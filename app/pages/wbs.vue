@@ -6,10 +6,10 @@ useHead({ title: '전체 일정' })
 const TODAY = '2026-06-10'
 
 /* 담당자 색 */
-const PEOPLE = ['서만원', '조수현', '김도형', '맑은소프트', '미정'] as const
+const PEOPLE = ['서만원', '조수현', '김도형', '김덕조', '김혜인', '방준영', '미정'] as const
 const PCOLOR: Record<string, string> = {
-  서만원: '#2563eb', 조수현: '#7c3aed', 김도형: '#0d9488',
-  맑은소프트: '#d97706', 미정: '#94a3b8',
+  서만원: '#2563eb', 조수현: '#7c3aed', 김도형: '#0d9488', 김덕조: '#0891b2',
+  김혜인: '#db2777', 방준영: '#d97706', 미정: '#94a3b8',
 }
 function whoOf(owner: string): string[] {
   if (!owner || owner === '—') return []
@@ -187,7 +187,7 @@ const memoPos = computed(() => {
 })
 
 /* ── 등록/수정/삭제 ── */
-const STEP_OPTIONS = [1, 2, 3, 4, 5]
+const STEP_OPTIONS = [1, 2, 3, 4, 5, 6, 7]
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const saving = ref(false)
@@ -249,7 +249,7 @@ function onScroll() {
 }
 onBeforeUnmount(() => { chromeHidden.value = false })
 
-const subtitle = 'WBS 간트 · 서비스 개발 · 앱 단위 · 기준일'
+const subtitle = 'WBS 간트 · 전체 일정 · 7단계 · 기준일'
 </script>
 
 <template>
