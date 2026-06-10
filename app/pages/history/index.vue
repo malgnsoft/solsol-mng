@@ -2,7 +2,7 @@
   <div class="page">
     <h1 class="page-title">작업 이력</h1>
     <p class="page-desc">
-      일자별 작업 이력입니다. 앞으로의 history 는 이 레포(<code>doc/history/</code>)에서 작성·갱신합니다.
+      일자별 작업 이력입니다. 앞으로의 history 는 이 레포(<code>docs/history/</code>)에서 작성·갱신합니다.
     </p>
 
     <ol class="timeline">
