@@ -97,4 +97,5 @@ export const wbsGantt: GanttItem[] = [
   { step: 7, group: "마케팅", name: "크리에이터 섭외 (베타오픈 10명)", owner: "미정", start: "2026-07-01", end: "2026-08-15", progress: 0 },
   { step: 7, group: "마케팅", name: "오픈 프로모션 기획", owner: "미정", start: "2026-08-01", end: "2026-08-31", progress: 0 },
   { step: 7, group: "계약", name: "토스 PG · NHN · 펌뱅킹 · NICE 계약", owner: "미정", start: "2026-06-01", end: "2026-08-15", progress: 0 },
+  { step: 7, group: "계약", name: "000", owner: "미정", progress: 0 },
 ]

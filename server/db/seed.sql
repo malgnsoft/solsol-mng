@@ -154,3 +154,4 @@ INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) 
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (60,7,'마케팅','크리에이터 섭외 (베타오픈 10명)','미정','2026-07-01','2026-08-15',0,NULL,NULL,59);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (61,7,'마케팅','오픈 프로모션 기획','미정','2026-08-01','2026-08-31',0,NULL,NULL,60);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (62,7,'계약','토스 PG · NHN · 펌뱅킹 · NICE 계약','미정','2026-06-01','2026-08-15',0,NULL,NULL,61);
+INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (63,7,'계약','000','미정',NULL,NULL,0,NULL,NULL,62);

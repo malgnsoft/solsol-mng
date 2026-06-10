@@ -57,6 +57,12 @@
 - 총 **62개 항목**, 타임라인 **2026-01-23 ~ 2026-08-31**(전 구간). WBS 단계 가중치·진척을 현황판과 동일하게 맞춰 **KPI = 프로젝트 전체 진척(가중평균 56.5%)**.
 - `wbsSteps`·`wbsStageMeta` 7단계, `STEP_OPTIONS` 1~7, 담당 필터·부제("전체 일정 · 7단계") 갱신.
 
+## 9. WBS 계약 항목 추가 + Cloudflare 재연결 · D1 시드 반영
+
+- **WBS Step 7 추가**: `계약` 그룹 맨 아래에 작업 `000`(id=63·sort=62·담당 미정·일정/진척 없음) 신규. 두 정본 동기화 — `app/utils/wbsData.ts`(dev 폴백) + `server/db/seed.sql`(D1 정본). `boardSeed.ts`는 board(stage/task) 전용이라 무관.
+- **Cloudflare 재인증**: OAuth 토큰 만료 → `wrangler login` 재로그인(`info@malgnsoft.com`, Account `d2b8c552…`). `wrangler.toml`의 `database_id`(`e682bf78…`)와 실제 D1 `solsol-project` 매칭 확인.
+- **D1 시드 반영**: `wrangler d1 execute solsol-project --remote --file=server/db/seed.sql` — 153 쿼리 성공·383 rows written·`last_row_id=63`(=`000`까지 삽입)·7 테이블, APAC(ICN). `seed.sql`은 `DELETE FROM wbs_item` 후 전체 재삽입이라 현재 세 정본(seed.sql · wbsData.ts · D1) 일치.
+
 ## 산출물
 
 - **신규 리소스**: D1 `solsol-project`(`e682bf78…`), Pages `solsol-mng` — <https://solsol-mng.pages.dev>.
