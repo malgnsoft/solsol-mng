@@ -258,7 +258,7 @@ const subtitle = 'WBS 간트 · 서비스 개발 · 앱 단위 · 기준일'
     <header class="topbar">
       <div class="title-wrap">
         <h1>전체 일정</h1>
-        <span class="sub">{{ subtitle }} <b>{{ md(TODAY) }}</b></span>
+        <span class="sub">{{ subtitle }} <b>{{ TODAY.replace(/-/g, '.') }}</b></span>
       </div>
       <div class="kpis">
         <div class="kpi overall"><span class="v">{{ kpi.avg }}%</span><span class="l">전체 진척 · {{ kpi.n }}개 작업</span><div class="meter"><i :style="{ width: kpi.avg + '%' }" /></div></div>
