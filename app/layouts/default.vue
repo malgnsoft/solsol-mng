@@ -5,7 +5,6 @@
         <NuxtLink to="/" class="brand">
           <span class="brand-icon"><AppLogoMark /></span>
           <span class="brand-text">솔솔</span>
-          <span class="brand-message">message</span>
           <span class="brand-sub">프로젝트 관리</span>
         </NuxtLink>
         <nav class="gnb-nav">
@@ -77,7 +76,7 @@ const nav = [
   margin: 0 auto;
   padding: 0 24px;
 }
-/* 사용자단(solsol) GNB 로고와 동일 — 마크 아이콘 + "솔솔" + "message" */
+/* 사용자단(solsol) GNB 로고와 동일 — 마크 아이콘 + "솔솔" */
 .brand {
   display: flex;
   align-items: center;
@@ -99,14 +98,6 @@ const nav = [
   color: var(--ink-900);
   letter-spacing: -0.01em;
   line-height: 1;
-}
-.brand-message {
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--ink-400);
-  letter-spacing: -0.01em;
-  line-height: 1;
-  margin-left: -5px;
 }
 .brand-sub {
   margin-left: 3px;
