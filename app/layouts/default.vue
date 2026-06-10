@@ -4,7 +4,7 @@
       <div class="gnb-inner">
         <NuxtLink to="/" class="brand">
           <span class="brand-icon"><AppLogoMark /></span>
-          <span class="brand-text">솔솔</span>
+          <span class="brand-text">쏠쏠</span>
           <span class="brand-sub">프로젝트 관리</span>
         </NuxtLink>
         <nav class="gnb-nav">
@@ -27,6 +27,10 @@
           <UIcon name="i-lucide-github" class="gnb-link-ico" />
           GitHub
         </a>
+        <button type="button" class="gnb-link gnb-auth" @click="logout">
+          <UIcon name="i-lucide-log-out" class="gnb-link-ico" />
+          로그아웃
+        </button>
       </div>
     </header>
 
@@ -35,7 +39,7 @@
     </main>
 
     <footer v-if="!isFullScreen" class="footer">
-      <span>솔솔 프로젝트 문서·작업 이력</span>
+      <span>쏠쏠 프로젝트 문서·작업 이력</span>
     </footer>
   </div>
 </template>
@@ -57,6 +61,13 @@ const nav = [
   { to: '/docs', label: '문서', icon: 'i-lucide-book-text' },
   { to: '/history', label: '작업 이력', icon: 'i-lucide-history' }
 ]
+
+// 비밀번호 게이트 — 인증 쿠키를 지우고 로그인 화면으로.
+const auth = useCookie('mng_auth')
+async function logout() {
+  auth.value = null
+  await navigateTo('/login')
+}
 </script>
 
 <style scoped>
@@ -92,7 +103,7 @@ const nav = [
   margin: 0 auto;
   padding: 0 24px;
 }
-/* 사용자단(solsol) GNB 로고와 동일 — 마크 아이콘 + "솔솔" */
+/* 사용자단(solsol) GNB 로고와 동일 — 마크 아이콘 + "쏠쏠" */
 .brand {
   display: flex;
   align-items: center;
@@ -151,6 +162,13 @@ const nav = [
 }
 .gnb-repo {
   color: var(--ink-400);
+}
+.gnb-auth {
+  color: var(--ink-400);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .layout-main {

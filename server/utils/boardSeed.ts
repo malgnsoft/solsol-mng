@@ -2,7 +2,7 @@
 import type { WbsDocument } from '~/composables/useWbs'
 
 export const boardSeed: WbsDocument = {
-  "projectName": "솔솔",
+  "projectName": "쏠쏠",
   "lastUpdated": "2026-06-10",
   "stages": [
     {
@@ -108,7 +108,7 @@ export const boardSeed: WbsDocument = {
           "title": "컨텐츠 및 저작권 정책 (DRM)",
           "status": "done",
           "owner": "방준영",
-          "note": "콘텐츠 소유권(강사 vs 솔솔)·무단복제·라이선스 관리.",
+          "note": "콘텐츠 소유권(강사 vs 쏠쏠)·무단복제·라이선스 관리.",
           "targetDate": "2026.02.13",
           "completionDate": "2026.02.13"
         },

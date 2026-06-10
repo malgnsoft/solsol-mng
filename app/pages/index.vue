@@ -1,9 +1,9 @@
 <template>
   <div class="page">
     <section class="hero">
-      <h1 class="hero-title">솔솔 프로젝트 관리</h1>
+      <h1 class="hero-title">쏠쏠 프로젝트 관리</h1>
       <p class="hero-desc">
-        솔솔 프로젝트의 문서·기록·진행 사항을 한곳에서 조망합니다.
+        쏠쏠 프로젝트의 문서·기록·진행 사항을 한곳에서 조망합니다.
       </p>
     </section>
 
@@ -18,7 +18,7 @@
           <p class="ov-label">목표</p>
           <p class="ov-goal">
             맑은소프트가 크리에이터(강사)가 자체 브랜드 사이트로 온라인 강의·디지털 콘텐츠·멤버십을 판매·운영하는
-            <b>멀티 테넌트 크리에이터 LMS SaaS “솔솔”</b>을 구축한다.
+            <b>멀티 테넌트 크리에이터 LMS SaaS “쏠쏠”</b>을 구축한다.
           </p>
           <div class="ov-channels">
             <span v-for="ch in channels" :key="ch" class="ov-chip">{{ ch }}</span>

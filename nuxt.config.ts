@@ -66,10 +66,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'ko' },
-      title: '솔솔 관리',
-      titleTemplate: '%s · 솔솔 관리',
+      title: '쏠쏠 관리',
+      titleTemplate: '%s · 쏠쏠 관리',
       meta: [
-        { name: 'description', content: '솔솔 프로젝트 문서·작업 이력 관리' },
+        { name: 'description', content: '쏠쏠 프로젝트 문서·작업 이력 관리' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }
       ],
       link: [

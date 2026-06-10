@@ -40,7 +40,7 @@ export default defineEventHandler(async (event): Promise<{ data: WbsDocument }> 
 
   return {
     data: {
-      projectName: meta?.projectName ?? '솔솔',
+      projectName: meta?.projectName ?? '쏠쏠',
       lastUpdated: meta?.lastUpdated ?? '—',
       stages,
     },

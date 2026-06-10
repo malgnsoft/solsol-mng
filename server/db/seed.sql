@@ -1,10 +1,10 @@
--- 자동 생성 시드 (solsol-project) — 솔솔 크리에이터 LMS · 진척 /progress 실측(6/7)
+-- 자동 생성 시드 (solsol-project) — 쏠쏠 크리에이터 LMS · 진척 /progress 실측(6/7)
 DELETE FROM wbs_item;
 DELETE FROM task;
 DELETE FROM stage;
 DELETE FROM board_meta;
 
-INSERT INTO board_meta (id, project_name, last_updated) VALUES (1, '솔솔', '2026-06-10');
+INSERT INTO board_meta (id, project_name, last_updated) VALUES (1, '쏠쏠', '2026-06-10');
 
 INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-1','Step 1','기획 · 정책','🎯','전체 스펙 리뷰 · 4개 앱 프로토타입 · 서비스 정책(회원/가격/구독/알림/저작권/도메인) 확정',8,95,0);
 INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-2','Step 2','화면설계','📋','4개 앱 메뉴 구조도 · 화면설계 v1.1 · 알림 기획 · 문구 통일',10,90,1);
@@ -23,7 +23,7 @@ INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion
 INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-2','step-1','서비스 정책','가격 정책 (경쟁사 분석 · 종량제)','done','김덕조','온라인 3개사 가격체계·Features 비교. Notification·AI 튜터·자동 자막/번역 종량제 설계.','2026.02.06','2026.02.06',NULL,6);
 INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-3','step-1','서비스 정책','구독 정책 (결제 · 환불)','done','김덕조','Creator LMS 구독정책 초안 완료.','2026.02.13','2026.02.13',NULL,7);
 INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-4','step-1','서비스 정책','닉네임 정책','done','김혜인',NULL,'2026.02.13','2026.02.13',NULL,8);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-5','step-1','서비스 정책','컨텐츠 및 저작권 정책 (DRM)','done','방준영','콘텐츠 소유권(강사 vs 솔솔)·무단복제·라이선스 관리.','2026.02.13','2026.02.13',NULL,9);
+INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-5','step-1','서비스 정책','컨텐츠 및 저작권 정책 (DRM)','done','방준영','콘텐츠 소유권(강사 vs 쏠쏠)·무단복제·라이선스 관리.','2026.02.13','2026.02.13',NULL,9);
 INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-6','step-1','서비스 정책','멤버십 상품 / 프리미엄 콘텐츠 정책','done','김혜인','최초 6개 상품 구성(크리에이터 ON/OFF). 디지털 다운로드 옵션.','2026.02.13','2026.02.13',NULL,10);
 INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-7','step-1','서비스 정책','게시판 · 결제 · 1:1문의 정책','done','김혜인',NULL,'2026.02.13','2026.02.13',NULL,11);
 INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-8','step-1','서비스 정책','알림 정책 (알림톡 · SMS · 메일 템플릿)','done','김덕조',NULL,'2026.02.27','2026.02.27',NULL,12);
@@ -154,4 +154,3 @@ INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) 
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (60,7,'마케팅','크리에이터 섭외 (베타오픈 10명)','미정','2026-07-01','2026-08-15',0,NULL,NULL,59);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (61,7,'마케팅','오픈 프로모션 기획','미정','2026-08-01','2026-08-31',0,NULL,NULL,60);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (62,7,'계약','토스 PG · NHN · 펌뱅킹 · NICE 계약','미정','2026-06-01','2026-08-15',0,NULL,NULL,61);
-INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (63,7,'계약','000','미정',NULL,NULL,0,NULL,NULL,62);

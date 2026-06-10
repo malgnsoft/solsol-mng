@@ -7,7 +7,7 @@ import {
   wbsGroupedTasks,
 } from '~/composables/useWbs'
 
-useHead({ title: '솔솔 현황판' })
+useHead({ title: '쏠쏠 현황판' })
 
 const {
   doc,
@@ -36,7 +36,7 @@ const {
         <!-- Title -->
         <div class="board-title-row">
           <div>
-            <h1 class="board-title">솔솔 현황판</h1>
+            <h1 class="board-title">쏠쏠 현황판</h1>
             <p class="board-subtitle">
               크리에이터 LMS 멀티 테넌트 SaaS · 4개 앱(Brand · CA · CF · BO) · 마지막 현행화
               <b>{{ lastUpdated }}</b>

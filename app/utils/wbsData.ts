@@ -1,4 +1,4 @@
-// 간트 WBS 데이터 — 솔솔 크리에이터 LMS 전체 일정(보드 7단계 전부). 날짜는 YYYY-MM-DD.
+// 간트 WBS 데이터 — 쏠쏠 크리에이터 LMS 전체 일정(보드 7단계 전부). 날짜는 YYYY-MM-DD.
 // Step 6=서비스 개발(개발 트랙). 진척은 dev /progress(6/7)+일정 기반. D1(wbs_item) 폴백 · seed.sql 동기화.
 
 export interface GanttItem {
@@ -97,5 +97,4 @@ export const wbsGantt: GanttItem[] = [
   { step: 7, group: "마케팅", name: "크리에이터 섭외 (베타오픈 10명)", owner: "미정", start: "2026-07-01", end: "2026-08-15", progress: 0 },
   { step: 7, group: "마케팅", name: "오픈 프로모션 기획", owner: "미정", start: "2026-08-01", end: "2026-08-31", progress: 0 },
   { step: 7, group: "계약", name: "토스 PG · NHN · 펌뱅킹 · NICE 계약", owner: "미정", start: "2026-06-01", end: "2026-08-15", progress: 0 },
-  { step: 7, group: "계약", name: "000", owner: "미정", progress: 0 },
 ]

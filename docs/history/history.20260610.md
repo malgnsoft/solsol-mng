@@ -1,16 +1,16 @@
-# 2026-06-10 — 솔솔(SolSol) 리브랜딩 + Cloudflare 연결 + 현황판·WBS 전면 재작성
+# 2026-06-10 — 쏠쏠(SolSol) 리브랜딩 + Cloudflare 연결 + 현황판·WBS 전면 재작성
 
-> **한 줄 요약** — 관리 허브를 `malgn-noti`/`malgn-helper`에서 **솔솔(크리에이터 LMS)** 로 전면 리브랜딩하고, 전용 Cloudflare 리소스(D1 `solsol-project` + Pages `solsol-mng`)를 신설·연결. 기획 스프레드시트(이미지 7장)를 분석해 **현황판(7단계·78작업)** 과 **WBS 간트(5트랙·32항목)** 를 새로 작성하고, 진척률을 dev `/progress` 실측치(종합 베타 44%)에 맞춘 뒤 WBS 마감을 8월말까지 연장.
+> **한 줄 요약** — 관리 허브를 `malgn-noti`/`malgn-helper`에서 **쏠쏠(크리에이터 LMS)** 로 전면 리브랜딩하고, 전용 Cloudflare 리소스(D1 `solsol-project` + Pages `solsol-mng`)를 신설·연결. 기획 스프레드시트(이미지 7장)를 분석해 **현황판(7단계·78작업)** 과 **WBS 간트(5트랙·32항목)** 를 새로 작성하고, 진척률을 dev `/progress` 실측치(종합 베타 44%)에 맞춘 뒤 WBS 마감을 8월말까지 연장.
 
-## 1. 리브랜딩 — solsol / 솔솔
+## 1. 리브랜딩 — solsol / 쏠쏠
 
 - **CLAUDE.md**: `malgn-helper` → `solsol` 전체 치환(제목·DB명·Pages 프로젝트명·doc 경로).
-- **코드·데이터 일괄 치환**(`app/`·`server/` 12개 파일): `malgn-noti*`·`malgn-notifications` → `solsol*`/`solsol-notifications`, 브랜딩 `맑은노티`·`맑은 메시징` → `솔솔`.
+- **코드·데이터 일괄 치환**(`app/`·`server/` 12개 파일): `malgn-noti*`·`malgn-notifications` → `solsol*`/`solsol-notifications`, 브랜딩 `맑은노티`·`맑은 메시징` → `쏠쏠`.
   - 화면 제목·GNB 로고 워드마크·주석·`projectName` 폴백·바로가기 URL.
   - `wrangler.toml`·`package.json`·`drizzle.config.ts` → `solsol-mng` / `solsol-project`.
-- **docs 마크다운**(`PROJECT_MANAGEMENT_BLUEPRINT.md`·`history/README.md`): `malgn-noti`·`malgn-helper`·`맑은노티`·`맑은 메시징` → `solsol`/`솔솔`.
+- **docs 마크다운**(`PROJECT_MANAGEMENT_BLUEPRINT.md`·`history/README.md`): `malgn-noti`·`malgn-helper`·`맑은노티`·`맑은 메시징` → `solsol`/`쏠쏠`.
 - **유지**: 회사명 `맑은소프트`, GitHub 조직 `malgnsoft`/`*.malgnsoft.workers.dev`, 과거 이력 메모(`맑은메시지 TF` 등).
-- **로고**: GNB 워드마크에서 `message` 제거 → **솔솔 프로젝트 관리** 만 노출(미사용 `.brand-message` CSS·주석 정리).
+- **로고**: GNB 워드마크에서 `message` 제거 → **쏠쏠 프로젝트 관리** 만 노출(미사용 `.brand-message` CSS·주석 정리).
 
 ## 2. Cloudflare 연결 (신규 리소스)
 
@@ -21,7 +21,7 @@
 
 ## 3. 현황판(`/board`) 전면 재작성 — 크리에이터 LMS
 
-- 기획 스프레드시트(이미지 7장) 분석: **솔솔 = 멀티 테넌트 크리에이터 LMS SaaS**. 4개 앱 — Brand site(`solsol.so`) · Customer Admin(강사, `ceo.solsol.so/@slug`) · Customer Front(수강생, `{slug}.solsol.so`) · BackOffice(운영, `so.solsol.so`). 결제 토스 · 정산 펌뱅킹 · 본인인증 NICE · 알림 NHN · 동영상 위캔디오 · GitHub `malgnsoft/creatorlms`.
+- 기획 스프레드시트(이미지 7장) 분석: **쏠쏠 = 멀티 테넌트 크리에이터 LMS SaaS**. 4개 앱 — Brand site(`solsol.so`) · Customer Admin(강사, `ceo.solsol.so/@slug`) · Customer Front(수강생, `{slug}.solsol.so`) · BackOffice(운영, `so.solsol.so`). 결제 토스 · 정산 펌뱅킹 · 본인인증 NICE · 알림 NHN · 동영상 위캔디오 · GitHub `malgnsoft/creatorlms`.
 - **7단계 · 78작업**: 기획·정책 / 화면설계 / 디자인 / 퍼블리싱 / 개발 설계 / 서비스 개발 / 운영·계약. 담당자·일자·정책을 스프레드시트에서 이식.
 - 대시보드(`index.vue`) 목표·기능 칩·기획 방향·바로가기, `board.vue` 부제·링크를 LMS 기준으로 교체.
 
@@ -48,7 +48,7 @@
 
 - **푸터 제거**: 전역 푸터가 `/wbs`(100vh 풀스크린 간트)의 영역 아래에 붙어 바깥 페이지 스크롤을 만들고, 그 스크롤이 간트 내부 sticky(헤더·좌측 담당 영역)를 밀어 올리던 문제 → `/wbs`에서만 푸터를 숨겨 좌측 담당·정보 패널 고정 정상화.
 - **스크롤 시 상단 접기**: 간트 스크롤 다운 시 **GNB + 전체 일정·KPI 헤더**를 함께 위로 접고(스크롤 업 시 복귀), **담당(좌측 정보) · 날짜(타임라인 헤더)** 는 sticky 유지. wbs.vue 가 `useState('wbsChromeHidden')` 로 신호를 발행 → 레이아웃이 GNB 높이를 접고 `/wbs` 영역을 56px만큼 100vh로 확장(전환 0.24s 동기화).
-- **로고**: GNB 워드마크에서 `message` 제거 → **솔솔 프로젝트 관리** 만 노출.
+- **로고**: GNB 워드마크에서 `message` 제거 → **쏠쏠 프로젝트 관리** 만 노출.
 - **기준일**: 부제 기준일을 `6/10` → **`2026.06.10`**(yyyy.MM.dd) 표기. 클릭 시 오늘 컬럼이 진척율(좌측 정보) 바로 오른쪽(타임라인 시작)으로 가로 스크롤.
 
 ## 8. WBS 전체 일정으로 확장 (5트랙 → 7단계)

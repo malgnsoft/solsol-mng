@@ -75,7 +75,7 @@ export function useWbs() {
 
   const doc = computed<WbsDocument | null>(() => data.value?.data ?? null)
   const stages = computed<WbsStage[]>(() => doc.value?.stages ?? [])
-  const projectName = computed(() => doc.value?.projectName ?? '솔솔')
+  const projectName = computed(() => doc.value?.projectName ?? '쏠쏠')
   const lastUpdated = computed(() => doc.value?.lastUpdated ?? '—')
 
   const allTasks = computed(() => stages.value.flatMap(s => s.tasks))
