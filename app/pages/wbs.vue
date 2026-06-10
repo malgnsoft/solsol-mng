@@ -234,9 +234,10 @@ async function del(t: Item) {
   catch (e) { alert('삭제 실패: ' + (e instanceof Error ? e.message : '')) }
 }
 
-/* ── 스크롤 시 상단(전체 일정·KPI)만 접기 — 담당·날짜 헤더는 sticky 유지 ── */
+/* ── 스크롤 시 상단(GNB + 전체 일정·KPI) 접기 — 담당·날짜 헤더는 sticky 유지 ── */
+// 레이아웃(default.vue)과 공유: GNB도 같은 신호로 함께 숨긴다.
 const ganttRef = ref<HTMLElement | null>(null)
-const chromeHidden = ref(false)
+const chromeHidden = useState('wbsChromeHidden', () => false)
 let lastScroll = 0
 function onScroll() {
   const el = ganttRef.value
@@ -246,6 +247,7 @@ function onScroll() {
   else if (t < lastScroll - 4) chromeHidden.value = false
   lastScroll = t
 }
+onBeforeUnmount(() => { chromeHidden.value = false })
 
 const subtitle = 'WBS 간트 · 서비스 개발 · 앱 단위 · 기준일'
 </script>
@@ -447,7 +449,10 @@ const subtitle = 'WBS 간트 · 서비스 개발 · 앱 단위 · 기준일'
   --day-w: 26px; --row-h: 30px; --grp-h: 34px; --step-h: 38px; --fs: 12.5px; --radius: 5px;
   height: calc(100vh - 56px); display: flex; flex-direction: column;
   background: var(--bg); color: var(--ink); font-size: var(--fs); letter-spacing: -0.01em;
+  transition: height .24s ease;
 }
+/* GNB가 함께 접히면 그 높이(56px)만큼 간트 영역을 넓힌다 */
+.wbsx.chrome-collapsed { height: 100vh; }
 .tnum { font-variant-numeric: tabular-nums; }
 .topbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 14px 22px 12px; background: var(--surface); border-bottom: 1px solid var(--line); max-height: 160px; overflow: hidden; transition: max-height .24s ease, padding .24s ease, opacity .2s ease, border-color .24s ease; }
 /* 스크롤 내릴 때 전체 일정·KPI 영역을 접어 위로 올림(담당·날짜 헤더는 sticky 유지) */

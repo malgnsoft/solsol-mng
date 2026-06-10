@@ -1,6 +1,6 @@
 <template>
   <div class="layout-default">
-    <header class="gnb">
+    <header class="gnb" :class="{ 'gnb-hidden': gnbHidden }">
       <div class="gnb-inner">
         <NuxtLink to="/" class="brand">
           <span class="brand-icon"><AppLogoMark /></span>
@@ -46,6 +46,10 @@
 const route = useRoute()
 const isFullScreen = computed(() => route.path === '/wbs')
 
+// /wbs 간트 스크롤 다운 시 GNB도 함께 접는다(wbs.vue 가 set 하는 공유 상태).
+const chromeHidden = useState('wbsChromeHidden', () => false)
+const gnbHidden = computed(() => isFullScreen.value && chromeHidden.value)
+
 const nav = [
   { to: '/', label: '대시보드', icon: 'i-lucide-layout-dashboard' },
   { to: '/board', label: '현황판', icon: 'i-lucide-gauge' },
@@ -71,6 +75,13 @@ const nav = [
   height: 56px;
   background: var(--white);
   border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  transition: height .24s ease, border-color .24s ease;
+}
+/* /wbs 스크롤 다운 시 GNB를 위로 접음 (간트 영역 확장) */
+.gnb.gnb-hidden {
+  height: 0;
+  border-bottom-color: transparent;
 }
 .gnb-inner {
   display: flex;
