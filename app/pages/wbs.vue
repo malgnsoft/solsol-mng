@@ -249,6 +249,14 @@ function onScroll() {
 }
 onBeforeUnmount(() => { chromeHidden.value = false })
 
+/* 기준일 클릭 → 오늘 컬럼을 진척율(좌측 정보) 바로 오른쪽으로 가로 스크롤 */
+function scrollToToday() {
+  const el = ganttRef.value
+  if (!el || todayIdx.value < 0) return
+  const dayW = parseFloat(getComputedStyle(el).getPropertyValue('--day-w')) || 26
+  el.scrollTo({ left: todayIdx.value * dayW, behavior: 'smooth' })
+}
+
 const subtitle = 'WBS 간트 · 전체 일정 · 7단계 · 기준일'
 </script>
 
@@ -258,7 +266,7 @@ const subtitle = 'WBS 간트 · 전체 일정 · 7단계 · 기준일'
     <header class="topbar">
       <div class="title-wrap">
         <h1>전체 일정</h1>
-        <span class="sub">{{ subtitle }} <b>{{ TODAY.replace(/-/g, '.') }}</b></span>
+        <span class="sub">{{ subtitle }} <b class="today-jump" title="클릭 시 오늘로 이동" @click="scrollToToday">{{ TODAY.replace(/-/g, '.') }}</b></span>
       </div>
       <div class="kpis">
         <div class="kpi overall"><span class="v">{{ kpi.avg }}%</span><span class="l">전체 진척 · {{ kpi.n }}개 작업</span><div class="meter"><i :style="{ width: kpi.avg + '%' }" /></div></div>
@@ -460,6 +468,8 @@ const subtitle = 'WBS 간트 · 전체 일정 · 7단계 · 기준일'
 .title-wrap { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .topbar h1 { margin: 0; font-size: 21px; font-weight: 800; letter-spacing: -0.02em; }
 .sub { color: var(--ink-2); font-size: 12.5px; font-weight: 500; } .sub b { color: var(--ink); font-weight: 700; }
+.today-jump { cursor: pointer; border-bottom: 1px dashed var(--ink-3); transition: color .12s; }
+.today-jump:hover { color: var(--today); border-bottom-color: var(--today); }
 .kpis { display: flex; gap: 10px; flex-shrink: 0; }
 .kpi { background: var(--surface-2); border: 1px solid var(--line); border-radius: 9px; padding: 8px 13px; min-width: 76px; display: flex; flex-direction: column; gap: 2px; }
 .kpi .v { font-size: 19px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
