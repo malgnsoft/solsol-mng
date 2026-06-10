@@ -34,13 +34,18 @@
       <slot />
     </main>
 
-    <footer class="footer">
+    <footer v-if="!isFullScreen" class="footer">
       <span>솔솔 프로젝트 문서·작업 이력</span>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
+// /wbs(간트)는 100vh 풀스크린 앱이라 푸터를 숨겨 바깥 페이지 스크롤을 없앤다.
+// (바깥 스크롤이 생기면 간트 내부 sticky 헤더·좌측 담당 영역이 함께 밀려 올라감)
+const route = useRoute()
+const isFullScreen = computed(() => route.path === '/wbs')
+
 const nav = [
   { to: '/', label: '대시보드', icon: 'i-lucide-layout-dashboard' },
   { to: '/board', label: '현황판', icon: 'i-lucide-gauge' },
