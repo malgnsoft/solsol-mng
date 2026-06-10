@@ -1,8 +1,8 @@
-// 자동 생성(시드) — D1 바인딩이 없는 로컬 dev 폴백용. 정본은 D1(malgn-noti-project).
+// 자동 생성(시드) — D1 바인딩이 없는 로컬 dev 폴백용. 정본은 D1(solsol-project).
 import type { WbsDocument } from '~/composables/useWbs'
 
 export const boardSeed: WbsDocument = {
-  "projectName": "맑은 메시징",
+  "projectName": "솔솔",
   "lastUpdated": "2026-06-04",
   "stages": [
     {
@@ -148,7 +148,7 @@ export const boardSeed: WbsDocument = {
           "title": "사용자단",
           "status": "done",
           "owner": "김도형",
-          "href": "https://malgn-noti.pages.dev/",
+          "href": "https://solsol.pages.dev/",
           "targetDate": "5/11",
           "completionDate": "5/11"
         },
@@ -158,7 +158,7 @@ export const boardSeed: WbsDocument = {
           "title": "관리자단",
           "status": "done",
           "owner": "김도형",
-          "href": "https://malgn-noti-admin.pages.dev/",
+          "href": "https://solsol-admin.pages.dev/",
           "targetDate": "5/11",
           "completionDate": "5/11"
         },
@@ -168,7 +168,7 @@ export const boardSeed: WbsDocument = {
           "title": "API 서버",
           "status": "done",
           "owner": "김도형",
-          "href": "https://malgn-noti-api.malgnsoft.workers.dev/",
+          "href": "https://solsol-api.malgnsoft.workers.dev/",
           "targetDate": "5/11",
           "completionDate": "5/11"
         }
@@ -190,7 +190,7 @@ export const boardSeed: WbsDocument = {
           "status": "in_progress",
           "owner": "김덕조",
           "note": "IA 정본(263 페이지)",
-          "href": "https://malgn-notifications.pages.dev/#/"
+          "href": "https://solsol-notifications.pages.dev/#/"
         },
         {
           "id": "2-1-2",
@@ -198,7 +198,7 @@ export const boardSeed: WbsDocument = {
           "title": "Front 메뉴 및 스펙",
           "status": "pending",
           "owner": "—",
-          "href": "https://malgn-notifications.pages.dev/#/sitemap"
+          "href": "https://solsol-notifications.pages.dev/#/sitemap"
         },
         {
           "id": "2-1-3",
@@ -206,7 +206,7 @@ export const boardSeed: WbsDocument = {
           "title": "Front 페이지 리스트",
           "status": "pending",
           "owner": "김덕조",
-          "href": "https://malgn-notifications.pages.dev/#/pagelists"
+          "href": "https://solsol-notifications.pages.dev/#/pagelists"
         },
         {
           "id": "2-1-4",
@@ -388,7 +388,7 @@ export const boardSeed: WbsDocument = {
           "title": "프로토타입으로 대체",
           "status": "in_progress",
           "owner": "김덕조·김경은",
-          "href": "https://malgn-notifications.pages.dev/#/"
+          "href": "https://solsol-notifications.pages.dev/#/"
         },
         {
           "id": "3-1-2",
@@ -404,7 +404,7 @@ export const boardSeed: WbsDocument = {
           "status": "pending",
           "owner": "김덕조·김경은",
           "note": "사용자단 /help 라이브 — 컨텐츠 보강 필요",
-          "href": "https://malgn-noti.pages.dev/help"
+          "href": "https://solsol.pages.dev/help"
         },
         {
           "id": "3-2-1",
@@ -566,7 +566,7 @@ export const boardSeed: WbsDocument = {
           "status": "pending",
           "owner": "김양현",
           "note": "(개발: doc/DESIGN.md Relay-inspired v1.0 + /guide 카탈로그 운영). 디자인팀 정식 산출물은 별도 필요.",
-          "href": "https://malgn-noti.pages.dev/guide"
+          "href": "https://solsol.pages.dev/guide"
         },
         {
           "id": "4-2",
@@ -593,7 +593,7 @@ export const boardSeed: WbsDocument = {
           "status": "done",
           "owner": "김도형",
           "note": "STACK.md — 3 레포 책임 + Cloudflare/AWS 혼합 + NHN 통합",
-          "href": "https://github.com/malgnsoft/malgn-noti/blob/main/doc/STACK.md",
+          "href": "https://github.com/malgnsoft/solsol/blob/main/doc/STACK.md",
           "targetDate": "5/14",
           "completionDate": "5/14"
         },
@@ -623,7 +623,7 @@ export const boardSeed: WbsDocument = {
           "title": "사용자단 디자인 가이드 (라이브 카탈로그)",
           "status": "done",
           "owner": "김도형",
-          "href": "https://malgn-noti.pages.dev/guide",
+          "href": "https://solsol.pages.dev/guide",
           "targetDate": "5/19",
           "completionDate": "5/19"
         },
@@ -643,7 +643,7 @@ export const boardSeed: WbsDocument = {
           "title": "관리자단 디자인 가이드",
           "status": "done",
           "owner": "김도형",
-          "href": "https://malgn-noti-admin.pages.dev/guide",
+          "href": "https://solsol-admin.pages.dev/guide",
           "targetDate": "5/27",
           "completionDate": "5/27"
         },
@@ -822,7 +822,7 @@ export const boardSeed: WbsDocument = {
           "status": "done",
           "owner": "김도형",
           "note": "/ (히어로·5채널·장점·단가 비교·CTA) + /help",
-          "href": "https://malgn-noti.pages.dev/",
+          "href": "https://solsol.pages.dev/",
           "completionDate": "5/22",
           "targetDate": "5/22"
         },
@@ -832,7 +832,7 @@ export const boardSeed: WbsDocument = {
           "title": "디자인 가이드 (라이브 카탈로그)",
           "status": "done",
           "owner": "김도형",
-          "href": "https://malgn-noti.pages.dev/guide",
+          "href": "https://solsol.pages.dev/guide",
           "completionDate": "5/19",
           "targetDate": "5/19"
         },
@@ -1008,7 +1008,7 @@ export const boardSeed: WbsDocument = {
         {
           "id": "5-5-7",
           "group": "통합 · 배포",
-          "title": "R2 bucket malgn-noti-files + FILES 바인딩",
+          "title": "R2 bucket solsol-files + FILES 바인딩",
           "status": "done",
           "owner": "김도형",
           "note": "6/2 §11. 사업자등록증·대부업등록증·보험증권 첨부용",

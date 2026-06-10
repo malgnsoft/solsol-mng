@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <h1 class="page-title">문서</h1>
-    <p class="page-desc">malgn-noti <code>doc/</code> 트리의 공통·도메인 정본 문서입니다.</p>
+    <p class="page-desc">solsol <code>doc/</code> 트리의 공통·도메인 정본 문서입니다.</p>
 
     <ul class="doc-list">
       <li v-for="doc in docs" :key="doc.path">

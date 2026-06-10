@@ -1,9 +1,9 @@
 <template>
   <div class="page">
     <section class="hero">
-      <h1 class="hero-title">맑은노티 프로젝트 관리</h1>
+      <h1 class="hero-title">솔솔 프로젝트 관리</h1>
       <p class="hero-desc">
-        맑은노티(맑은 메시징) 프로젝트의 문서·기록·진행 사항을 한곳에서 조망합니다.
+        솔솔 프로젝트의 문서·기록·진행 사항을 한곳에서 조망합니다.
       </p>
     </section>
 
@@ -18,7 +18,7 @@
           <p class="ov-label">목표</p>
           <p class="ov-goal">
             맑은소프트가 <b>NHN Cloud Notification Hub</b>를 래핑하여, 고객사가 자체 브랜드로 메시지를 발송·관리하는
-            <b>멀티 테넌트 SaaS “맑은 메시징”</b>을 구축한다.
+            <b>멀티 테넌트 SaaS “솔솔”</b>을 구축한다.
           </p>
           <div class="ov-channels">
             <span v-for="ch in channels" :key="ch" class="ov-chip">{{ ch }}</span>
@@ -107,10 +107,10 @@
 
 <script setup lang="ts">
 const shortcuts = [
-  { label: '사용자단 콘솔', url: 'https://malgn-noti.pages.dev' },
-  { label: '관리자단 콘솔', url: 'https://malgn-noti-admin.pages.dev' },
-  { label: 'API 서버', url: 'https://malgn-noti-api.malgnsoft.workers.dev' },
-  { label: 'GitHub', url: 'https://github.com/malgnsoft/malgn-noti-mng' },
+  { label: '사용자단 콘솔', url: 'https://solsol.pages.dev' },
+  { label: '관리자단 콘솔', url: 'https://solsol-admin.pages.dev' },
+  { label: 'API 서버', url: 'https://solsol-api.malgnsoft.workers.dev' },
+  { label: 'GitHub', url: 'https://github.com/malgnsoft/solsol-mng' },
 ]
 
 const stripProto = (u: string) => u.replace(/^https?:\/\//, '')
@@ -119,7 +119,7 @@ const channels = ['SMS / LMS / MMS', 'RCS', '알림톡 / 친구톡', 'Email', 'P
 const directions = [
   '멀티 테넌트 SaaS — 고객사(테넌트)별 자체 브랜드 · 발송 한도 · 크레딧 과금',
   '5채널 + 복합(Flow) 폴백·순서 발송 (예: 알림톡 → 친구톡 → LMS)',
-  '모든 발송은 백엔드(malgn-noti-api) 경유 — NHN 키 비노출 · 과금 · 감사 통제',
+  '모든 발송은 백엔드(solsol-api) 경유 — NHN 키 비노출 · 과금 · 감사 통제',
   '핵심 도메인: 발송 · 캠페인 · 이력/통계 · 주소록 · 발신정보 · 템플릿 · 크레딧 · 계정/인증 · 문의',
   '디자인: Relay-inspired 저밀도 시스템 · 스택: Nuxt 3 + Tailwind v4 + Nuxt UI v3',
 ]

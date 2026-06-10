@@ -2,7 +2,7 @@ import { asc, eq } from 'drizzle-orm'
 import type { WbsDocument, WbsStage, WbsTask, WbsStatus } from '~/composables/useWbs'
 import { boardMeta, stage, task } from '../db/schema'
 
-// 현황판 데이터 API — D1(malgn-noti-project)을 Drizzle ORM 으로 직접 조회해 조립.
+// 현황판 데이터 API — D1(solsol-project)을 Drizzle ORM 으로 직접 조회해 조립.
 // D1 바인딩이 없는 로컬 dev 는 시드(boardSeed, server/utils 자동 임포트)로 폴백.
 
 export default defineEventHandler(async (event): Promise<{ data: WbsDocument }> => {
@@ -40,7 +40,7 @@ export default defineEventHandler(async (event): Promise<{ data: WbsDocument }> 
 
   return {
     data: {
-      projectName: meta?.projectName ?? '맑은 메시징',
+      projectName: meta?.projectName ?? '솔솔',
       lastUpdated: meta?.lastUpdated ?? '—',
       stages,
     },

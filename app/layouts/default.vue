@@ -4,7 +4,7 @@
       <div class="gnb-inner">
         <NuxtLink to="/" class="brand">
           <span class="brand-icon"><AppLogoMark /></span>
-          <span class="brand-text">맑은</span>
+          <span class="brand-text">솔솔</span>
           <span class="brand-message">message</span>
           <span class="brand-sub">프로젝트 관리</span>
         </NuxtLink>
@@ -21,7 +21,7 @@
         </nav>
         <a
           class="gnb-link gnb-repo"
-          href="https://github.com/malgnsoft/malgn-noti-mng"
+          href="https://github.com/malgnsoft/solsol-mng"
           target="_blank"
           rel="noopener"
         >
@@ -36,7 +36,7 @@
     </main>
 
     <footer class="footer">
-      <span>맑은노티(맑은 메시징) 프로젝트 문서·작업 이력</span>
+      <span>솔솔 프로젝트 문서·작업 이력</span>
     </footer>
   </div>
 </template>
@@ -77,7 +77,7 @@ const nav = [
   margin: 0 auto;
   padding: 0 24px;
 }
-/* 사용자단(malgn-noti) GNB 로고와 동일 — 마크 아이콘 + "맑은" + "message" */
+/* 사용자단(solsol) GNB 로고와 동일 — 마크 아이콘 + "솔솔" + "message" */
 .brand {
   display: flex;
   align-items: center;

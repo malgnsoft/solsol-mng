@@ -1,6 +1,6 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 
-// 현황판(board) D1 스키마 — Drizzle 정본. (db: malgn-noti-project)
+// 현황판(board) D1 스키마 — Drizzle 정본. (db: solsol-project)
 // 마이그레이션은 drizzle-kit 으로 생성(server/db/migrations).
 
 export const boardMeta = sqliteTable('board_meta', {

@@ -7,7 +7,7 @@ import {
   wbsGroupedTasks,
 } from '~/composables/useWbs'
 
-useHead({ title: '맑은노티 현황판' })
+useHead({ title: '솔솔 현황판' })
 
 const {
   doc,
@@ -36,14 +36,14 @@ const {
         <!-- Title -->
         <div class="board-title-row">
           <div>
-            <h1 class="board-title">맑은노티 현황판</h1>
+            <h1 class="board-title">솔솔 현황판</h1>
             <p class="board-subtitle">
               NHN Cloud Notification Hub 기반 멀티 테넌트 메시징 SaaS · 마지막 현행화
               <b>{{ lastUpdated }}</b>
             </p>
           </div>
           <a
-            href="https://malgn-noti.pages.dev/wbs"
+            href="https://solsol.pages.dev/wbs"
             target="_blank"
             rel="noopener noreferrer"
             class="board-source-link"

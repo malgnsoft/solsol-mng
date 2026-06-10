@@ -32,7 +32,7 @@ export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
   devtools: { enabled: true },
 
-  // malgn-noti와 동일 스택: Nuxt UI v3 (Reka UI + Tailwind v4).
+  // solsol와 동일 스택: Nuxt UI v3 (Reka UI + Tailwind v4).
   // @nuxt/content 는 docs/ 마크다운(문서·작업 이력) 렌더링용.
   modules: [
     '@nuxt/ui',
@@ -66,16 +66,16 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'ko' },
-      title: '맑은노티 관리',
-      titleTemplate: '%s · 맑은노티 관리',
+      title: '솔솔 관리',
+      titleTemplate: '%s · 솔솔 관리',
       meta: [
-        { name: 'description', content: '맑은노티(맑은 메시징) 프로젝트 문서·작업 이력 관리' },
+        { name: 'description', content: '솔솔 프로젝트 문서·작업 이력 관리' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        // malgn-noti 와 동일한 Relay-inspired 폰트 (design_handoff 정본)
+        // solsol 와 동일한 Relay-inspired 폰트 (design_handoff 정본)
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif&display=swap'

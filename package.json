@@ -1,5 +1,5 @@
 {
-  "name": "malgn-noti-mng",
+  "name": "solsol-mng",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,8 +11,8 @@
     "typecheck": "nuxt typecheck",
     "lint": "eslint .",
     "db:generate": "drizzle-kit generate",
-    "db:apply": "wrangler d1 migrations apply malgn-noti-project --remote",
-    "db:seed": "wrangler d1 execute malgn-noti-project --remote --file=server/db/seed.sql"
+    "db:apply": "wrangler d1 migrations apply solsol-project --remote",
+    "db:seed": "wrangler d1 execute solsol-project --remote --file=server/db/seed.sql"
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.0",

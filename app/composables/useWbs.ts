@@ -1,4 +1,4 @@
-// 자체 D1(malgn-noti-project) 기반 내부 API(/api/board) 조회 + 파생 통계.
+// 자체 D1(solsol-project) 기반 내부 API(/api/board) 조회 + 파생 통계.
 // 현황판(/board)과 대시보드(/)가 공유. 데이터 편집은 D1에서 수행.
 
 export type WbsStatus = 'done' | 'in_progress' | 'pending' | 'blocked'
@@ -68,14 +68,14 @@ export function wbsGroupedTasks(stage: WbsStage) {
 }
 
 export function useWbs() {
-  // 현황판 데이터는 자체 D1(malgn-noti-project) 기반 내부 API /api/board 에서 조회.
+  // 현황판 데이터는 자체 D1(solsol-project) 기반 내부 API /api/board 에서 조회.
   const { data, pending, error, refresh } = useFetch<{ data: WbsDocument }>('/api/board', {
     key: 'board',
   })
 
   const doc = computed<WbsDocument | null>(() => data.value?.data ?? null)
   const stages = computed<WbsStage[]>(() => doc.value?.stages ?? [])
-  const projectName = computed(() => doc.value?.projectName ?? '맑은 메시징')
+  const projectName = computed(() => doc.value?.projectName ?? '솔솔')
   const lastUpdated = computed(() => doc.value?.lastUpdated ?? '—')
 
   const allTasks = computed(() => stages.value.flatMap(s => s.tasks))
