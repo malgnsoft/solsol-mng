@@ -11,8 +11,8 @@ export const boardSeed: WbsDocument = {
       "name": "기획 · 정책",
       "emoji": "🎯",
       "summary": "전체 스펙 리뷰 · 4개 앱 프로토타입 · 서비스 정책(회원/가격/구독/알림/저작권/도메인) 확정",
-      "weight": 10,
-      "progress": 90,
+      "weight": 8,
+      "progress": 95,
       "tasks": [
         {
           "id": "step-1-1-1",
@@ -175,8 +175,8 @@ export const boardSeed: WbsDocument = {
       "name": "화면설계",
       "emoji": "📋",
       "summary": "4개 앱 메뉴 구조도 · 화면설계 v1.1 · 알림 기획 · 문구 통일",
-      "weight": 12,
-      "progress": 85,
+      "weight": 10,
+      "progress": 90,
       "tasks": [
         {
           "id": "step-2-1-1",
@@ -303,8 +303,8 @@ export const boardSeed: WbsDocument = {
       "name": "디자인",
       "emoji": "🎨",
       "summary": "Customer Front · Admin · Brand 디자인 시안 · 브랜드 로고",
-      "weight": 8,
-      "progress": 88,
+      "weight": 6,
+      "progress": 85,
       "tasks": [
         {
           "id": "step-3-1-1",
@@ -355,8 +355,8 @@ export const boardSeed: WbsDocument = {
       "name": "퍼블리싱",
       "emoji": "🧩",
       "summary": "Customer Admin · Front · Brand · BackOffice · Guide 퍼블리싱",
-      "weight": 10,
-      "progress": 60,
+      "weight": 8,
+      "progress": 70,
       "tasks": [
         {
           "id": "step-4-1-1",
@@ -385,7 +385,7 @@ export const boardSeed: WbsDocument = {
           "id": "step-4-1-4",
           "group": "퍼블리싱",
           "title": "BackOffice 퍼블리싱",
-          "status": "pending",
+          "status": "in_progress",
           "owner": "유회광"
         },
         {
@@ -403,8 +403,8 @@ export const boardSeed: WbsDocument = {
       "name": "개발 설계",
       "emoji": "📐",
       "summary": "개발 플랫폼/방법론 · DB·ERD · 기능명세 · API 명세 · 외부연계 설계",
-      "weight": 12,
-      "progress": 75,
+      "weight": 10,
+      "progress": 80,
       "tasks": [
         {
           "id": "step-5-1-1",
@@ -468,9 +468,9 @@ export const boardSeed: WbsDocument = {
       "no": "Step 6",
       "name": "서비스 개발",
       "emoji": "🛠️",
-      "summary": "공통/백엔드 · Customer Admin · Front · Brand · BackOffice · AI 튜터 · 인프라 (간트 별도)",
-      "weight": 35,
-      "progress": 30,
+      "summary": "종합 베타 진척 44% (dev /progress, 6/7) — CA 45% · BO 66% · CF 17% · Brand 2%. 상세는 WBS 간트.",
+      "weight": 43,
+      "progress": 44,
       "tasks": [
         {
           "id": "step-6-1-1",
@@ -496,7 +496,7 @@ export const boardSeed: WbsDocument = {
           "title": "외부 API 어댑터 · 연동",
           "status": "in_progress",
           "owner": "조수현 · 서만원",
-          "note": "소셜로그인·메시징·결제·본인인증·위캔디오.",
+          "note": "소셜로그인·메시징 적용 · 결제PG·본인인증·위캔디오는 CF 거래데이터 대기.",
           "targetDate": "2026.05.10"
         },
         {
@@ -517,9 +517,9 @@ export const boardSeed: WbsDocument = {
           "id": "step-6-2-1",
           "group": "Customer Admin",
           "title": "CA — 인증 + 사용자 관리",
-          "status": "in_progress",
+          "status": "done",
           "owner": "조수현",
-          "note": "[상] CRUD 우선 · 권한관리."
+          "note": "[상] 사용자 95% · 목록·상세·탭·모달 배선 완료."
         },
         {
           "id": "step-6-2-2",
@@ -527,7 +527,7 @@ export const boardSeed: WbsDocument = {
           "title": "CA — 콘텐츠 관리",
           "status": "in_progress",
           "owner": "서만원",
-          "note": "[상]"
+          "note": "[상] 85% · assets·cert·영상(벤더) 잔여."
         },
         {
           "id": "step-6-2-3",
@@ -535,22 +535,23 @@ export const boardSeed: WbsDocument = {
           "title": "CA — 상품 (강의 · 디지털 · 패키지)",
           "status": "in_progress",
           "owner": "서만원",
-          "note": "[상] CRUD 우선 · 나머지탭 CF 작업 후."
+          "note": "[상] 78% · 전 상품유형 CRUD 완료 · 후행탭 CF 데이터 의존."
         },
         {
           "id": "step-6-2-4",
           "group": "Customer Admin",
           "title": "CA — 상품 (커뮤니티 · 멤버십)",
-          "status": "pending",
+          "status": "in_progress",
           "owner": "서만원",
-          "note": "[상]"
+          "note": "[상] 결제/수강생/후기/수료증 후행탭 보류(CF 의존)."
         },
         {
           "id": "step-6-2-5",
           "group": "Customer Admin",
-          "title": "CA — 판매 · 마케팅 · 사이트 디자인 · 운영 · 정산 · 설정 · 통계",
-          "status": "pending",
-          "owner": "조수현 · 서만원"
+          "title": "CA — 판매 · 마케팅 · 사이트 · 운영 · 정산 · 설정 · 통계",
+          "status": "in_progress",
+          "owner": "조수현 · 서만원",
+          "note": "운영 92%·판매 55%·설정 35%·마케팅 25%·사이트 20%·정산 10%·통계 0%."
         },
         {
           "id": "step-6-3-1",
@@ -563,25 +564,26 @@ export const boardSeed: WbsDocument = {
         {
           "id": "step-6-3-2",
           "group": "Customer Front",
-          "title": "CF — 상품 목록/상세",
-          "status": "pending",
+          "title": "CF — 상품 목록/상세 (일반강의)",
+          "status": "in_progress",
           "owner": "서만원",
-          "note": "[중] 상품결제."
+          "note": "[중] 일반강의 55% · 코어 카탈로그 · 상품결제 대기."
         },
         {
           "id": "step-6-3-3",
           "group": "Customer Front",
           "title": "CF — 커뮤니티 · 멤버십 · 마이페이지 · 게시판",
           "status": "pending",
-          "owner": "조수현 · 서만원"
+          "owner": "조수현 · 서만원",
+          "note": "공지 90% 외 대부분 미착수(상품관리·결제PG·본인인증 선행)."
         },
         {
           "id": "step-6-4-1",
           "group": "Brand site",
           "title": "Brand — 인증 + 가입",
-          "status": "in_progress",
+          "status": "pending",
           "owner": "조수현",
-          "note": "[상]"
+          "note": "[상] Brand 전체 2% · 거의 미착수."
         },
         {
           "id": "step-6-4-2",
@@ -603,7 +605,8 @@ export const boardSeed: WbsDocument = {
           "group": "BackOffice · 인프라",
           "title": "BackOffice 개발 (범위 미정)",
           "status": "in_progress",
-          "owner": "서만원"
+          "owner": "서만원",
+          "note": "전체 66% · 고객·테넌트 90%·개발자 95% · 결제정산·운영도구는 CF 거래데이터 대기."
         },
         {
           "id": "step-6-5-2",
@@ -642,8 +645,8 @@ export const boardSeed: WbsDocument = {
       "name": "운영 · 계약",
       "emoji": "📦",
       "summary": "운영 방안 · 약관/개인정보 · QA · 마케팅(크리에이터 섭외) · 외부 계약(PG·NHN·펌뱅킹·NICE)",
-      "weight": 13,
-      "progress": 18,
+      "weight": 15,
+      "progress": 15,
       "tasks": [
         {
           "id": "step-7-1-1",
