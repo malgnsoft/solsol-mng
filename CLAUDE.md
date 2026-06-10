@@ -1,7 +1,7 @@
 # solsol-mng — 프로젝트 관리 허브
 
 `solsol`(고객상담 AI 챗봇) 프로젝트를 운영·조망하는 **단일 관리 허브** 앱.
-설계 원본은 [doc/PROJECT_MANAGEMENT_BLUEPRINT.md](doc/PROJECT_MANAGEMENT_BLUEPRINT.md).
+설계 원본은 [doc/PROJECT_MANAGEMENT_BLUEPRINT.md](docs/PROJECT_MANAGEMENT_BLUEPRINT.md).
 
 ## 화면 (5)
 

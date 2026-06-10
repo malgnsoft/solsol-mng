@@ -17,8 +17,8 @@
         <div class="ov-card">
           <p class="ov-label">목표</p>
           <p class="ov-goal">
-            맑은소프트가 <b>NHN Cloud Notification Hub</b>를 래핑하여, 고객사가 자체 브랜드로 메시지를 발송·관리하는
-            <b>멀티 테넌트 SaaS “솔솔”</b>을 구축한다.
+            맑은소프트가 크리에이터(강사)가 자체 브랜드 사이트로 온라인 강의·디지털 콘텐츠·멤버십을 판매·운영하는
+            <b>멀티 테넌트 크리에이터 LMS SaaS “솔솔”</b>을 구축한다.
           </p>
           <div class="ov-channels">
             <span v-for="ch in channels" :key="ch" class="ov-chip">{{ ch }}</span>
@@ -107,21 +107,22 @@
 
 <script setup lang="ts">
 const shortcuts = [
-  { label: '사용자단 콘솔', url: 'https://solsol.pages.dev' },
-  { label: '관리자단 콘솔', url: 'https://solsol-admin.pages.dev' },
-  { label: 'API 서버', url: 'https://solsol-api.malgnsoft.workers.dev' },
-  { label: 'GitHub', url: 'https://github.com/malgnsoft/solsol-mng' },
+  { label: 'Brand site', url: 'https://brand.solsol-dev.workers.dev' },
+  { label: 'Customer Admin', url: 'https://customer-admin.solsol-dev.workers.dev' },
+  { label: 'Customer Front', url: 'https://customer-front.solsol-dev.workers.dev' },
+  { label: 'BackOffice', url: 'https://backoffice.solsol-dev.workers.dev' },
+  { label: 'GitHub', url: 'https://github.com/malgnsoft/creatorlms' },
 ]
 
 const stripProto = (u: string) => u.replace(/^https?:\/\//, '')
 
-const channels = ['SMS / LMS / MMS', 'RCS', '알림톡 / 친구톡', 'Email', 'Push', '복합 (Flow)']
+const channels = ['온라인 강의', '디지털 콘텐츠', '멤버십 / 구독', '커뮤니티 / 게시판', 'AI 튜터', 'AI 자막 / 번역']
 const directions = [
-  '멀티 테넌트 SaaS — 고객사(테넌트)별 자체 브랜드 · 발송 한도 · 크레딧 과금',
-  '5채널 + 복합(Flow) 폴백·순서 발송 (예: 알림톡 → 친구톡 → LMS)',
-  '모든 발송은 백엔드(solsol-api) 경유 — NHN 키 비노출 · 과금 · 감사 통제',
-  '핵심 도메인: 발송 · 캠페인 · 이력/통계 · 주소록 · 발신정보 · 템플릿 · 크레딧 · 계정/인증 · 문의',
-  '디자인: Relay-inspired 저밀도 시스템 · 스택: Nuxt 3 + Tailwind v4 + Nuxt UI v3',
+  '멀티 테넌트 SaaS — 크리에이터(테넌트)별 자체 브랜드 사이트({slug}.solsol.so)',
+  '4개 앱: Brand site · Customer Admin(강사) · Customer Front(수강생) · BackOffice(운영)',
+  '결제 토스페이먼츠 · 정산 기업 펌뱅킹 · 본인인증 NICE · 알림 NHN · 동영상 위캔디오',
+  '핵심 도메인: 강의/콘텐츠 · 상품/멤버십 · 커뮤니티 · 결제/정산 · 회원/인증 · AI 튜터 · 알림',
+  '스택: Frontend/Backend · DB MySQL · Cloudflare Workers (solsol-dev)',
 ]
 
 const {

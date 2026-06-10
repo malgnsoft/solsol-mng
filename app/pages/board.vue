@@ -38,17 +38,17 @@ const {
           <div>
             <h1 class="board-title">솔솔 현황판</h1>
             <p class="board-subtitle">
-              NHN Cloud Notification Hub 기반 멀티 테넌트 메시징 SaaS · 마지막 현행화
+              크리에이터 LMS 멀티 테넌트 SaaS · 4개 앱(Brand · CA · CF · BO) · 마지막 현행화
               <b>{{ lastUpdated }}</b>
             </p>
           </div>
           <a
-            href="https://solsol.pages.dev/wbs"
+            href="https://backoffice.solsol-dev.workers.dev/progress"
             target="_blank"
             rel="noopener noreferrer"
             class="board-source-link"
           >
-            원본 WBS
+            개발 진행률
             <UIcon name="i-lucide-arrow-up-right" />
           </a>
         </div>

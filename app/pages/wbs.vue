@@ -3,13 +3,13 @@ import { wbsSteps, wbsStageMeta } from '~/utils/wbsData'
 
 useHead({ title: '전체 일정' })
 
-const TODAY = '2026-06-05'
+const TODAY = '2026-06-10'
 
 /* 담당자 색 */
-const PEOPLE = ['김도형', '김경은', '김덕조', '컨설팅팀', '안병훈', '미정'] as const
+const PEOPLE = ['서만원', '조수현', '김도형', '맑은소프트', '미정'] as const
 const PCOLOR: Record<string, string> = {
-  김도형: '#2563eb', 김경은: '#7c3aed', 김덕조: '#0d9488',
-  컨설팅팀: '#d97706', 안병훈: '#db2777', 미정: '#94a3b8',
+  서만원: '#2563eb', 조수현: '#7c3aed', 김도형: '#0d9488',
+  맑은소프트: '#d97706', 미정: '#94a3b8',
 }
 function whoOf(owner: string): string[] {
   if (!owner || owner === '—') return []
@@ -187,7 +187,7 @@ const memoPos = computed(() => {
 })
 
 /* ── 등록/수정/삭제 ── */
-const STEP_OPTIONS = [1, 3, 5]
+const STEP_OPTIONS = [1, 2, 3, 4, 5]
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const saving = ref(false)
@@ -234,7 +234,7 @@ async function del(t: Item) {
   catch (e) { alert('삭제 실패: ' + (e instanceof Error ? e.message : '')) }
 }
 
-const subtitle = 'WBS 간트 · Step 1 · 3 · 5 · 화면 단위 · 기준일'
+const subtitle = 'WBS 간트 · 서비스 개발 · 앱 단위 · 기준일'
 </script>
 
 <template>
