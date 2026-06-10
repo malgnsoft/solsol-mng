@@ -44,12 +44,25 @@
 - 완료 항목은 기존 일정 유지, 미완료 작업을 7~8월로 재분배. 롱폴(Customer Front 커뮤니티·멤버십, Brand 마이페이지·서비스 소개)이 **2026-08-31** 마감.
 - 간트 타임라인: **2026-04-13 ~ 2026-08-31**. 진척률·트랙 가중치는 실측치 유지.
 
+## 7. `/wbs` UX 개선 (풀스크린 · 스크롤 · 기준일)
+
+- **푸터 제거**: 전역 푸터가 `/wbs`(100vh 풀스크린 간트)의 영역 아래에 붙어 바깥 페이지 스크롤을 만들고, 그 스크롤이 간트 내부 sticky(헤더·좌측 담당 영역)를 밀어 올리던 문제 → `/wbs`에서만 푸터를 숨겨 좌측 담당·정보 패널 고정 정상화.
+- **스크롤 시 상단 접기**: 간트 스크롤 다운 시 **GNB + 전체 일정·KPI 헤더**를 함께 위로 접고(스크롤 업 시 복귀), **담당(좌측 정보) · 날짜(타임라인 헤더)** 는 sticky 유지. wbs.vue 가 `useState('wbsChromeHidden')` 로 신호를 발행 → 레이아웃이 GNB 높이를 접고 `/wbs` 영역을 56px만큼 100vh로 확장(전환 0.24s 동기화).
+- **로고**: GNB 워드마크에서 `message` 제거 → **솔솔 프로젝트 관리** 만 노출.
+- **기준일**: 부제 기준일을 `6/10` → **`2026.06.10`**(yyyy.MM.dd) 표기. 클릭 시 오늘 컬럼이 진척율(좌측 정보) 바로 오른쪽(타임라인 시작)으로 가로 스크롤.
+
+## 8. WBS 전체 일정으로 확장 (5트랙 → 7단계)
+
+- 기존 5개 앱 트랙을 **Step 6(서비스 개발)** 하위 그룹으로 묶고, **Step 1~5(기획·정책 / 화면설계 / 디자인 / 퍼블리싱 / 개발 설계)** 와 **Step 7(운영·계약)** 을 일자와 함께 추가.
+- 총 **62개 항목**, 타임라인 **2026-01-23 ~ 2026-08-31**(전 구간). WBS 단계 가중치·진척을 현황판과 동일하게 맞춰 **KPI = 프로젝트 전체 진척(가중평균 56.5%)**.
+- `wbsSteps`·`wbsStageMeta` 7단계, `STEP_OPTIONS` 1~7, 담당 필터·부제("전체 일정 · 7단계") 갱신.
+
 ## 산출물
 
 - **신규 리소스**: D1 `solsol-project`(`e682bf78…`), Pages `solsol-mng` — <https://solsol-mng.pages.dev>.
 - **데이터 정합**(단일 생성 스크립트로 동기화): `server/db/seed.sql`(board + `wbs_item`) · `server/utils/boardSeed.ts` · `app/utils/wbsData.ts`.
 - **수정 파일**: `wrangler.toml`·`package.json`·`drizzle.config.ts`·`CLAUDE.md`, `app/pages/{index,board,wbs}.vue`·`app/layouts/default.vue`·`app/composables/useWbs.ts`·`app/pages/docs/index.vue`, `server/api/board.get.ts`·`server/db/schema.ts`·`server/utils/db.ts`, `docs/PROJECT_MANAGEMENT_BLUEPRINT.md`.
-- **주요 커밋**(`main`): `Rebrand to solsol and wire up Cloudflare` → `Rewrite board and WBS for SolSol Creator LMS` → `Adjust progress to real dev /progress data` → `Remove 'message' from logo wordmark` → `Extend WBS gantt deadlines to end of August`(`6c02938`).
+- **주요 커밋**(`main`): `Rebrand to solsol and wire up Cloudflare` → `Rewrite board and WBS for SolSol Creator LMS` → `Adjust progress to real dev /progress data` → `Remove 'message' from logo wordmark` → `Extend WBS gantt deadlines to end of August` → `Hide footer on /wbs` → `Collapse top header + GNB on scroll` → `Format 기준일 as yyyy.MM.dd` → `Expand WBS to full schedule (7 steps)` → `Click 기준일 to scroll to today`.
 
 ## 다음 단계 / 알려진 한계
 
