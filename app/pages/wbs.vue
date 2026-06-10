@@ -234,11 +234,24 @@ async function del(t: Item) {
   catch (e) { alert('삭제 실패: ' + (e instanceof Error ? e.message : '')) }
 }
 
+/* ── 스크롤 시 상단(전체 일정·KPI)만 접기 — 담당·날짜 헤더는 sticky 유지 ── */
+const ganttRef = ref<HTMLElement | null>(null)
+const chromeHidden = ref(false)
+let lastScroll = 0
+function onScroll() {
+  const el = ganttRef.value
+  if (!el) return
+  const t = el.scrollTop
+  if (t > lastScroll && t > 72) chromeHidden.value = true
+  else if (t < lastScroll - 4) chromeHidden.value = false
+  lastScroll = t
+}
+
 const subtitle = 'WBS 간트 · 서비스 개발 · 앱 단위 · 기준일'
 </script>
 
 <template>
-  <div class="wbsx">
+  <div class="wbsx" :class="{ 'chrome-collapsed': chromeHidden }">
     <!-- Topbar -->
     <header class="topbar">
       <div class="title-wrap">
@@ -283,7 +296,7 @@ const subtitle = 'WBS 간트 · 서비스 개발 · 앱 단위 · 기준일'
     </div>
 
     <!-- Gantt -->
-    <div class="gantt">
+    <div ref="ganttRef" class="gantt" @scroll="onScroll">
       <div class="ginner">
         <div class="gridbg" :style="{ width: trackWidth }">
           <div class="daylines" />
@@ -436,7 +449,9 @@ const subtitle = 'WBS 간트 · 서비스 개발 · 앱 단위 · 기준일'
   background: var(--bg); color: var(--ink); font-size: var(--fs); letter-spacing: -0.01em;
 }
 .tnum { font-variant-numeric: tabular-nums; }
-.topbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 14px 22px 12px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.topbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 14px 22px 12px; background: var(--surface); border-bottom: 1px solid var(--line); max-height: 160px; overflow: hidden; transition: max-height .24s ease, padding .24s ease, opacity .2s ease, border-color .24s ease; }
+/* 스크롤 내릴 때 전체 일정·KPI 영역을 접어 위로 올림(담당·날짜 헤더는 sticky 유지) */
+.wbsx.chrome-collapsed .topbar { max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; border-bottom-color: transparent; }
 .title-wrap { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .topbar h1 { margin: 0; font-size: 21px; font-weight: 800; letter-spacing: -0.02em; }
 .sub { color: var(--ink-2); font-size: 12.5px; font-weight: 500; } .sub b { color: var(--ink); font-weight: 700; }
