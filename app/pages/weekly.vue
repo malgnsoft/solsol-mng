@@ -63,7 +63,11 @@ function ownerColor(o: string) {
 
 // ── 필터 ──
 const showDone = ref(false)
-const owners = computed(() => Array.from(new Set(items.value.map(i => i.owner).filter(Boolean))).sort())
+// 한 작업의 담당이 여러 명("김덕조, 김혜인" / "유회광 · 방준영")일 수 있어 개별 담당자로 분해.
+function ownersOf(i: WItem): string[] {
+  return (i.owner || '').split(/[,·]/).map(s => s.trim()).filter(Boolean)
+}
+const owners = computed(() => Array.from(new Set(items.value.flatMap(ownersOf))).sort())
 const fOwners = ref(new Set<string>())
 function toggleOwner(o: string) {
   const s = new Set(fOwners.value)
@@ -74,7 +78,8 @@ function toggleOwner(o: string) {
 
 function passes(i: WItem) {
   if (!showDone.value && i.progress >= 100) return false
-  if (fOwners.value.size && !fOwners.value.has(i.owner)) return false
+  // 담당 필터 — 작업의 담당자 중 한 명이라도 선택돼 있으면 매칭(다중 담당 포함).
+  if (fOwners.value.size && !ownersOf(i).some(o => fOwners.value.has(o))) return false
   return true
 }
 const scheduled = computed(() =>
