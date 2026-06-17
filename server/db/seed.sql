@@ -1,97 +1,14 @@
--- 자동 생성 시드 (solsol-project) — 쏠쏠 크리에이터 LMS · 진척 /progress 실측(6/7)
+-- 자동 생성 시드 (solsol-project) — 쏠쏠 프로젝트 관리
+-- 회원(member) 기본 관리자 + WBS 간트(wbs_item). 이슈/댓글은 사용자 작성 데이터라 시드 없음.
+-- 적용(원격): pnpm db:seed  (wrangler d1 execute solsol-project --remote --file=server/db/seed.sql)
+
+-- ── 기본 관리자 계정 (로그인: admin / 비밀번호: solsol2026) ──
+DELETE FROM member;
+INSERT INTO member (id,login_id,password_hash,name,company,role,grade,email,phone,source,office_id,status,agreed_at,created_at,updated_at)
+  VALUES (1,'admin','pbkdf2$100000$h8N9NWJuj0dGeTXaP1KbFg==$UKTOSQv9NcHWiMwmFVHUO9HX0o6Wg10qHwdBFeYtrBs=','관리자','맑은소프트','프로젝트 관리자','admin','','','direct',NULL,'active',NULL,'2026-06-17T00:00:00.000Z',NULL);
+
+-- ── WBS 간트 ──
 DELETE FROM wbs_item;
-DELETE FROM task;
-DELETE FROM stage;
-DELETE FROM board_meta;
-
-INSERT INTO board_meta (id, project_name, last_updated) VALUES (1, '쏠쏠', '2026-06-10');
-
-INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-1','Step 1','기획 · 정책','🎯','전체 스펙 리뷰 · 4개 앱 프로토타입 · 서비스 정책(회원/가격/구독/알림/저작권/도메인) 확정',8,95,0);
-INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-2','Step 2','화면설계','📋','4개 앱 메뉴 구조도 · 화면설계 v1.1 · 알림 기획 · 문구 통일',10,90,1);
-INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-3','Step 3','디자인','🎨','Customer Front · Admin · Brand 디자인 시안 · 브랜드 로고',6,85,2);
-INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-4','Step 4','퍼블리싱','🧩','Customer Admin · Front · Brand · BackOffice · Guide 퍼블리싱',8,70,3);
-INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-5','Step 5','개발 설계','📐','개발 플랫폼/방법론 · DB·ERD · 기능명세 · API 명세 · 외부연계 설계',10,80,4);
-INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-6','Step 6','서비스 개발','🛠️','종합 베타 진척 44% (dev /progress, 6/7) — CA 45% · BO 66% · CF 17% · Brand 2%. 상세는 WBS 간트.',43,44,5);
-INSERT INTO stage (id,no,name,emoji,summary,weight,progress,sort) VALUES ('step-7','Step 7','운영 · 계약','📦','운영 방안 · 약관/개인정보 · QA · 마케팅(크리에이터 섭외) · 외부 계약(PG·NHN·펌뱅킹·NICE)',15,15,6);
-
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-1-1','step-1','리뷰 · 프로토타입','전체 스펙 요구사항 리뷰회의','done','김덕조',NULL,'2026.01.30','2026.01.30',NULL,0);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-1-2','step-1','리뷰 · 프로토타입','프로토타입 — Customer Admin','done','김덕조',NULL,'2026.01.26','2026.01.26','https://creatorlms-admin.pages.dev/',1);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-1-3','step-1','리뷰 · 프로토타입','프로토타입 — Customer Front','done','김덕조',NULL,'2026.01.26','2026.01.26','https://front-creator.pages.dev/front/index.html',2);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-1-4','step-1','리뷰 · 프로토타입','프로토타입 — Brand site','done','김덕조',NULL,'2026.01.23','2026.01.23','https://brand-creator.pages.dev/brand/index.html',3);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-1-5','step-1','리뷰 · 프로토타입','프로토타입 — BackOffice','done','유회광',NULL,'2026.02.25','2026.02.25','https://juksim.ubik.co.kr/creatorlms/app.php',4);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-1','step-1','서비스 정책','회원가입 정책 (소셜로그인 · 이메일 인증)','done','유빅 · 김덕조','CF 소셜로그인만 허용(구글·카카오·네이버·페이스북·애플). 이메일 없으면 가입불가. Brand 회원가입은 이메일/비밀번호.','2026.02.03','2026.02.03',NULL,5);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-2','step-1','서비스 정책','가격 정책 (경쟁사 분석 · 종량제)','done','김덕조','온라인 3개사 가격체계·Features 비교. Notification·AI 튜터·자동 자막/번역 종량제 설계.','2026.02.06','2026.02.06',NULL,6);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-3','step-1','서비스 정책','구독 정책 (결제 · 환불)','done','김덕조','Creator LMS 구독정책 초안 완료.','2026.02.13','2026.02.13',NULL,7);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-4','step-1','서비스 정책','닉네임 정책','done','김혜인',NULL,'2026.02.13','2026.02.13',NULL,8);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-5','step-1','서비스 정책','컨텐츠 및 저작권 정책 (DRM)','done','방준영','콘텐츠 소유권(강사 vs 쏠쏠)·무단복제·라이선스 관리.','2026.02.13','2026.02.13',NULL,9);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-6','step-1','서비스 정책','멤버십 상품 / 프리미엄 콘텐츠 정책','done','김혜인','최초 6개 상품 구성(크리에이터 ON/OFF). 디지털 다운로드 옵션.','2026.02.13','2026.02.13',NULL,10);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-7','step-1','서비스 정책','게시판 · 결제 · 1:1문의 정책','done','김혜인',NULL,'2026.02.13','2026.02.13',NULL,11);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-8','step-1','서비스 정책','알림 정책 (알림톡 · SMS · 메일 템플릿)','done','김덕조',NULL,'2026.02.27','2026.02.27',NULL,12);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-9','step-1','서비스 정책','브랜딩 작업','done','김덕조',NULL,'2026.02.27','2026.02.27',NULL,13);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-10','step-1','서비스 정책','도메인 구조 확정 (solsol.so)','done','김덕조','CF: {slug}.solsol.so · CA: ceo.solsol.so/@slug · BO: so.solsol.so · Brand: solsol.so','2026.04.15','2026.04.15',NULL,14);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-1-2-11','step-1','서비스 정책','BackOffice 정책 (도메인/SSL · 국가/언어 · AI번역 · 환불)','in_progress','방준영 · 김혜인',NULL,'2026.03.29',NULL,NULL,15);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-1-1','step-2','메뉴 구조도','Customer Admin 메뉴 구조도','done','조안이혜',NULL,'2026.03.13','2026.03.13',NULL,16);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-1-2','step-2','메뉴 구조도','Customer Front 메뉴 구조도','done','김혜인',NULL,'2026.02.10','2026.02.10',NULL,17);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-1-3','step-2','메뉴 구조도','Brand site 메뉴 구조도','done','김덕조',NULL,'2026.02.10','2026.02.10',NULL,18);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-1-4','step-2','메뉴 구조도','BackOffice 메뉴 구조도','done','유회광',NULL,'2026.02.28','2026.02.28',NULL,19);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-1-5','step-2','메뉴 구조도','Guide site 메뉴 구조도','in_progress','방준영',NULL,'2026.06.26',NULL,NULL,20);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-2-1','step-2','화면설계','Customer Admin 화면설계 v1.1','done','김혜인 · 조안이혜','v1.1 완료(디스크립션 미작성).','2026.04.02','2026.04.02',NULL,21);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-2-2','step-2','화면설계','Customer Front 화면설계 v1.1','in_progress','김혜인','v1.1 작업중.','2026.03.04',NULL,NULL,22);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-2-3','step-2','화면설계','Brand site 화면설계 (피그마)','done','김덕조',NULL,'2026.03.13','2026.03.13',NULL,23);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-2-4','step-2','화면설계','BackOffice 화면설계','done','유회광',NULL,'2026.03.05','2026.03.05',NULL,24);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-2-5','step-2','화면설계','Guide site 화면설계','done','방준영',NULL,'2026.03.20','2026.03.20',NULL,25);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-3-1','step-2','알림 · 문구','서비스 알림 기획','done','김혜인',NULL,'2026.04.15','2026.04.15',NULL,26);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-3-2','step-2','알림 · 문구','마케팅 서비스 알림 추가','done','조안이혜',NULL,'2026.04.25','2026.04.25',NULL,27);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-2-3-3','step-2','알림 · 문구','얼럿/컨펌 문구 통일 정리','done','조안이혜 · 김혜인',NULL,'2026.04.16','2026.04.16',NULL,28);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-3-1-1','step-3','디자인 시안','Customer Front 시안 (피그마)','done','전진주',NULL,'2026.03.20','2026.03.20',NULL,29);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-3-1-2','step-3','디자인 시안','Customer Admin 시안','in_progress','이승미',NULL,NULL,NULL,NULL,30);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-3-1-3','step-3','디자인 시안','Brand site - main (피그마)','done','전진주',NULL,'2026.03.25','2026.03.25',NULL,31);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-3-1-4','step-3','디자인 시안','Brand site - sub','done','전진주',NULL,NULL,NULL,NULL,32);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-3-2-1','step-3','브랜드','브랜드 로고','done','방준영',NULL,'2026.03.25','2026.03.25',NULL,33);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-4-1-1','step-4','퍼블리싱','Customer Admin 퍼블리싱','in_progress','박윤희',NULL,'2026.05.31',NULL,NULL,34);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-4-1-2','step-4','퍼블리싱','Customer Front 퍼블리싱','in_progress','박윤희',NULL,'2026.05.31',NULL,NULL,35);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-4-1-3','step-4','퍼블리싱','Brand site 퍼블리싱','in_progress','김덕조',NULL,NULL,NULL,NULL,36);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-4-1-4','step-4','퍼블리싱','BackOffice 퍼블리싱','in_progress','유회광',NULL,NULL,NULL,NULL,37);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-4-1-5','step-4','퍼블리싱','Guide site 퍼블리싱','pending','방준영',NULL,NULL,NULL,NULL,38);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-5-1-1','step-5','설계 산출물','개발 플랫폼 세팅 및 방법론 정의','done','서만원','Frontend/Backend · DB MySQL · 시스템 구성도 · 서버구조(MSA) · API 인증 · 배포 정책.','2026.04.30','2026.04.30','https://github.com/malgnsoft/creatorlms',39);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-5-1-2','step-5','설계 산출물','DB 설계 (테이블 구조 · ERD)','done','서만원',NULL,'2026.04.30','2026.04.30',NULL,40);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-5-1-3','step-5','설계 산출물','기능명세서 (페이지명세서)','done','서만원',NULL,'2026.04.30','2026.04.30',NULL,41);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-5-1-4','step-5','설계 산출물','API 명세서 1차','done','서만원',NULL,'2026.05.31','2026.05.31',NULL,42);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-5-1-5','step-5','설계 산출물','API 명세서 2차','in_progress','서만원',NULL,'2026.06.30',NULL,NULL,43);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-5-1-6','step-5','설계 산출물','외부 연계 설계 (NHN · NICE · PG · 위캔디오 · 펌뱅킹)','in_progress','서만원','대체로 7/1부터 2개월간 실 연동.','2026.08.31',NULL,NULL,44);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-1-1','step-6','공통 · 백엔드','프레임워크 설계 · 개발','done','서만원','웹앱 개별 세팅.','2026.05.10','2026.05.10',NULL,45);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-1-2','step-6','공통 · 백엔드','공통 모듈 개발 (코드/파일/약관/메모)','in_progress','서만원',NULL,'2026.06.07',NULL,NULL,46);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-1-3','step-6','공통 · 백엔드','외부 API 어댑터 · 연동','in_progress','조수현 · 서만원','소셜로그인·메시징 적용 · 결제PG·본인인증·위캔디오는 CF 거래데이터 대기.','2026.05.10',NULL,NULL,47);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-1-4','step-6','공통 · 백엔드','API 개발','in_progress','서만원',NULL,NULL,NULL,NULL,48);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-1-5','step-6','공통 · 백엔드','배치 프로세스 개발','pending','서만원',NULL,NULL,NULL,NULL,49);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-2-1','step-6','Customer Admin','CA — 인증 + 사용자 관리','done','조수현','[상] 사용자 95% · 목록·상세·탭·모달 배선 완료.',NULL,NULL,NULL,50);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-2-2','step-6','Customer Admin','CA — 콘텐츠 관리','in_progress','서만원','[상] 85% · assets·cert·영상(벤더) 잔여.',NULL,NULL,NULL,51);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-2-3','step-6','Customer Admin','CA — 상품 (강의 · 디지털 · 패키지)','in_progress','서만원','[상] 78% · 전 상품유형 CRUD 완료 · 후행탭 CF 데이터 의존.',NULL,NULL,NULL,52);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-2-4','step-6','Customer Admin','CA — 상품 (커뮤니티 · 멤버십)','in_progress','서만원','[상] 결제/수강생/후기/수료증 후행탭 보류(CF 의존).',NULL,NULL,NULL,53);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-2-5','step-6','Customer Admin','CA — 판매 · 마케팅 · 사이트 · 운영 · 정산 · 설정 · 통계','in_progress','조수현 · 서만원','운영 92%·판매 55%·설정 35%·마케팅 25%·사이트 20%·정산 10%·통계 0%.',NULL,NULL,NULL,54);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-3-1','step-6','Customer Front','CF — 인증 + 가입 (소셜)','in_progress','조수현','[상] 소셜 회원가입·로그인.',NULL,NULL,NULL,55);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-3-2','step-6','Customer Front','CF — 상품 목록/상세 (일반강의)','in_progress','서만원','[중] 일반강의 55% · 코어 카탈로그 · 상품결제 대기.',NULL,NULL,NULL,56);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-3-3','step-6','Customer Front','CF — 커뮤니티 · 멤버십 · 마이페이지 · 게시판','pending','조수현 · 서만원','공지 90% 외 대부분 미착수(상품관리·결제PG·본인인증 선행).',NULL,NULL,NULL,57);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-4-1','step-6','Brand site','Brand — 인증 + 가입','pending','조수현','[상] Brand 전체 2% · 거의 미착수.',NULL,NULL,NULL,58);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-4-2','step-6','Brand site','Brand — 플랜 구독 (결제)','pending','서만원','[상]',NULL,NULL,NULL,59);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-4-3','step-6','Brand site','Brand — 마이페이지 · 서비스 소개','pending','조수현 · 서만원',NULL,NULL,NULL,NULL,60);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-5-1','step-6','BackOffice · 인프라','BackOffice 개발 (범위 미정)','in_progress','서만원','전체 66% · 고객·테넌트 90%·개발자 95% · 결제정산·운영도구는 CF 거래데이터 대기.',NULL,NULL,NULL,61);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-5-2','step-6','BackOffice · 인프라','AI 튜터 설계 및 개발','pending','김도형',NULL,NULL,NULL,NULL,62);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-5-3','step-6','BackOffice · 인프라','학습분석리포트 설계','pending','김도형',NULL,NULL,NULL,NULL,63);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-5-4','step-6','BackOffice · 인프라','인프라 구축','in_progress','맑은소프트','클라우드 · 도메인 · SSL.',NULL,NULL,NULL,64);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-6-5-5','step-6','BackOffice · 인프라','CI/CD','in_progress','맑은소프트',NULL,NULL,NULL,NULL,65);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-1-1','step-7','운영 방안','운영 서비스 기획','in_progress','방준영',NULL,NULL,NULL,NULL,66);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-1-2','step-7','운영 방안','이용약관 · 개인정보처리방침 셋팅','pending','방준영','화면설계 및 정책서 이후 작업.',NULL,NULL,NULL,67);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-1-3','step-7','운영 방안','정산 운영 방안 (기업 펌뱅킹)','pending','방준영','신한은행 · K뱅크 · 카카오뱅크 중 택일.',NULL,NULL,NULL,68);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-2-1','step-7','테스트 · 정책','전체 QA (기획·디자인·퍼블리싱 산출물 체크)','pending','미정',NULL,NULL,NULL,NULL,69);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-2-2','step-7','테스트 · 정책','운영가이드 작업','pending','방준영',NULL,NULL,NULL,NULL,70);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-2-3','step-7','테스트 · 정책','FAQ 작성 · 마케팅동의 약관','pending','미정',NULL,NULL,NULL,NULL,71);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-3-1','step-7','마케팅','크리에이터 섭외 (베타오픈 10명)','pending','미정',NULL,NULL,NULL,NULL,72);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-3-2','step-7','마케팅','알림 마케팅 기획 · 오픈 프로모션','pending','미정',NULL,NULL,NULL,NULL,73);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-4-1','step-7','외부 계약','토스페이먼츠 PG 계약','pending','미정',NULL,NULL,NULL,NULL,74);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-4-2','step-7','외부 계약','NHN Cloud 신청','pending','미정',NULL,NULL,NULL,NULL,75);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-4-3','step-7','외부 계약','신한은행 펌뱅킹 계약','pending','미정',NULL,NULL,NULL,NULL,76);
-INSERT INTO task (id,stage_id,grp,title,status,owner,note,target_date,completion_date,href,sort) VALUES ('step-7-4-4','step-7','외부 계약','나이스평가정보 심사 및 계약','pending','미정',NULL,NULL,NULL,NULL,77);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (1,1,'리뷰 · 프로토타입','전체 스펙 요구사항 리뷰회의','김덕조','2026-01-26','2026-01-30',100,NULL,NULL,0);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (2,1,'리뷰 · 프로토타입','4개 앱 프로토타입 (CA·CF·Brand·BO)','김덕조, 유회광','2026-01-23','2026-02-25',100,'creatorlms 프로토타입 5종',NULL,1);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (3,1,'서비스 정책','서비스 정책 확정 (회원·가격·구독·알림·저작권)','김덕조, 김혜인','2026-02-03','2026-02-27',100,NULL,NULL,2);

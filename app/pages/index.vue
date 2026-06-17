@@ -33,15 +33,15 @@
       </div>
     </section>
 
-    <!-- 프로젝트 현황 (현황판 요약) -->
+    <!-- 프로젝트 현황 (WBS 요약) -->
     <section class="board-summary">
       <div class="board-summary-head">
         <h2 class="board-summary-title">프로젝트 현황</h2>
-        <NuxtLink to="/board" class="board-summary-more">현황판 전체 보기 →</NuxtLink>
+        <NuxtLink to="/wbs" class="board-summary-more">전체 일정(WBS) 보기 →</NuxtLink>
       </div>
 
       <div v-if="wbsPending" class="board-summary-state">현황 불러오는 중…</div>
-      <div v-else-if="wbsError || !wbsDoc" class="board-summary-state">현황을 불러올 수 없습니다.</div>
+      <div v-else-if="wbsError" class="board-summary-state">현황을 불러올 수 없습니다.</div>
       <AppWbsOverview
         v-else
         :stages="stages"
@@ -64,6 +64,29 @@
           </div>
         </template>
       </AppWbsOverview>
+    </section>
+
+    <!-- 최근 이슈 (정책·이슈·공지·논의) -->
+    <section class="issues-section">
+      <div class="col-head">
+        <h2 class="col-title">최근 이슈</h2>
+        <NuxtLink to="/issues" class="col-more">전체 보기 →</NuxtLink>
+      </div>
+      <div v-if="issuesPending" class="issue-empty">이슈 불러오는 중…</div>
+      <div v-else-if="issuesError" class="issue-empty">이슈를 불러올 수 없습니다.</div>
+      <ul v-else-if="recentIssues.length" class="card-list">
+        <li v-for="it in recentIssues" :key="it.id">
+          <NuxtLink :to="`/issues/${it.id}`" class="issue-card">
+            <span class="badge type">{{ issueTypeLabel(it.type) }}</span>
+            <span class="issue-card-title">{{ it.title }}</span>
+            <span class="badge" :class="issueStatusClass(it.status)">{{ issueStatusLabel(it.status) }}</span>
+            <span class="issue-card-meta">{{ it.authorName || '—' }} · {{ formatDate(it.updatedAt || it.createdAt) }}</span>
+          </NuxtLink>
+        </li>
+      </ul>
+      <NuxtLink v-else to="/issues/new" class="issue-empty issue-empty-link">
+        등록된 이슈가 없습니다. 새 이슈를 작성해 보세요 →
+      </NuxtLink>
     </section>
 
     <div class="grid">
@@ -106,6 +129,11 @@
 </template>
 
 <script setup lang="ts">
+import { wbsSteps, wbsStageMeta } from '~/utils/wbsData'
+import type { WbsStage } from '~/composables/useWbs'
+import { formatDate, issueStatusClass, issueStatusLabel, issueTypeLabel } from '~/utils/issueMeta'
+import type { IssueListItem } from '~/utils/issueMeta'
+
 const shortcuts = [
   { label: 'Brand site', url: 'https://brand.solsol-dev.workers.dev' },
   { label: 'Customer Admin', url: 'https://customer-admin.solsol-dev.workers.dev' },
@@ -125,13 +153,35 @@ const directions = [
   '스택: Frontend/Backend · DB MySQL · Cloudflare Workers (solsol-dev)',
 ]
 
-const {
-  doc: wbsDoc,
-  stages,
-  weightedAverage,
-  pending: wbsPending,
-  error: wbsError,
-} = useWbs()
+// 현황 요약은 WBS(간트)와 동일 소스 — wbsStageMeta(단계 진척) + /api/wbs(항목 수).
+const STEP_EMOJI: Record<number, string> = { 1: '🎯', 2: '📋', 3: '🎨', 4: '🧩', 5: '📐', 6: '🛠️', 7: '📦' }
+const { data: wbsRes, pending: wbsPending, error: wbsError } = await useFetch<{ data: { step: number }[] }>('/api/wbs', { key: 'wbs-overview' })
+const wbsItems = computed(() => wbsRes.value?.data ?? [])
+
+const stages = computed<WbsStage[]>(() =>
+  Object.keys(wbsStageMeta).map((k) => {
+    const num = Number(k)
+    const meta = wbsStageMeta[num]!
+    const [no, name] = (wbsSteps[num] ?? `Step ${num} · `).split(' · ')
+    return {
+      id: `step-${num}`,
+      no: no ?? `Step ${num}`,
+      emoji: STEP_EMOJI[num] ?? '•',
+      name: name ?? '',
+      summary: '',
+      weight: meta.weight,
+      progress: meta.progress,
+      tasks: wbsItems.value.filter(i => i.step === num) as unknown as WbsStage['tasks'],
+    }
+  }),
+)
+
+const weightedAverage = computed(() => {
+  const metas = Object.values(wbsStageMeta)
+  const tw = metas.reduce((a, s) => a + s.weight, 0)
+  if (!tw) return 0
+  return Math.round((metas.reduce((a, s) => a + s.weight * s.progress, 0) / tw) * 10) / 10
+})
 
 const { data: all } = await useAllDocs()
 
@@ -144,6 +194,13 @@ const histories = computed(() =>
 
 const topDocs = computed(() => docs.value.slice(0, 8))
 const recentHistory = computed(() => histories.value.slice(0, 6))
+
+// 최근 이슈 — 게시판 최신 5건 (목록 API는 최신순 정렬).
+const { data: issuesRes, pending: issuesPending, error: issuesError } = await useFetch<{ data: IssueListItem[] }>(
+  '/api/issues',
+  { query: { page: 1 }, key: 'home-issues' },
+)
+const recentIssues = computed(() => (issuesRes.value?.data ?? []).slice(0, 5))
 </script>
 
 <style scoped>
@@ -346,5 +403,87 @@ const recentHistory = computed(() => histories.value.slice(0, 6))
   font-size: 12px;
   color: var(--accent-ink);
   width: 78px;
+}
+
+/* 최근 이슈 */
+.issues-section {
+  margin-bottom: 44px;
+}
+.issue-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.issue-card:hover {
+  border-color: var(--ink-300);
+}
+.issue-card-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.issue-card-meta {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--ink-400);
+  white-space: nowrap;
+}
+.issue-empty {
+  display: block;
+  padding: 28px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--ink-400);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.issue-empty-link:hover {
+  color: var(--accent-ink);
+  border-color: var(--ink-300);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 9px;
+  border-radius: var(--r-full, 999px);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.badge.type {
+  background: var(--ink-100);
+  color: var(--ink-600);
+}
+.badge.st-open {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.badge.st-in_progress {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.badge.st-resolved {
+  background: var(--ink-100);
+  color: var(--ink-500);
+}
+.badge.st-hold {
+  background: #fef3c7;
+  color: #92400e;
+}
+@media (max-width: 560px) {
+  .issue-card-meta { display: none; }
 }
 </style>

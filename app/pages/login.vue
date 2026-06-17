@@ -1,165 +1,193 @@
 <template>
-  <div class="login-screen">
-    <div class="login-card">
-      <div class="login-mark"><AppLogoMark /></div>
-      <h1 class="login-title">쏠쏠 프로젝트 관리</h1>
-      <p class="login-sub">쏠쏠 크리에이터 LMS 프로젝트 관리 허브</p>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-head">
+        <span class="auth-mark"><AppLogoMark /></span>
+        <h1 class="auth-title">로그인</h1>
+        <p class="auth-sub">쏠쏠 프로젝트 관리</p>
+      </div>
 
-      <form class="login-form" @submit.prevent="submit">
-        <label class="login-label" for="login-pw">접근 비밀번호</label>
-        <input
-          id="login-pw"
-          v-model="password"
-          type="password"
-          class="login-input"
-          autocomplete="current-password"
-          :disabled="loading"
-          autofocus
-        >
-        <p v-if="error" class="login-error">{{ error }}</p>
-        <button type="submit" class="login-btn" :disabled="loading || !password">
-          {{ loading ? '확인 중…' : '입장하기' }}
+      <form class="auth-form" @submit.prevent="onSubmit">
+        <label class="field">
+          <span class="field-label">아이디</span>
+          <input
+            v-model.trim="form.loginId"
+            class="field-input"
+            type="text"
+            autocomplete="username"
+            placeholder="아이디"
+            required
+          >
+        </label>
+        <label class="field">
+          <span class="field-label">비밀번호</span>
+          <input
+            v-model="form.password"
+            class="field-input"
+            type="password"
+            autocomplete="current-password"
+            placeholder="비밀번호"
+            required
+          >
+        </label>
+
+        <p v-if="error" class="auth-error" role="alert">{{ error }}</p>
+
+        <button class="auth-submit" type="submit" :disabled="pending">
+          {{ pending ? '로그인 중…' : '로그인' }}
         </button>
       </form>
 
-      <p class="login-hint">회원가입 없이 비밀번호로만 입장합니다.</p>
+      <p class="auth-foot">
+        아직 계정이 없나요?
+        <NuxtLink to="/signup" class="auth-link">회원가입</NuxtLink>
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: false })
-useHead({ title: '로그인' })
-
 const route = useRoute()
-const password = ref('')
-const loading = ref(false)
+const { member, login } = useAuth()
+
+const form = reactive({ loginId: '', password: '' })
+const pending = ref(false)
 const error = ref('')
 
-async function submit() {
-  if (loading.value || !password.value) return
+const redirectTo = computed(() => {
+  const r = route.query.redirect
+  // 오픈 리다이렉트(`//evil.com`, `/\evil.com`) 차단 — 내부 경로만 허용.
+  if (typeof r !== 'string' || !r.startsWith('/') || r.startsWith('//') || r.startsWith('/\\')) return '/'
+  return r
+})
+
+// 이미 로그인 상태면 진입 차단
+if (member.value) {
+  await navigateTo(redirectTo.value, { replace: true })
+}
+
+async function onSubmit() {
+  if (pending.value) return
+  pending.value = true
   error.value = ''
-  loading.value = true
   try {
-    await $fetch('/api/login', { method: 'POST', body: { password: password.value } })
-    const redirect = (route.query.redirect as string) || '/'
-    await navigateTo(redirect.startsWith('/') ? redirect : '/')
-  } catch (e: unknown) {
-    const err = e as { data?: { statusMessage?: string }, statusMessage?: string }
-    error.value = err?.data?.statusMessage || err?.statusMessage || '비밀번호가 올바르지 않습니다.'
-    password.value = ''
-  } finally {
-    loading.value = false
+    await login(form.loginId, form.password)
+    await navigateTo(redirectTo.value, { replace: true })
+  }
+  catch (e: unknown) {
+    error.value = extractError(e, '로그인에 실패했습니다')
+  }
+  finally {
+    pending.value = false
   }
 }
 </script>
 
 <style scoped>
-.login-screen {
-  min-height: 100vh;
+.auth-page {
+  min-height: calc(100vh - 56px);
   display: grid;
   place-items: center;
-  padding: 24px;
-  background:
-    radial-gradient(1200px 600px at 50% -10%, var(--accent-soft) 0%, transparent 60%),
-    var(--paper);
+  padding: 48px 20px;
 }
-.login-card {
+.auth-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
   background: var(--white);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow: var(--shadow-modal);
-  padding: 40px 32px 28px;
-  text-align: center;
+  border-radius: var(--r-lg, 12px);
+  padding: 32px 28px;
 }
-.login-mark {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 18px;
+.auth-head {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.auth-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
   background: var(--ink-900);
   color: var(--white);
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
+  border-radius: var(--r-md, 8px);
+  margin-bottom: 12px;
 }
-.login-mark :deep(svg) {
-  width: 26px;
-  height: 26px;
-}
-.login-title {
-  font-size: 22px;
+.auth-title {
+  font-size: 20px;
   font-weight: 700;
   color: var(--ink-900);
   letter-spacing: -0.01em;
 }
-.login-sub {
-  margin-top: 6px;
+.auth-sub {
+  margin-top: 4px;
   font-size: 13px;
   color: var(--ink-400);
 }
-.login-form {
-  margin-top: 28px;
-  text-align: left;
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
-.login-label {
-  display: block;
-  font-size: 13px;
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-label {
+  font-size: 12px;
   font-weight: 600;
-  color: var(--ink-700);
-  margin-bottom: 8px;
+  color: var(--ink-600);
 }
-.login-input {
-  width: 100%;
-  height: 46px;
-  padding: 0 14px;
-  font-size: 15px;
-  color: var(--ink-900);
-  background: var(--ink-50);
+.field-input {
+  height: 40px;
+  padding: 0 12px;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  outline: none;
-  transition: border-color .15s ease, background .15s ease;
-}
-.login-input:focus {
+  border-radius: var(--r-md, 8px);
+  font-size: 14px;
+  color: var(--ink-900);
   background: var(--white);
+}
+.field-input:focus {
+  outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
-.login-input:disabled {
-  opacity: .6;
-}
-.login-error {
-  margin-top: 10px;
+.auth-error {
   font-size: 13px;
-  color: var(--danger-ink);
+  color: #dc2626;
 }
-.login-btn {
-  width: 100%;
-  height: 48px;
-  margin-top: 18px;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--white);
+.auth-submit {
+  height: 42px;
+  margin-top: 4px;
   background: var(--ink-900);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: opacity .15s ease, transform .05s ease;
+  color: var(--white);
+  border-radius: var(--r-md, 8px);
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity .15s ease;
 }
-.login-btn:hover:not(:disabled) {
-  opacity: .9;
+.auth-submit:hover:not(:disabled) {
+  opacity: 0.88;
 }
-.login-btn:active:not(:disabled) {
-  transform: translateY(1px);
-}
-.login-btn:disabled {
-  opacity: .5;
+.auth-submit:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
-.login-hint {
+.auth-foot {
   margin-top: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-500);
+}
+.auth-link {
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.auth-note {
+  margin-top: 10px;
+  text-align: center;
   font-size: 12px;
   color: var(--ink-400);
+  line-height: 1.5;
 }
 </style>

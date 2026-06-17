@@ -3,9 +3,15 @@ compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
 
-# 현황판 데이터 DB (Cloudflare D1)
+# 구조화 데이터 DB (참여자·WBS·이슈) (Cloudflare D1)
 [[d1_databases]]
 binding = "DB"
 database_name = "solsol-project"
 database_id = "e682bf78-753f-4087-b5fa-58bdccd75fb3"
 migrations_dir = "server/db/migrations"
+
+# 이슈 첨부 이미지 저장소 (Cloudflare R2). 업로드/서빙은 /api/uploads 경유(로그인 게이트).
+# 미생성 시 로컬 dev 는 인메모리 폴백. 배포 전 생성: wrangler r2 bucket create solsol-mng-files
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "solsol-mng-files"
