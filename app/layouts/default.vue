@@ -19,15 +19,6 @@
           </NuxtLink>
         </nav>
         <div class="gnb-right">
-          <a
-            class="gnb-link gnb-repo"
-            href="https://github.com/djkim555-cmyk/solsol-mng"
-            target="_blank"
-            rel="noopener"
-          >
-            <UIcon name="i-lucide-github" class="gnb-link-ico" />
-            GitHub
-          </a>
           <ClientOnly>
             <div v-if="member" class="gnb-auth">
               <NuxtLink to="/account" class="gnb-user">
@@ -173,9 +164,6 @@ async function onLogout() {
 .gnb-link-ico {
   width: 16px;
   height: 16px;
-}
-.gnb-repo {
-  color: var(--ink-400);
 }
 .gnb-right {
   display: flex;
