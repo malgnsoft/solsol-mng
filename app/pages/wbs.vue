@@ -3,7 +3,11 @@ import { wbsSteps, wbsStageMeta } from '~/utils/wbsData'
 
 useHead({ title: '전체 일정' })
 
-const TODAY = '2026-06-10'
+// 기준일 = 항상 오늘(KST). epoch+9h 로 서버·클라 동일 날짜 보장(하이드레이션 불일치 방지),
+// onMounted 에서 클라 기준으로 한 번 더 갱신(자정 경과 대비).
+function kstToday() { return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10) }
+const TODAY = useState('wbs:today', () => kstToday())
+onMounted(() => { TODAY.value = kstToday() })
 
 /* 담당자 색 */
 const PEOPLE = ['서만원', '조수현', '김도형', '김덕조', '김혜인', '방준영', '미정'] as const
@@ -35,8 +39,8 @@ const items = computed<Item[]>(() => data.value?.data ?? [])
 
 function statusOf(t: Item): Status {
   if (t.progress >= 100) return 'done'
-  if (!t.start || t.start > TODAY) return 'plan'
-  if (t.end && t.end < TODAY && t.progress < 100) return 'late'
+  if (!t.start || t.start > TODAY.value) return 'plan'
+  if (t.end && t.end < TODAY.value && t.progress < 100) return 'late'
   return 'active'
 }
 
@@ -50,13 +54,13 @@ const days = computed(() => {
   const cur = toDate(minIso); const last = toDate(maxIso)
   while (cur <= last) {
     const dow = cur.getDay()
-    out.push({ iso: toIso(cur), day: cur.getDate(), month: cur.getMonth() + 1, dow, weekend: dow === 0 || dow === 6, sat: dow === 6, sun: dow === 0, today: toIso(cur) === TODAY })
+    out.push({ iso: toIso(cur), day: cur.getDate(), month: cur.getMonth() + 1, dow, weekend: dow === 0 || dow === 6, sat: dow === 6, sun: dow === 0, today: toIso(cur) === TODAY.value })
     cur.setDate(cur.getDate() + 1)
   }
   return out
 })
 const idxOf = computed(() => new Map(days.value.map((d, i) => [d.iso, i])))
-const todayIdx = computed(() => idxOf.value.get(TODAY) ?? -1)
+const todayIdx = computed(() => idxOf.value.get(TODAY.value) ?? -1)
 const months = computed(() => {
   const out: { month: number, span: number, startIdx: number }[] = []
   days.value.forEach((d, i) => { const l = out[out.length - 1]; if (l && l.month === d.month) l.span++; else out.push({ month: d.month, span: 1, startIdx: i }) })
