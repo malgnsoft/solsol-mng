@@ -3,6 +3,18 @@
 `solsol`(고객상담 AI 챗봇) 프로젝트를 운영·조망하는 **단일 관리 허브** 앱.
 설계 원본은 [doc/PROJECT_MANAGEMENT_BLUEPRINT.md](docs/PROJECT_MANAGEMENT_BLUEPRINT.md).
 
+## 관련 프로젝트 (로컬 경로)
+
+| 경로                                  | 역할                  |
+| ------------------------------------- | --------------------- |
+| `/Users/dotype/Projects/solsol-mng`         | 프로젝트 관리 허브    |
+| `/Users/dotype/Projects/solsol-brand`       | 쏠쏠 브랜드 사이트    |
+| `/Users/dotype/Projects/solsol-brand-admin` | 쏠쏠 브랜드 백오피스  |
+| `/Users/dotype/Projects/solsol-brand-api`   | 쏠쏠 브랜드 백엔드    |
+
+> **아키텍처 참고**: `/Users/dotype/Projects/malgn-noti-mng` (맑은노티 프로젝트 관리).
+> 본 허브의 참여자·이슈 게시판·주간 작업 구조의 원본 — 구조·패턴을 맞출 때 이 레포를 참조한다.
+
 ## 화면
 
 | 영역      | 경로       | 렌더링   | 내용                                                    |
