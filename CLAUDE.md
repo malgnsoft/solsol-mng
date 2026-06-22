@@ -5,15 +5,19 @@
 
 ## 관련 프로젝트 (로컬 경로)
 
-| 경로                                  | 역할                  |
-| ------------------------------------- | --------------------- |
-| `/Users/dotype/Projects/solsol-mng`         | 프로젝트 관리 허브    |
-| `/Users/dotype/Projects/solsol-brand`       | 쏠쏠 브랜드 사이트    |
-| `/Users/dotype/Projects/solsol-brand-admin` | 쏠쏠 브랜드 백오피스  |
-| `/Users/dotype/Projects/solsol-brand-api`   | 쏠쏠 브랜드 백엔드    |
+쏠쏠 브랜드 4개 앱은 **맑은노티(malgn-noti) 생태계와 동일한 아키텍처**를 사용한다.
+각 프로젝트는 같은 접미사의 맑은노티 레포를 아키텍처 원본으로 참고한다.
+(`solsol-brand*` 3개는 현재 비어 있음 — 아래 원본 구조를 따라 구축 예정.)
 
-> **아키텍처 참고**: `/Users/dotype/Projects/malgn-noti-mng` (맑은노티 프로젝트 관리).
-> 본 허브의 참여자·이슈 게시판·주간 작업 구조의 원본 — 구조·패턴을 맞출 때 이 레포를 참조한다.
+| 경로 (`/Users/dotype/Projects/…`) | 구분 | 아키텍처 원본(맑은노티) | 스택 |
+| --------------------- | ---------------- | ------------------------------- | --------------------------------------------------- |
+| `solsol-mng`          | 프로젝트 관리 허브 | `malgn-noti-mng`                | Nuxt 3 (compat v4) · Nuxt UI v3 · @nuxt/content · Drizzle D1 · Pages |
+| `solsol-brand`        | 사용자단 (브랜드 사이트) | `malgn-noti` (사용자단)          | Nuxt 3 · Vue 3 · Nuxt UI v3 · nitro `cloudflare-pages` (프론트) |
+| `solsol-brand-admin`  | 관리자단 (백오피스 콘솔) | `malgn-noti-admin` (관리자단/BackOffice) | Nuxt 3 풀스택(`server/` 포함) · Nuxt UI v3 · `cloudflare-pages` |
+| `solsol-brand-api`    | 백엔드 API        | `malgn-noti-api` (API 서버)      | Hono · Drizzle ORM · Cloudflare **Workers** (`wrangler`) |
+
+> **아키텍처 참고**: 구조·패턴·스택을 맞출 때 위 "아키텍처 원본" 레포(`../malgn-noti*`)를 참조한다.
+> 본 관리 허브(`solsol-mng`)의 참여자·이슈 게시판·주간 작업 구조 원본은 `malgn-noti-mng`.
 
 ## 화면
 
