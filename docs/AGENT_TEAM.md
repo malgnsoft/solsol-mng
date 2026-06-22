@@ -24,7 +24,6 @@
  tech-writer   api-dev                    it-specialist      privacy-officer
                admin-dev                  deployer
                dba
-               pms-developer
 ```
 
 > **그로스/도메인 전문가**(상시 대기, 필요 시 호출): `growth-keeper`(에이전트 조직 성장),
@@ -36,7 +35,7 @@
 
 | 레포 | 구분 | 주담당 에이전트 | 아키텍처 원본 |
 | --- | --- | --- | --- |
-| `solsol-mng` | 프로젝트 관리 허브 | `pms-developer`·`frontend-developer` | `malgn-noti-mng` |
+| `solsol-mng` | 프로젝트 관리 허브 | `frontend-developer` | `malgn-noti-mng` |
 | `solsol-brand` | 사용자단(브랜드 사이트) | `frontend-developer` | `malgn-noti` |
 | `solsol-brand-admin` | 관리자단(백오피스 콘솔) | `admin-developer` | `malgn-noti-admin` |
 | `solsol-brand-api` | 백엔드 API(Hono·Workers) | `api-developer` | `malgn-noti-api` |
@@ -54,7 +53,7 @@
 
 1. **기획-lead / planner·service-planner** — 요구사항·정책·사용자 플로우·KPI 정의, 작업 분해(WBS).
 2. **개발-lead / architect** — 구조·경계·기술 선택을 정하고 작업을 개발자에게 분배.
-3. **개발자** — `frontend`(사용자단)·`admin`(관리자단)·`api`(백엔드)·`pms`(관리 허브)가 구현,
+3. **개발자** — `frontend`(사용자단·관리 허브)·`admin`(관리자단)·`api`(백엔드)가 구현,
    스키마 변경은 **`dba`** 에 위임.
 4. **품질·보안-lead** — `qa`(동작·회귀)·`security-reviewer`(위협·권한·시크릿)·`privacy-officer`(PII)가
    서로 다른 렌즈로 검증하고 결함을 재현 절차·심각도와 함께 담당자에게 회신(직접 수정 안 함).
