@@ -75,3 +75,21 @@ wrangler pages deploy dist --project-name=solsol-mng --branch=main --commit-dirt
 
 - 프로덕션은 세션·오피스 시크릿 필요: `NUXT_SESSION_SECRET`(필수), `OFFICE_SHARED_SECRET`(오피스 연동 시).
 - 스키마 정본은 `server/db/schema.ts`. 데이터·문구를 바꿀 때는 `server/db/seed.sql` + `app/utils/wbsData.ts`(간트)를 함께 갱신.
+
+## 배포 일괄 절차 (IMPORTANT — "배포" 요청 시 이 전체를 한 번에 수행)
+
+사용자가 **"배포"**(또는 커밋·푸시·배포·이력 중 일부)를 요청하면, 아래 순서를 **일괄로** 실행한다.
+
+1. **커밋** — 변경 스테이징 후 한국어 메시지로 커밋. 마지막 줄에 트레일러:
+   `Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>`
+2. **푸시** — `git push malgn main`.
+   ⚠️ `origin`(`djkim555-cmyk/solsol-mng`)은 이 계정 **읽기 전용** → 푸시는 **`malgn` 리모트(`malgnsoft/solsol-mng`)** 로. 없으면
+   `git remote add malgn https://github.com/malgnsoft/solsol-mng.git`.
+3. **빌드 + 배포** —
+   `pnpm build && wrangler pages deploy dist --project-name=solsol-mng --branch=main --commit-dirty=true --commit-message "<요약>"`.
+4. **이력 기록** — `docs/history/history.<오늘(KST,yyyyMMdd)>.md` 작성(한 줄 요약 + 작업 섹션 + 산출물 + 다음 단계) + `docs/history/README.md` 인덱스 표 **맨 위 행** 추가. 같은 날 파일이 있으면 섹션을 이어 붙인다.
+5. **이력 커밋·푸시** — 4의 문서를 커밋 후 다시 `git push malgn main`.
+6. **검증** — 배포 후 프로덕션 스모크(로그인 + 주요 페이지 200, 변경점 반영) 확인 후 결과 보고.
+
+- **문서만** 바뀐 변경(예: CLAUDE.md·docs)은 3(배포)을 생략해도 되지만, **앱 코드/콘텐츠 변경의 배포에는 이력(4·5)을 항상 포함**한다.
+- 기준일·날짜는 **KST(UTC+9)** 로 계산한다.
