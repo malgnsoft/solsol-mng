@@ -25,7 +25,15 @@
 - 레포 `malgnsoft/solsol-brand` (`mockup/` 25 페이지 + 토큰/공용 CSS).
 - 배포 <https://solsol-brand-mockup.pages.dev> (index.html = 전체 갤러리).
 
+## 4. 메인 정밀 재현 (Figma MCP 한도 해제 후)
+
+- Figma 한도 원인 규명: 파일이 속한 **팀의 플랜** 기준으로 한도 적용(Starter=6/월). 파일을 Pro 팀으로 이동(새 파일 `CustomerLMS-디자인시안 _최종`, fileKey `fa8RY8ZvnJYD4pZafKnbMP`)해 **200/일** 해제.
+- `get_design_context`로 최종 `메인`(node 3700:24262) 정확 데이터 추출: 컬러(**#ED1B23** 등)·Pretendard·이미지 에셋 **50개**·전체 카피. 에셋은 `mockup/assets/img/`(약 21MB) 다운로드.
+- Figma 코드젠(절대좌표) 직접 변환은 헤드리스 렌더가 깨져, **정확한 토큰/카피/실에셋 기반 flow 레이아웃으로 재구성**. 메인 **9개 섹션**(헤더·히어로·이미지그리드·솔루션 6카드·뉴스레터·비교표(쏠쏠 vs 경쟁사 ₩49,000~)·핵심기능 6카드·프로토타입 레드밴드·최종 CTA·푸터).
+- 재배포: `malgnsoft/solsol-brand`(`a65052e`) → Pages `solsol-brand-mockup`. 라이브 검증 200·히어로 이미지 정상. <https://solsol-brand-mockup.pages.dev/pages/main>
+
 ## 다음 단계 / 알려진 한계
 
-- Figma 호출 한도 해제(또는 업그레이드) 후 **미열람 화면 프레임별 픽셀 대조**로 정밀화.
+- 메인 외 화면(가격·마이페이지 등)도 동일 방식(MCP 정확 추출 → 재현)으로 정밀화 가능.
+- flow 재구성이라 미세 여백은 ±수 px 차이 가능(컬러·카피·이미지·구조는 일치).
 - 이후 실제 `solsol-brand`(Nuxt 3 + Nuxt UI v3, 원본 `malgn-noti`)로 토큰·컴포넌트 이식.
