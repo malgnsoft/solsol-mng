@@ -47,3 +47,13 @@
 - 최종 CTA: **회전 배지**(14일 무료체험·신용카드 등록없이·모든 기능) + 재생 버튼, 좌측 배치.
 - 히어로: **2단 제목 크기**(크리에이터를 위한 44 / 핵심 서비스만 모았습니다 60), 이미지 그리드 **2행 디밍**.
 - 재배포 `solsol-brand-mockup` · 라이브 검증 200. <https://solsol-brand-mockup.pages.dev/pages/main>
+
+## 6. 관리 허브에 검증(validation) 섹션 신설 + 개발–검증 절차
+
+검증 패키지(`docs/validation/`, Figma 화면설계서 기반 SoT)를 학습·연동(`solsol-mng` `fd07d7a`):
+
+- **에이전트팀 학습**: `기획-lead`·`운영-lead`가 검증 문서 9종 정독·브리핑(읽기 전용 준수). 전체 제품(쏠쏠 크리에이터 LMS 3영역·194화면·정책 96 + 충돌 확정 6건) 이해.
+- **개발–검증 연동 절차** 신설 `docs/DEV_VALIDATION_PROCESS.md` + CLAUDE.md 반영 — 화면ID 단위, 권위 우선순위(05 정책설계서 6건 최우선), 6단계 게이트(구현 9축→셀프→qa·security·privacy→팀장 컨펌→배포).
+- **관리 허브 "검증" 섹션**: GNB '검증' 메뉴 + `/validation` 인덱스(문서 9종) + `/docs` 에서 검증문서 분리. @nuxt/content가 `docs/validation/*.md` 렌더.
+- 검증 캡처 `_exports`(1.2GB·PNG 1,946)는 `.gitignore` 제외(앱은 .md만 렌더). 검증 폴더 원본 무수정.
+- 배포 검증: `/validation` 200 · `/docs/validation/*` 200. <https://solsol-mng.pages.dev/validation>
