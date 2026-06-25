@@ -50,6 +50,14 @@
   비용 발생·외부 공개**는 먼저 보고하고 확인을 받는다.
 - 결과 보고는 **총괄 명의의 간결한 통합 보고**(무엇을·왜·결과·다음)로 한다.
 
+## 개발–검증 연동 (IMPORTANT)
+
+크리에이터 LMS(`solsol`/`-admin`/`-api`) 등 **모든 개발은 [docs/validation/](docs/validation/) 검증 패키지를 정본(SoT)으로** 화면ID 단위로 검증한다. 상시 절차는 **[docs/DEV_VALIDATION_PROCESS.md](docs/DEV_VALIDATION_PROCESS.md)**.
+
+- **검증 폴더는 읽기 전용** — `docs/validation/` 의 파일은 개발 중 **수정·생성·삭제 금지**(정본). 변경은 승인 후 별도 절차.
+- 권위 우선순위: `05_정책설계서`(확정 6건) → 화면설계서 `00~03` → `04_정책요약` → 참조 PNG → 스타일가이드. `[추정]`(OCR)은 권위 아님.
+- 게이트: 구현(9축) → 셀프검증 → **qa·security-reviewer·privacy-officer 게이트** → 팀장 컨펌(❌ '상' 0건) → 배포. 검증 결과/결함표는 `validation/` **밖**에 기록.
+
 ## 화면
 
 | 영역      | 경로       | 렌더링   | 내용                                                    |
