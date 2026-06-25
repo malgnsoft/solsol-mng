@@ -67,3 +67,12 @@
 - **빈 렌더 버그 2건 수정**(자동임포트 prefix `pathPrefix:false`, `h()` 오용→인라인 SVG) — 헤드리스 스크린샷으로 실제 렌더 확인(빌드 성공≠동작).
 - `nuxt generate` 정적 산출 → Pages `solsol-brand-mockup` 배포. 라이브 `/`·`/pricing/`·`/my-sites/` 200. <https://solsol-brand-mockup.pages.dev>
 - 핸드오프엔 가격/내사이트 변형 등 잔여 페이지 존재 — 동일 방식 확장 가능.
+
+## 8. 크리에이터 사용자단(Customer Front) 목업 + FR01 검증 라운드
+
+`design_handoff_customer_lms` 핸드오프를 에이전트팀으로 구현·검증·배포:
+
+- **빌드**(frontend-developer): `solsol/mockup/` Nuxt 3 + Tailwind + Nuxt UI, Customer Front **46 화면**(인증·강의 6유형·플레이어·결제·마이페이지 13·커뮤니티/게시판·FAQ) + 레이아웃 default/mypage/player + 목업 인덱스(화면ID 표기). `nuxt generate` 정적 배포.
+- **검증**(qa, FR01 정본 대조): ❌ **게이트 미통과** — 커버리지 40/42, blocker 5(쿠폰 정률 C-4 위반 4파일 + 프로필 모달 미구현)·major 5·minor 3. 05 6건: ②무료체험 미운영 합격·⑥쿠폰 정액 위반·나머지 N/A. 결과: [docs/dev-validation/FR01-customer-front-round1.md](../dev-validation/FR01-customer-front-round1.md).
+- 배포(게이트 미통과 기록 후 시연용): `malgnsoft/solsol`(`6f54a9f`) → Pages `solsol-mockup`. <https://solsol-mockup.pages.dev>
+- 보완은 후속 라운드(쿠폰 정률 정액화 → 모달 구현 → 재검증).
