@@ -253,12 +253,17 @@ function onScroll() {
 }
 onBeforeUnmount(() => { chromeHidden.value = false })
 
-/* 기준일 클릭 → 오늘 컬럼을 진척율(좌측 정보) 바로 오른쪽으로 가로 스크롤 */
+/* 기준일 클릭 → 오늘 컬럼이 타임라인 좌측(진척 시작점)에 오도록 가로 스크롤.
+   실제 .todayline 위치 기준 − 좌측 정보열(ihead) 폭 − 가시영역 33% (원본 malgn 방식). */
 function scrollToToday() {
   const el = ganttRef.value
-  if (!el || todayIdx.value < 0) return
-  const dayW = parseFloat(getComputedStyle(el).getPropertyValue('--day-w')) || 26
-  el.scrollTo({ left: todayIdx.value * dayW, behavior: 'smooth' })
+  if (!el) return
+  const line = el.querySelector('.todayline') as HTMLElement | null
+  if (!line) return
+  const infoW = (el.querySelector('.ihead') as HTMLElement | null)?.clientWidth ?? 0
+  const visTimeline = el.clientWidth - infoW
+  const target = line.offsetLeft - infoW - visTimeline * 0.33
+  el.scrollTo({ left: Math.max(0, target), behavior: 'smooth' })
 }
 
 const subtitle = 'WBS 간트 · 전체 일정 · 7단계 · 기준일'
