@@ -40,3 +40,13 @@
 - **검증**(qa, AD01 정본 §3.2): **본화면 107 전수 생성(파일 누락 0)** — 통합 7건·ID미표기 1건. ❌ 게이트 미통과 — **모달 미구현 blocker 2**(학습자상세 `0101-002_pu01~04`·빌더 `0703-003_pu01~05`)·major 6(비밀번호 8~16자·가입코드 10분·강사목록 권한모달·C-10/C-15·가입버튼 오기)·minor 3. 05 6건: ②⑥ ⭕ / ③ 부분 / ④⑤ ❌. 결과 [docs/dev-validation/AD01-customer-admin-round1.md](../dev-validation/AD01-customer-admin-round1.md).
 - **배포**(게이트 미통과 기록 후 시연용): `malgnsoft/solsol-admin`(`5e44ea8`) → Pages `solsol-admin-mockup`. 스모크 전 라우트 200. <https://solsol-admin-mockup.pages.dev>
 - 보완은 후속 라운드(학습자/빌더 모달 → 정책 문구 → 재검증).
+
+## 6. 관리 허브 `/screens` 목업 링크 현행화 (3영역 전체)
+
+세 영역 목업 배포분에 맞춰 `/screens`(화면)의 mockupUrl·publish 현행화:
+
+- **AD01**: 목업 페이지의 화면ID 주석에서 ID→라우트 자동 추출(정적 산출 라우트 검증) + 통합 단계화면 6건 보강 → **103/103 실페이지** 링크(`solsol-admin-mockup`).
+- **BR01**: 빌드 보고 매핑으로 **39/39** 링크(`solsol-brand-mockup`).
+- **FR01**: 기존 상대경로(§화면목록 SoT 재생성 때 base 누락으로 깨졌던 링크)에 **base 보정** → **42/42** 링크(`solsol-mockup`) 정상화.
+- 모달은 부모 화면 목업으로 연결. 공유 모달 컴포넌트(AD01 C## 7·BR01 C01 1)는 단일 부모가 없어 제외.
+- 재배포: `solsol-mng` Pages. `/screens` 각 화면의 '목업' 링크 → 해당 영역 목업으로 이동.

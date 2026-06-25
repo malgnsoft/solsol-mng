@@ -24,7 +24,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/auth/payment-restricted",
+        "mockupUrl": "https://solsol-mockup.pages.dev/auth/payment-restricted",
         "devUrl": "",
         "modals": []
       },
@@ -36,7 +36,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/auth/signup",
+        "mockupUrl": "https://solsol-mockup.pages.dev/auth/signup",
         "devUrl": "",
         "modals": []
       },
@@ -48,7 +48,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/auth/signup-terms",
+        "mockupUrl": "https://solsol-mockup.pages.dev/auth/signup-terms",
         "devUrl": "",
         "modals": [
           {
@@ -59,7 +59,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/auth/signup-terms",
+            "mockupUrl": "https://solsol-mockup.pages.dev/auth/signup-terms",
             "devUrl": ""
           }
         ]
@@ -72,7 +72,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/auth/login",
+        "mockupUrl": "https://solsol-mockup.pages.dev/auth/login",
         "devUrl": "",
         "modals": []
       },
@@ -84,7 +84,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/notifications",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/notifications",
         "devUrl": "",
         "modals": []
       },
@@ -96,7 +96,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses",
         "devUrl": "",
         "modals": []
       },
@@ -108,7 +108,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/detail",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/detail",
         "devUrl": "",
         "modals": [
           {
@@ -119,7 +119,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/courses/detail",
+            "mockupUrl": "https://solsol-mockup.pages.dev/courses/detail",
             "devUrl": ""
           },
           {
@@ -130,7 +130,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/courses/detail",
+            "mockupUrl": "https://solsol-mockup.pages.dev/courses/detail",
             "devUrl": ""
           }
         ]
@@ -143,7 +143,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/live",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/live",
         "devUrl": "",
         "modals": []
       },
@@ -155,7 +155,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/live/detail",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/live/detail",
         "devUrl": "",
         "modals": []
       },
@@ -167,7 +167,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/video",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/video",
         "devUrl": "",
         "modals": []
       },
@@ -179,7 +179,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/video/detail",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/video/detail",
         "devUrl": "",
         "modals": []
       },
@@ -191,7 +191,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/package",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/package",
         "devUrl": "",
         "modals": []
       },
@@ -203,7 +203,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/package/detail",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/package/detail",
         "devUrl": "",
         "modals": []
       },
@@ -215,7 +215,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/digital",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/digital",
         "devUrl": "",
         "modals": []
       },
@@ -227,7 +227,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/digital/detail",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/digital/detail",
         "devUrl": "",
         "modals": []
       },
@@ -239,7 +239,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/community/premium",
+        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium",
         "devUrl": "",
         "modals": []
       },
@@ -251,7 +251,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/community/premium/board",
+        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium/board",
         "devUrl": "",
         "modals": []
       },
@@ -263,7 +263,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/community/premium/write",
+        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium/write",
         "devUrl": "",
         "modals": []
       },
@@ -275,7 +275,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/community/premium/detail",
+        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium/detail",
         "devUrl": "",
         "modals": []
       },
@@ -287,7 +287,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/community/premium/write",
+        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium/write",
         "devUrl": "",
         "modals": []
       },
@@ -299,7 +299,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/membership",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/membership",
         "devUrl": "",
         "modals": []
       },
@@ -311,7 +311,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/community/notice",
+        "mockupUrl": "https://solsol-mockup.pages.dev/community/notice",
         "devUrl": "",
         "modals": []
       },
@@ -323,7 +323,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/community/free",
+        "mockupUrl": "https://solsol-mockup.pages.dev/community/free",
         "devUrl": "",
         "modals": []
       },
@@ -335,7 +335,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/community/faq",
+        "mockupUrl": "https://solsol-mockup.pages.dev/community/faq",
         "devUrl": "",
         "modals": []
       },
@@ -347,7 +347,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/payment/checkout",
+        "mockupUrl": "https://solsol-mockup.pages.dev/payment/checkout",
         "devUrl": "",
         "modals": [
           {
@@ -358,7 +358,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/payment/checkout",
+            "mockupUrl": "https://solsol-mockup.pages.dev/payment/checkout",
             "devUrl": ""
           },
           {
@@ -369,7 +369,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/payment/checkout",
+            "mockupUrl": "https://solsol-mockup.pages.dev/payment/checkout",
             "devUrl": ""
           }
         ]
@@ -382,7 +382,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/payment/complete",
+        "mockupUrl": "https://solsol-mockup.pages.dev/payment/complete",
         "devUrl": "",
         "modals": []
       },
@@ -394,7 +394,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/payment/fail",
+        "mockupUrl": "https://solsol-mockup.pages.dev/payment/fail",
         "devUrl": "",
         "modals": []
       },
@@ -406,7 +406,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/subscription",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/subscription",
         "devUrl": "",
         "modals": [
           {
@@ -417,7 +417,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/mypage/subscription",
+            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/subscription",
             "devUrl": ""
           }
         ]
@@ -430,7 +430,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/products",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/products",
         "devUrl": "",
         "modals": [
           {
@@ -441,7 +441,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/mypage/products",
+            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/products",
             "devUrl": ""
           },
           {
@@ -452,7 +452,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/mypage/products",
+            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/products",
             "devUrl": ""
           }
         ]
@@ -465,7 +465,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/learn/player",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/player",
         "devUrl": "",
         "modals": [
           {
@@ -476,7 +476,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/courses/learn/player",
+            "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/player",
             "devUrl": ""
           }
         ]
@@ -489,7 +489,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/learn/dashboard",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/dashboard",
         "devUrl": "",
         "modals": [
           {
@@ -500,7 +500,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/courses/learn/dashboard",
+            "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/dashboard",
             "devUrl": ""
           }
         ]
@@ -513,7 +513,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/courses/learn/live",
+        "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/live",
         "devUrl": "",
         "modals": []
       },
@@ -525,7 +525,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/certificate",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/certificate",
         "devUrl": "",
         "modals": [
           {
@@ -536,7 +536,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/mypage/certificate",
+            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/certificate",
             "devUrl": ""
           }
         ]
@@ -549,7 +549,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/wishlist",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/wishlist",
         "devUrl": "",
         "modals": []
       },
@@ -561,7 +561,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/coupon",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/coupon",
         "devUrl": "",
         "modals": []
       },
@@ -573,7 +573,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/payments",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/payments",
         "devUrl": "",
         "modals": []
       },
@@ -585,7 +585,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/payment-info",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/payment-info",
         "devUrl": "",
         "modals": []
       },
@@ -597,7 +597,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/posts",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/posts",
         "devUrl": "",
         "modals": []
       },
@@ -609,7 +609,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/inquiry/write",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/inquiry/write",
         "devUrl": "",
         "modals": []
       },
@@ -621,7 +621,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/inquiry",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/inquiry",
         "devUrl": "",
         "modals": []
       },
@@ -633,7 +633,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/inquiry/detail",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/inquiry/detail",
         "devUrl": "",
         "modals": []
       },
@@ -645,7 +645,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "/mypage/profile",
+        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/profile",
         "devUrl": "",
         "modals": [
           {
@@ -656,7 +656,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/mypage/profile",
+            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/profile",
             "devUrl": ""
           },
           {
@@ -667,7 +667,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/mypage/profile",
+            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/profile",
             "devUrl": ""
           },
           {
@@ -678,7 +678,7 @@ export const screenAreas: ScreenArea[] = [
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "/mypage/profile",
+            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/profile",
             "devUrl": ""
           }
         ]
@@ -695,10 +695,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "대시보드",
         "group": "대시보드",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -707,10 +707,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "통계 - 학습자 통계",
         "group": "통계",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -719,10 +719,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "통계 - 매출 통계",
         "group": "통계",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -731,10 +731,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "통계 - 콘텐츠 통계",
         "group": "통계",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -743,10 +743,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "결제 유예 이용 제한(어드민 차단)",
         "group": "시스템·공통",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -755,10 +755,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "어드민 로그인",
         "group": "인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -767,10 +767,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "비밀번호 찾기(재설정 메일)",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -779,10 +779,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "새 비밀번호 설정",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -791,10 +791,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "어드민 회원가입",
         "group": "인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -803,10 +803,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "알림센터",
         "group": "시스템·공통",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -815,10 +815,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "내 정보(계정 정보)",
         "group": "문의·계정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -826,10 +826,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "프로필 설정 모달(5MB·5:5 크롭)",
             "group": "문의·계정",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -839,10 +839,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "1:1 문의 관리(목록)",
         "group": "문의·계정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -851,10 +851,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "1:1 문의 상세",
         "group": "문의·계정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -863,10 +863,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "1:1 문의 수정",
         "group": "문의·계정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -875,10 +875,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "크레딧 관리",
         "group": "크레딧",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -886,10 +886,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "크레딧 영수증 모달",
             "group": "크레딧",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -897,10 +897,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "크레딧 상세 모달(결제취소)",
             "group": "크레딧",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -910,10 +910,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "크레딧 충전",
         "group": "크레딧",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -922,10 +922,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "크레딧 결제완료/실패",
         "group": "크레딧",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -934,10 +934,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사용자 - 학습자 목록",
         "group": "사용자",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -946,10 +946,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사용자 - 학습자 상세",
         "group": "사용자",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -957,10 +957,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "수강 강좌 목록 모달",
             "group": "사용자",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -968,10 +968,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "구독관리 모달(멤버십/커뮤니티)",
             "group": "사용자",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -979,10 +979,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "수료여부 변경 모달",
             "group": "사용자",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -990,10 +990,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "다운로드 내역 모달",
             "group": "사용자",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1003,10 +1003,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사용자 - 강사 목록",
         "group": "사용자",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1014,10 +1014,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "강사 초대 모달",
             "group": "사용자",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1027,10 +1027,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사용자 - 강사 상세",
         "group": "사용자",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1038,10 +1038,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "개설 강의 목록 모달",
             "group": "사용자",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -1049,10 +1049,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "수강자수 모달",
             "group": "사용자",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1062,10 +1062,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사용자 - 관리자 목록",
         "group": "사용자",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1073,10 +1073,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "관리자 초대 모달",
             "group": "사용자",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1086,10 +1086,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사용자 - 관리자 상세",
         "group": "사용자",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1098,10 +1098,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "상품 - 일반강의 목록",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1109,10 +1109,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "카테고리 선택 모달(목록 필터)",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -1120,10 +1120,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "상품 복사 모달(후기복사 옵션)",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -1131,10 +1131,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "카테고리 이동 모달",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1144,10 +1144,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "상품 - 카테고리 관리",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1155,10 +1155,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "상품 정렬 설정 모달",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1168,10 +1168,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "일반강의 생성 Step1.상품정보",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1179,10 +1179,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "썸네일 설정 모달(16:9 크롭)",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -1190,10 +1190,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "카테고리 선택 모달(상품생성·라디오)",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -1201,10 +1201,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "대표강사 추가 모달",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -1212,10 +1212,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "서브강사 추가 모달",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1225,10 +1225,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "일반강의 생성 Step2.커리큘럼",
         "group": "기타",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/products/courses/create",
         "devUrl": "",
         "modals": []
       },
@@ -1237,10 +1237,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "일반강의 생성 Step3.콘텐츠 등록",
         "group": "콘텐츠",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/products/courses/create",
         "devUrl": "",
         "modals": [
           {
@@ -1248,10 +1248,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "콘텐츠 선택 모달(일반강의·단일)",
             "group": "콘텐츠",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/products/courses/create",
             "devUrl": ""
           }
         ]
@@ -1261,10 +1261,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "일반강의 생성 Step4.결제설정",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/products/courses/create",
         "devUrl": "",
         "modals": []
       },
@@ -1273,10 +1273,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "일반강의 상세페이지(탭형)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1284,10 +1284,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "수료증 미리보기 모달",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -1295,10 +1295,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "학습기간 설정 모달",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1308,10 +1308,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "상품 - 라이브강의 목록",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1320,10 +1320,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "라이브강의 생성(3단계)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1332,10 +1332,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "라이브강의 상세페이지(탭형)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1344,10 +1344,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "상품 - 화상강의 목록",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1356,10 +1356,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "화상강의 생성(3단계)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1368,10 +1368,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "화상강의 상세페이지(탭형)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1380,10 +1380,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "상품 - 디지털 상품 목록",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1392,10 +1392,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "디지털 상품 생성(3단계)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1403,10 +1403,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "콘텐츠 선택 모달(디지털·다중)",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1416,10 +1416,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "디지털 상품 상세페이지(탭형)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1427,10 +1427,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "파일별 다운로드 상태 모달",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1440,10 +1440,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "상품 - 패키지 상품 목록",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1452,10 +1452,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "패키지 상품 생성(3단계)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1463,10 +1463,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "상품 검색 모달(패키지 구성)",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1476,10 +1476,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "패키지 상품 상세페이지(탭형)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1488,10 +1488,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "상품 - 프리미엄 커뮤니티 목록",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1500,10 +1500,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "프리미엄 커뮤니티 생성(2단계)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1512,10 +1512,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "프리미엄 커뮤니티 상세페이지(탭형)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1523,10 +1523,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "일괄 고정글설정 모달",
             "group": "상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1536,10 +1536,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "커뮤니티 게시글 쓰기(어드민)",
         "group": "기타",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1548,10 +1548,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "커뮤니티 게시글 상세(어드민)",
         "group": "기타",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/products/community/posts/create",
         "devUrl": "",
         "modals": []
       },
@@ -1560,10 +1560,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "상품 - 멤버십(목록·탭형)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1572,10 +1572,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "멤버십 생성(2단계)",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1584,10 +1584,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "멤버십 상세페이지",
         "group": "상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1596,10 +1596,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "콘텐츠 라이브러리(목록)",
         "group": "콘텐츠",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1608,10 +1608,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "콘텐츠 - 폴더 관리",
         "group": "콘텐츠",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1619,10 +1619,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "폴더 이동 모달(라이브러리 일괄)",
             "group": "콘텐츠",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1632,10 +1632,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "콘텐츠 등록(업로드)",
         "group": "콘텐츠",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1644,10 +1644,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "콘텐츠 상세페이지(탭형)",
         "group": "콘텐츠",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1655,10 +1655,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "폴더 변경 모달(콘텐츠 상세)",
             "group": "콘텐츠",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1668,10 +1668,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "콘텐츠 - 자막 편집",
         "group": "콘텐츠",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1680,10 +1680,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "판매 - 주문(목록)",
         "group": "판매",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1692,10 +1692,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "주문 상세페이지",
         "group": "판매",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1704,10 +1704,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "판매 - 쿠폰(목록)",
         "group": "판매",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1716,10 +1716,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "쿠폰 등록/수정/조회(일원화)",
         "group": "판매",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1727,10 +1727,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "개별 상품 선택 모달(쿠폰 적용범위)",
             "group": "판매",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1740,10 +1740,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "판매 - 환불(목록)",
         "group": "판매",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1752,10 +1752,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "환불 상세/접수",
         "group": "판매",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1764,10 +1764,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "운영 - 게시판(목록)",
         "group": "운영",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1776,10 +1776,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "게시판 생성",
         "group": "운영",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1788,10 +1788,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "게시판 상세페이지(탭형)",
         "group": "운영",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1800,10 +1800,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "게시판 상세(자유게시판)",
         "group": "운영",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/operations/boards/1",
         "devUrl": "",
         "modals": [
           {
@@ -1811,10 +1811,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "일괄 비밀글설정 모달",
             "group": "운영",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/operations/boards/1",
             "devUrl": ""
           }
         ]
@@ -1824,10 +1824,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "운영 - 팝업(목록)",
         "group": "운영",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1836,10 +1836,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "팝업 생성/수정",
         "group": "운영",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1847,10 +1847,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "팝업 이미지 설정 모달(4:5 크롭)",
             "group": "운영",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1860,10 +1860,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마케팅 - 캠페인(목록)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1872,10 +1872,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "캠페인 생성/수정",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1883,10 +1883,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "설문폼 추가 모달(캠페인)",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -1894,10 +1894,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "테스트 발송 모달",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1907,10 +1907,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마케팅 - 발송내역(목록)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1919,10 +1919,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "발송내역 상세",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1930,10 +1930,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "재발송 모달(발송내역 상세)",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1943,10 +1943,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마케팅 - 수신자 그룹(목록)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -1955,10 +1955,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "수신자 그룹 생성/수정",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1966,10 +1966,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "수신자 추가 모달(개인별)",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -1979,10 +1979,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마케팅 - 메시지 템플릿(목록)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -1990,10 +1990,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "메시지 템플릿 미리보기 모달",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -2003,10 +2003,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "메시지 템플릿 생성/수정",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2015,10 +2015,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마케팅 - 설문폼 관리(목록)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -2026,10 +2026,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "설문폼 미리보기 모달",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -2039,10 +2039,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "설문폼 상세/등록(탭형)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -2050,10 +2050,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "설문 추가 모달(질문 추가)",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -2061,10 +2061,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "답변 보기 모달(개별 응답)",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           },
           {
@@ -2072,10 +2072,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "알림톡 발송번호 선택 모달",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -2085,10 +2085,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마케팅 - 마케팅 툴 연동",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2097,10 +2097,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마케팅 - 가입 랜딩페이지(목록)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2109,10 +2109,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "가입 랜딩페이지 생성/수정(기본형)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -2120,10 +2120,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "가입 랜딩(기본형) 미리보기 모달",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -2133,10 +2133,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "가입 랜딩페이지 생성/수정(확장형)",
         "group": "마케팅",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/marketing/landing/create",
         "devUrl": "",
         "modals": [
           {
@@ -2144,10 +2144,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "가입 랜딩(확장형) 미리보기 모달",
             "group": "마케팅",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/marketing/landing/create",
             "devUrl": ""
           }
         ]
@@ -2157,10 +2157,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - 기본 정보",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2169,10 +2169,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - 메뉴 목록",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2181,10 +2181,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - 메뉴 생성/수정",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2193,10 +2193,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - 페이지 목록",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2205,10 +2205,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - 페이지 생성/수정",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/site/pages/1/edit",
         "devUrl": "",
         "modals": []
       },
@@ -2217,10 +2217,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - 페이지 빌더(꾸미기)",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/site/pages/1/edit",
         "devUrl": "",
         "modals": [
           {
@@ -2228,10 +2228,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "페이지 빌더 미리보기 모달",
             "group": "사이트 디자인",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/site/pages/1/edit",
             "devUrl": ""
           },
           {
@@ -2239,10 +2239,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "로케이션 주소 검색 모달",
             "group": "사이트 디자인",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/site/pages/1/edit",
             "devUrl": ""
           },
           {
@@ -2250,10 +2250,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "게시판 섹션 - 게시글 선택 모달(검색·다중)",
             "group": "사이트 디자인",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/site/pages/1/edit",
             "devUrl": ""
           },
           {
@@ -2261,10 +2261,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "후기 섹션 - 후기 선택 모달(검색·다중)",
             "group": "사이트 디자인",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/site/pages/1/edit",
             "devUrl": ""
           },
           {
@@ -2272,10 +2272,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "설문 섹션 - 설문폼 선택 모달(발행상태만)",
             "group": "사이트 디자인",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/site/pages/1/edit",
             "devUrl": ""
           }
         ]
@@ -2285,10 +2285,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - 메타코드",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2297,10 +2297,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - SEO 설정(3탭)",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -2308,10 +2308,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "SEO 변수 추가 모달",
             "group": "사이트 디자인",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -2321,10 +2321,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "사이트 디자인 - 푸터",
         "group": "사이트 디자인",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2333,10 +2333,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "정산 - 정산 정보(미등록)",
         "group": "정산",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2345,10 +2345,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "정산 - 정산 정보 등록/수정(3유형)",
         "group": "정산",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/admin/settlement/info",
         "devUrl": "",
         "modals": []
       },
@@ -2357,10 +2357,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "정산 - 정산 내역 목록",
         "group": "정산",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2369,10 +2369,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "정산 - 정산 내역 상세(3탭)",
         "group": "정산",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2381,10 +2381,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "정산 - 부가세 신고 자료 목록",
         "group": "정산",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2393,10 +2393,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "정산 - 부가세 신고 자료 상세",
         "group": "정산",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2405,10 +2405,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "설정 - 기본정보",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2417,10 +2417,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "설정 - 플레이어",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2429,10 +2429,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "설정 - 수료증 템플릿 목록",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2441,10 +2441,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "설정 - 수료증 템플릿 상세",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": []
       },
@@ -2453,10 +2453,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "설정 - 강사/관리자 공지 목록",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -2464,10 +2464,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "노출대상 리스트 보기 모달",
             "group": "설정",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -2477,10 +2477,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "설정 - 공지 등록/수정",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -2488,10 +2488,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "노출대상 추가 모달",
             "group": "설정",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -2501,10 +2501,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "설정 - 학습자 알림",
         "group": "설정",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
         "devUrl": "",
         "modals": [
           {
@@ -2512,10 +2512,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "학습자 알림 미리보기 모달",
             "group": "설정",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-admin-mockup.pages.dev/catalog",
             "devUrl": ""
           }
         ]
@@ -2609,10 +2609,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "메인(main 랜딩)",
         "group": "메인·소개",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/landing",
         "devUrl": "",
         "modals": []
       },
@@ -2621,10 +2621,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "플랫폼 소개",
         "group": "메인·소개",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/platform",
         "devUrl": "",
         "modals": []
       },
@@ -2633,10 +2633,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "프로덕트",
         "group": "메인·소개",
         "design": false,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/product",
         "devUrl": "",
         "modals": []
       },
@@ -2645,10 +2645,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "데모보기",
         "group": "메인·소개",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/demo",
         "devUrl": "",
         "modals": []
       },
@@ -2657,10 +2657,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "주요기능 소개",
         "group": "메인·소개",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/features",
         "devUrl": "",
         "modals": []
       },
@@ -2669,10 +2669,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "회원가입 - Free",
         "group": "회원·인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/signup",
         "devUrl": "",
         "modals": []
       },
@@ -2681,10 +2681,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "회원가입(동의 통합 폼)",
         "group": "회원·인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/signup/form",
         "devUrl": "",
         "modals": [
           {
@@ -2692,10 +2692,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "인증코드 발송 PU(3분 유효)",
             "group": "회원·인증",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-brand-mockup.pages.dev/signup/form",
             "devUrl": ""
           }
         ]
@@ -2705,10 +2705,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "회원가입 - Free 완료",
         "group": "회원·인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/signup/complete",
         "devUrl": "",
         "modals": []
       },
@@ -2717,10 +2717,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "로그인",
         "group": "회원·인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/login",
         "devUrl": "",
         "modals": []
       },
@@ -2729,10 +2729,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "비밀번호 재설정(인증메일)",
         "group": "회원·인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/auth/reset-password",
         "devUrl": "",
         "modals": []
       },
@@ -2741,10 +2741,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "새 비밀번호 설정",
         "group": "회원·인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/auth/new-password",
         "devUrl": "",
         "modals": [
           {
@@ -2752,10 +2752,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "새 비밀번호 설정 - 완료 컨펌",
             "group": "회원·인증",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-brand-mockup.pages.dev/auth/new-password",
             "devUrl": ""
           }
         ]
@@ -2765,10 +2765,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "내 사이트 만들기",
         "group": "사이트 관리",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/create-site",
         "devUrl": "",
         "modals": [
           {
@@ -2776,10 +2776,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "도메인 중복 체크 결과",
             "group": "사이트 관리",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-brand-mockup.pages.dev/create-site",
             "devUrl": ""
           }
         ]
@@ -2789,10 +2789,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "내 사이트 관리(목록)",
         "group": "사이트 관리",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/my-sites",
         "devUrl": "",
         "modals": []
       },
@@ -2801,10 +2801,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "공지/소식(목록)",
         "group": "메인·소개",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/news",
         "devUrl": "",
         "modals": []
       },
@@ -2813,10 +2813,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "공지/소식 상세",
         "group": "메인·소개",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/news/detail",
         "devUrl": "",
         "modals": []
       },
@@ -2825,10 +2825,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "가격(요금제 main)",
         "group": "가격·결제",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/pricing",
         "devUrl": "",
         "modals": []
       },
@@ -2837,10 +2837,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "유료플랜 구매/플랜 업그레이드",
         "group": "회원·인증",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/payment/buy",
         "devUrl": "",
         "modals": []
       },
@@ -2849,10 +2849,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "결제 완료(최초)",
         "group": "가격·결제",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/payment/complete",
         "devUrl": "",
         "modals": []
       },
@@ -2861,10 +2861,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "결제 완료(플랜 업그레이드)",
         "group": "가격·결제",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/payment/upgrade",
         "devUrl": "",
         "modals": []
       },
@@ -2873,10 +2873,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "결제 실패",
         "group": "가격·결제",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/payment/fail",
         "devUrl": "",
         "modals": []
       },
@@ -2885,10 +2885,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "문의하기",
         "group": "문의",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/contact",
         "devUrl": "",
         "modals": []
       },
@@ -2897,10 +2897,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "문의하기 - 접수 완료",
         "group": "문의",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/contact/complete",
         "devUrl": "",
         "modals": []
       },
@@ -2909,10 +2909,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마이페이지 - 문의 내역(목록)",
         "group": "문의",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/inquiry",
         "devUrl": "",
         "modals": []
       },
@@ -2921,10 +2921,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마이페이지 - 문의 내역 상세",
         "group": "문의",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/inquiry/1",
         "devUrl": "",
         "modals": []
       },
@@ -2933,10 +2933,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마이페이지 - 이용상품 정보(상태별)",
         "group": "계정·이용상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/product",
         "devUrl": "",
         "modals": [
           {
@@ -2944,10 +2944,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "구독 취소 완료",
             "group": "계정·이용상품",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/product",
             "devUrl": ""
           }
         ]
@@ -2957,10 +2957,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마이페이지 - 사용 연장하기",
         "group": "계정·이용상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/extend",
         "devUrl": "",
         "modals": []
       },
@@ -2969,10 +2969,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마이페이지 - 계정관리(계정정보)",
         "group": "계정·이용상품",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/account",
         "devUrl": "",
         "modals": []
       },
@@ -2981,10 +2981,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마이페이지 - 결제 이메일 변경",
         "group": "가격·결제",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/change-email",
         "devUrl": "",
         "modals": [
           {
@@ -2992,10 +2992,10 @@ export const screenAreas: ScreenArea[] = [
             "name": "결제 이메일 인증코드 발송 PU(3분)",
             "group": "가격·결제",
             "design": true,
-            "publish": false,
+            "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "",
+            "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/change-email",
             "devUrl": ""
           }
         ]
@@ -3005,10 +3005,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마이페이지 - 결제 내역",
         "group": "가격·결제",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/mypage/payment-history",
         "devUrl": "",
         "modals": []
       },
@@ -3017,10 +3017,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "이용약관",
         "group": "약관·정책",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/terms",
         "devUrl": "",
         "modals": []
       },
@@ -3029,10 +3029,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "무료약정상품 이용약관",
         "group": "약관·정책",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/terms/free",
         "devUrl": "",
         "modals": []
       },
@@ -3041,10 +3041,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "유료약정상품 이용약관",
         "group": "약관·정책",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/terms/paid",
         "devUrl": "",
         "modals": []
       },
@@ -3053,10 +3053,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "개인정보처리방침",
         "group": "약관·정책",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/terms/privacy",
         "devUrl": "",
         "modals": []
       },
@@ -3065,10 +3065,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "마케팅 정보 수신 동의",
         "group": "약관·정책",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/terms/marketing",
         "devUrl": "",
         "modals": []
       },
@@ -3077,10 +3077,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "시스템 일부 에러 페이지",
         "group": "시스템·공통",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/error/system",
         "devUrl": "",
         "modals": []
       },
@@ -3089,10 +3089,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "404 페이지",
         "group": "시스템·공통",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/error/404",
         "devUrl": "",
         "modals": []
       },
@@ -3101,10 +3101,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "네트워크 연결 오류",
         "group": "시스템·공통",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/error/network",
         "devUrl": "",
         "modals": []
       },
@@ -3113,10 +3113,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "서비스 긴급점검(전체장애)",
         "group": "시스템·공통",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/error/emergency",
         "devUrl": "",
         "modals": []
       },
@@ -3125,10 +3125,10 @@ export const screenAreas: ScreenArea[] = [
         "name": "서비스 정기점검",
         "group": "시스템·공통",
         "design": true,
-        "publish": false,
+        "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "",
+        "mockupUrl": "https://solsol-brand-mockup.pages.dev/error/maintenance",
         "devUrl": "",
         "modals": []
       },
