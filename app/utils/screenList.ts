@@ -1,5 +1,5 @@
 // 페이지 진척 데이터 — docs/validation/00_화면목록.md(정본·읽기전용) 검증 추출.
-// 각 페이지(P) 아래에 비고에서 추출한 모달을 modals[]로 중첩(그 화면 종속).
+// 각 페이지(P) 아래 모달을 modals[]로 중첩, 모달에도 화면ID(부모ID-P0n) 배정.
 // design=true(증류완료=Figma 존재). publish→mockupUrl, dev→devUrl 채워지면 링크 노출.
 
 export interface ScreenItem {
@@ -52,7 +52,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-FR01-0301-002-P01",
             "name": "전체동의연동·보기모달",
             "group": "회원·인증",
             "design": true,
@@ -328,7 +328,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-FR01-0201-001-P01",
             "name": "본인확인/쿠폰선택/약관/카드등록 4모달",
             "group": "결제",
             "design": true,
@@ -376,7 +376,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-FR01-0301-101-P01",
             "name": "멤버십/커뮤니티 구독·취소 모달",
             "group": "마이페이지",
             "design": true,
@@ -400,7 +400,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-FR01-0301-102-P01",
             "name": "유형별 카드·패키지/디지털 리스트 모달",
             "group": "강의·상품",
             "design": true,
@@ -436,7 +436,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-FR01-0301-202-P01",
             "name": "/상품후기·후기작성 모달",
             "group": "강의·상품",
             "design": true,
@@ -472,7 +472,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-FR01-0301-103-P01",
             "name": "강의단위 카드·수료증 모달",
             "group": "마이페이지",
             "design": true,
@@ -695,7 +695,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0302-002-P01",
             "name": "강도바·성공/오류 모달",
             "group": "설정",
             "design": true,
@@ -743,7 +743,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-9003-001-P01",
             "name": "프로필 설정 모달",
             "group": "문의·계정",
             "design": true,
@@ -803,7 +803,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-9005-001-P01",
             "name": "내역/영수증/상세 모달",
             "group": "크레딧",
             "design": true,
@@ -863,7 +863,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0101-002-P01",
             "name": "·수료변경·수강강좌/구독/다운로드 모달",
             "group": "사용자",
             "design": true,
@@ -887,7 +887,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0102-001-P01",
             "name": "KPI3·초대모달",
             "group": "사용자",
             "design": true,
@@ -911,7 +911,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0102-002-P01",
             "name": "·권한설정 모달",
             "group": "사용자",
             "design": true,
@@ -922,7 +922,7 @@ export const screenAreas: ScreenArea[] = [
             "devUrl": ""
           },
           {
-            "id": "",
+            "id": "S-AD01-0102-002-P02",
             "name": "·개설강의/수강자수 모달",
             "group": "사용자",
             "design": true,
@@ -970,7 +970,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0201-001-P01",
             "name": "I3·카테고리선택/복사/카테고리이동 모달",
             "group": "상품",
             "design": true,
@@ -994,7 +994,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0202-001-P01",
             "name": "최대2단계·드래그순서·상품정렬설정 모달",
             "group": "상품",
             "design": true,
@@ -1018,7 +1018,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0201-002-P01",
             "name": "·서브강사/운영설정·카테고리 라디오 모달",
             "group": "상품",
             "design": true,
@@ -1054,7 +1054,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0201-004-P01",
             "name": "텐츠연결/맛보기·재생설정·콘텐츠선택 모달",
             "group": "콘텐츠",
             "design": true,
@@ -1090,7 +1090,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0201-006-P01",
             "name": "·수료증/학습기간 모달",
             "group": "상품",
             "design": true,
@@ -1234,7 +1234,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0206-002-P01",
             "name": "상품검색모달",
             "group": "상품",
             "design": true,
@@ -1534,7 +1534,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0501-004-P01",
             "name": "·댓글/답글·일괄 비밀글설정 모달",
             "group": "운영",
             "design": true,
@@ -1570,7 +1570,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0502-002-P01",
             "name": "5 크롭 모달",
             "group": "운영",
             "design": true,
@@ -1606,7 +1606,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0601-002-P01",
             "name": "·설문폼/테스트발송 모달",
             "group": "마케팅",
             "design": true,
@@ -1630,7 +1630,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0602-001-P01",
             "name": "·카카오 채널 연결/해제 모달",
             "group": "마케팅",
             "design": true,
@@ -1678,7 +1678,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0603-002-P01",
             "name": "12 모달",
             "group": "마케팅",
             "design": true,
@@ -1702,7 +1702,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0604-001-P01",
             "name": "·미리보기 모달",
             "group": "마케팅",
             "design": true,
@@ -1726,7 +1726,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0604-002-P01",
             "name": "·카카오 채널 연결 모달",
             "group": "마케팅",
             "design": true,
@@ -1750,7 +1750,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0605-001-P01",
             "name": "·미리보기 모달",
             "group": "마케팅",
             "design": true,
@@ -1774,7 +1774,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0605-002-P01",
             "name": "·설문추가/답변보기/알림톡번호 모달",
             "group": "마케팅",
             "design": true,
@@ -1822,7 +1822,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-0607-002-P01",
             "name": "·미리보기 모달",
             "group": "마케팅",
             "design": true,
@@ -2098,7 +2098,7 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "",
+            "id": "S-AD01-1104-002-P01",
             "name": "·대상 추가 모달",
             "group": "설정",
             "design": true,

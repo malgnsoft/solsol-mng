@@ -109,8 +109,8 @@ const grouped = computed(() => {
                   </tr>
                   <!-- 해당 페이지의 모달들 (아래 연속 배치) -->
                   <tr v-for="(m, mi) in (p.modals ?? [])" :key="g.group + pi + 'm' + mi" class="row-modal">
-                    <td class="c-id"><span class="modal-tag">모달</span></td>
-                    <td class="c-nm"><span class="modal-arrow">↳</span>{{ m.name }}</td>
+                    <td class="c-id"><code>{{ m.id }}</code></td>
+                    <td class="c-nm"><span class="modal-arrow">↳</span><span class="modal-tag">모달</span> {{ m.name }}</td>
                     <td v-for="s in STAGES" :key="s.key" class="c-st">
                       <span class="dot sm" :class="m[s.key] ? 'on' : 'off'">{{ m[s.key] ? '✓' : '·' }}</span>
                     </td>

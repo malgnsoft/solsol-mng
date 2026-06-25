@@ -105,7 +105,7 @@ async function onLogout() {
   align-items: center;
   gap: 24px;
   height: 100%;
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
 }
