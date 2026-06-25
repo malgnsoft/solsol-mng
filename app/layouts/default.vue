@@ -57,7 +57,6 @@ const chromeHidden = useState('wbsChromeHidden', () => false)
 const gnbHidden = computed(() => isFullScreen.value && chromeHidden.value)
 
 const nav = [
-  { to: '/', label: '대시보드', icon: 'i-lucide-layout-dashboard' },
   { to: '/wbs', label: 'WBS', icon: 'i-lucide-gantt-chart' },
   { to: '/weekly', label: '주간 작업', icon: 'i-lucide-calendar-days' },
   { to: '/issues', label: '이슈', icon: 'i-lucide-message-square-warning' },
