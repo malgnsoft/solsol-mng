@@ -16,8 +16,22 @@
 | `solsol-brand-admin`  | 관리자단 (백오피스 콘솔) | `malgn-noti-admin` (관리자단/BackOffice) | Nuxt 3 풀스택(`server/` 포함) · Nuxt UI v3 · `cloudflare-pages` |
 | `solsol-brand-api`    | 백엔드 API        | `malgn-noti-api` (API 서버)      | Hono · Drizzle ORM · Cloudflare **Workers** (`wrangler`) |
 
+### 쏠쏠 크리에이터 LMS 앱 (3) — 본 제품(서비스) 레포
+
+브랜드 사이트(`solsol-brand*`)와 별개로, **크리에이터 LMS 서비스 본체**는 아래 3개 레포다.
+**개발·기획 모두 이 레포들을 정본으로 참고**한다(기능·화면·도메인은 여기 기준).
+
+| 레포 | 구분 | GitHub |
+| ---- | ---- | ------ |
+| `solsol`       | 쏠쏠 크리에이터 **사용자단**(수강생/크리에이터 프론트) | <https://github.com/malgnsoft/solsol.git> |
+| `solsol-admin` | 쏠쏠 크리에이터 **관리자단**(운영 콘솔)               | <https://github.com/malgnsoft/solsol-admin.git> |
+| `solsol-api`   | 쏠쏠 크리에이터 **백엔드**(API)                       | <https://github.com/malgnsoft/solsol-api.git> |
+
 > **아키텍처 참고**: 구조·패턴·스택을 맞출 때 위 "아키텍처 원본" 레포(`../malgn-noti*`)를 참조한다.
 > 본 관리 허브(`solsol-mng`)의 참여자·이슈 게시판·주간 작업 구조 원본은 `malgn-noti-mng`.
+>
+> **개발·기획 공통 참고**: 위 `solsol`·`solsol-admin`·`solsol-api`(크리에이터 LMS 본체)는
+> 기획(요구사항·화면·도메인)과 개발(구현·연동) 양쪽에서 정본으로 참조한다.
 >
 > **에이전트팀**: 개발·운영 서브에이전트팀 구성·역할·작업 흐름은 [docs/AGENT_TEAM.md](docs/AGENT_TEAM.md).
 > 에이전트 정의는 글로벌(`~/.claude/agents/`)에 있다.
