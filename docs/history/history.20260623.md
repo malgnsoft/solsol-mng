@@ -57,3 +57,13 @@
 - **관리 허브 "검증" 섹션**: GNB '검증' 메뉴 + `/validation` 인덱스(문서 9종) + `/docs` 에서 검증문서 분리. @nuxt/content가 `docs/validation/*.md` 렌더.
 - 검증 캡처 `_exports`(1.2GB·PNG 1,946)는 `.gitignore` 제외(앱은 .md만 렌더). 검증 폴더 원본 무수정.
 - 배포 검증: `/validation` 200 · `/docs/validation/*` 200. <https://solsol-mng.pages.dev/validation>
+
+## 7. 브랜드 사이트 목업 → Nuxt 3 재구축 (디자인 핸드오프)
+
+기존 정적 HTML 목업 삭제 후, 개발자 핸드오프(`ProjectHandoff/design_handoff_solsol_brand`)를 정본으로 **Nuxt 3 + Tailwind + Nuxt UI** 재구현(`solsol-brand` `66a4129`·`139fc37`):
+
+- **검증 라운드1(목업 vs SoT)** 선행: qa가 BR01 36화면 대조 → 커버리지 61%·❌상 9건 결함표 산출(게이트 미통과 확인). 이후 목업 전면 삭제.
+- `mockup/` 에 Nuxt 앱 신설 — `pages/index.vue`(Brand Landing, 1920×7132) + `pricing.vue` + `my-sites.vue`, 공통(AppHeader/Footer/SsolLogo) + 랜딩 7섹션 + pricing·my-sites 컴포넌트. Pretendard·에셋 12종.
+- **빈 렌더 버그 2건 수정**(자동임포트 prefix `pathPrefix:false`, `h()` 오용→인라인 SVG) — 헤드리스 스크린샷으로 실제 렌더 확인(빌드 성공≠동작).
+- `nuxt generate` 정적 산출 → Pages `solsol-brand-mockup` 배포. 라이브 `/`·`/pricing/`·`/my-sites/` 200. <https://solsol-brand-mockup.pages.dev>
+- 핸드오프엔 가격/내사이트 변형 등 잔여 페이지 존재 — 동일 방식 확장 가능.
