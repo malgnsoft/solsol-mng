@@ -33,3 +33,10 @@
 
 - FR01 blocker 5 / BR01 major 4(무료체험·유효시간 우선) 보완 라운드 → 재검증.
 - AD01 관리자단 목업·브랜드 관리자단 화면목록 확정 시 동일 방식 확장.
+
+## 5. 크리에이터 관리자단(AD01) 전체 목업 + 검증 + 배포
+
+- **빌드**(admin-developer): 핸드오프 `design_handoff_customer_admin`(Nuxt SFC 스캐폴드 — 96 .vue + 레이아웃/컴포넌트/토큰, 런타임 파일 부재)를 **동작하는 Nuxt 3 + @nuxt/ui 앱으로 통합**(`solsol-admin/mockup/`). primary `#027CFA`, LNB/GNB, 화면ID 카탈로그(`/catalog`). `nuxt generate` 205라우트, 깨진 페이지 0.
+- **검증**(qa, AD01 정본 §3.2): **본화면 107 전수 생성(파일 누락 0)** — 통합 7건·ID미표기 1건. ❌ 게이트 미통과 — **모달 미구현 blocker 2**(학습자상세 `0101-002_pu01~04`·빌더 `0703-003_pu01~05`)·major 6(비밀번호 8~16자·가입코드 10분·강사목록 권한모달·C-10/C-15·가입버튼 오기)·minor 3. 05 6건: ②⑥ ⭕ / ③ 부분 / ④⑤ ❌. 결과 [docs/dev-validation/AD01-customer-admin-round1.md](../dev-validation/AD01-customer-admin-round1.md).
+- **배포**(게이트 미통과 기록 후 시연용): `malgnsoft/solsol-admin`(`5e44ea8`) → Pages `solsol-admin-mockup`. 스모크 전 라우트 200. <https://solsol-admin-mockup.pages.dev>
+- 보완은 후속 라운드(학습자/빌더 모달 → 정책 문구 → 재검증).
