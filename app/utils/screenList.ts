@@ -1,6 +1,6 @@
-// 페이지 진척 데이터 — docs/validation/00_화면목록.md(정본·읽기전용) 검증 추출.
-// 각 페이지(P) 아래 모달을 modals[]로 중첩, 모달에도 화면ID(부모ID-P0n) 배정.
-// design=true(증류완료=Figma 존재). publish→mockupUrl, dev→devUrl 채워지면 링크 노출.
+// 화면 목록 — docs/validation/00_화면목록.md v1.2(정본·읽기전용) 기준 재생성.
+// 본화면(§3.x) + 실제 모달/팝업 _pu(§3.x.2, 부모 아래 중첩) + 공유 모달 컴포넌트 C##(§3.x.3, '공유 모달 컴포넌트' 그룹).
+// FR01 은 solsol-mockup 배포 라우트로 mockupUrl 연결(publish=true). design=true(미설계 제외). D1 상태 있으면 머지 시 우선.
 
 export interface ScreenItem {
   id: string; name: string; group: string
@@ -14,7 +14,7 @@ export const screenAreas: ScreenArea[] = [
   {
     "key": "creator-front",
     "label": "쏠쏠 크리에이터 사용자단",
-    "source": "검증 화면목록 00_화면목록.md · FR01 (Figma 출처)",
+    "source": "검증 화면목록 00_화면목록.md · FR01 (v1.2)",
     "screens": [
       {
         "id": "S-FR01-9001-001",
@@ -24,7 +24,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/auth/payment-restricted",
+        "mockupUrl": "/auth/payment-restricted",
         "devUrl": "",
         "modals": []
       },
@@ -36,7 +36,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/auth/signup",
+        "mockupUrl": "/auth/signup",
         "devUrl": "",
         "modals": []
       },
@@ -48,18 +48,18 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/auth/signup-terms",
+        "mockupUrl": "/auth/signup-terms",
         "devUrl": "",
         "modals": [
           {
-            "id": "S-FR01-0301-002-P01",
-            "name": "전체동의연동·보기모달",
+            "id": "S-FR01-0301-002_pu01",
+            "name": "약관 보기 모달(이용약관/개인정보/마케팅)",
             "group": "회원·인증",
             "design": true,
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "https://solsol-mockup.pages.dev/auth/signup-terms",
+            "mockupUrl": "/auth/signup-terms",
             "devUrl": ""
           }
         ]
@@ -72,7 +72,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/auth/login",
+        "mockupUrl": "/auth/login",
         "devUrl": "",
         "modals": []
       },
@@ -84,7 +84,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/notifications",
+        "mockupUrl": "/mypage/notifications",
         "devUrl": "",
         "modals": []
       },
@@ -96,7 +96,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses",
+        "mockupUrl": "/courses",
         "devUrl": "",
         "modals": []
       },
@@ -108,9 +108,32 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/detail",
+        "mockupUrl": "/courses/detail",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-FR01-0102-002_pu01",
+            "name": "공유하기 모달(카카오/페이스북/링크복사)",
+            "group": "강의·상품",
+            "design": true,
+            "publish": true,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "/courses/detail",
+            "devUrl": ""
+          },
+          {
+            "id": "S-FR01-0102-002_pu02",
+            "name": "맛보기 영상 모달",
+            "group": "강의·상품",
+            "design": true,
+            "publish": true,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "/courses/detail",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-FR01-0103-001",
@@ -120,7 +143,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/live",
+        "mockupUrl": "/courses/live",
         "devUrl": "",
         "modals": []
       },
@@ -132,7 +155,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/live/detail",
+        "mockupUrl": "/courses/live/detail",
         "devUrl": "",
         "modals": []
       },
@@ -144,7 +167,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/video",
+        "mockupUrl": "/courses/video",
         "devUrl": "",
         "modals": []
       },
@@ -156,7 +179,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/video/detail",
+        "mockupUrl": "/courses/video/detail",
         "devUrl": "",
         "modals": []
       },
@@ -168,7 +191,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/package",
+        "mockupUrl": "/courses/package",
         "devUrl": "",
         "modals": []
       },
@@ -180,7 +203,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/package/detail",
+        "mockupUrl": "/courses/package/detail",
         "devUrl": "",
         "modals": []
       },
@@ -192,7 +215,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/digital",
+        "mockupUrl": "/courses/digital",
         "devUrl": "",
         "modals": []
       },
@@ -204,7 +227,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/digital/detail",
+        "mockupUrl": "/courses/digital/detail",
         "devUrl": "",
         "modals": []
       },
@@ -216,7 +239,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium",
+        "mockupUrl": "/community/premium",
         "devUrl": "",
         "modals": []
       },
@@ -228,7 +251,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium/board",
+        "mockupUrl": "/community/premium/board",
         "devUrl": "",
         "modals": []
       },
@@ -240,7 +263,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium/write",
+        "mockupUrl": "/community/premium/write",
         "devUrl": "",
         "modals": []
       },
@@ -252,7 +275,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium/detail",
+        "mockupUrl": "/community/premium/detail",
         "devUrl": "",
         "modals": []
       },
@@ -264,7 +287,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/community/premium/write",
+        "mockupUrl": "/community/premium/write",
         "devUrl": "",
         "modals": []
       },
@@ -276,7 +299,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/membership",
+        "mockupUrl": "/courses/membership",
         "devUrl": "",
         "modals": []
       },
@@ -288,7 +311,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/community/notice",
+        "mockupUrl": "/community/notice",
         "devUrl": "",
         "modals": []
       },
@@ -300,7 +323,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/community/free",
+        "mockupUrl": "/community/free",
         "devUrl": "",
         "modals": []
       },
@@ -312,7 +335,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/community/faq",
+        "mockupUrl": "/community/faq",
         "devUrl": "",
         "modals": []
       },
@@ -324,18 +347,29 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/payment/checkout",
+        "mockupUrl": "/payment/checkout",
         "devUrl": "",
         "modals": [
           {
-            "id": "S-FR01-0201-001-P01",
-            "name": "본인확인/쿠폰선택/약관/카드등록 4모달",
+            "id": "S-FR01-0201-001_pu01",
+            "name": "쿠폰 선택 모달",
             "group": "결제",
             "design": true,
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "https://solsol-mockup.pages.dev/payment/checkout",
+            "mockupUrl": "/payment/checkout",
+            "devUrl": ""
+          },
+          {
+            "id": "S-FR01-0201-001_pu02",
+            "name": "결제 항목별 약관 모달",
+            "group": "결제",
+            "design": true,
+            "publish": true,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "/payment/checkout",
             "devUrl": ""
           }
         ]
@@ -348,7 +382,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/payment/complete",
+        "mockupUrl": "/payment/complete",
         "devUrl": "",
         "modals": []
       },
@@ -360,7 +394,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/payment/fail",
+        "mockupUrl": "/payment/fail",
         "devUrl": "",
         "modals": []
       },
@@ -372,18 +406,18 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/subscription",
+        "mockupUrl": "/mypage/subscription",
         "devUrl": "",
         "modals": [
           {
-            "id": "S-FR01-0301-101-P01",
-            "name": "멤버십/커뮤니티 구독·취소 모달",
+            "id": "S-FR01-0301-101_pu01",
+            "name": "구독 취소 모달(멤버십/커뮤니티)",
             "group": "마이페이지",
             "design": true,
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/subscription",
+            "mockupUrl": "/mypage/subscription",
             "devUrl": ""
           }
         ]
@@ -396,18 +430,29 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/products",
+        "mockupUrl": "/mypage/products",
         "devUrl": "",
         "modals": [
           {
-            "id": "S-FR01-0301-102-P01",
-            "name": "유형별 카드·패키지/디지털 리스트 모달",
+            "id": "S-FR01-0301-102_pu01",
+            "name": "패키지 상품 리스트 모달",
             "group": "강의·상품",
             "design": true,
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/products",
+            "mockupUrl": "/mypage/products",
+            "devUrl": ""
+          },
+          {
+            "id": "S-FR01-0301-102_pu02",
+            "name": "디지털 상품 리스트 모달(잔여차감)",
+            "group": "강의·상품",
+            "design": true,
+            "publish": true,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "/mypage/products",
             "devUrl": ""
           }
         ]
@@ -420,9 +465,21 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/player",
+        "mockupUrl": "/courses/learn/player",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-FR01-0301-201_pu01",
+            "name": "영상 전체보기(전체화면 플레이어)",
+            "group": "강의·상품",
+            "design": true,
+            "publish": true,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "/courses/learn/player",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-FR01-0301-202",
@@ -432,18 +489,18 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/dashboard",
+        "mockupUrl": "/courses/learn/dashboard",
         "devUrl": "",
         "modals": [
           {
-            "id": "S-FR01-0301-202-P01",
-            "name": "/상품후기·후기작성 모달",
+            "id": "S-FR01-0301-202_pu01",
+            "name": "상품후기 작성 모달",
             "group": "강의·상품",
             "design": true,
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/dashboard",
+            "mockupUrl": "/courses/learn/dashboard",
             "devUrl": ""
           }
         ]
@@ -456,7 +513,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/courses/learn/live",
+        "mockupUrl": "/courses/learn/live",
         "devUrl": "",
         "modals": []
       },
@@ -468,18 +525,18 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/certificate",
+        "mockupUrl": "/mypage/certificate",
         "devUrl": "",
         "modals": [
           {
-            "id": "S-FR01-0301-103-P01",
-            "name": "강의단위 카드·수료증 모달",
+            "id": "S-FR01-0301-103_pu01",
+            "name": "수료증 모달(PDF 다운로드)",
             "group": "마이페이지",
             "design": true,
             "publish": true,
             "dev": false,
             "test": false,
-            "mockupUrl": "https://solsol-mockup.pages.dev/mypage/certificate",
+            "mockupUrl": "/mypage/certificate",
             "devUrl": ""
           }
         ]
@@ -492,7 +549,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/wishlist",
+        "mockupUrl": "/mypage/wishlist",
         "devUrl": "",
         "modals": []
       },
@@ -504,7 +561,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/coupon",
+        "mockupUrl": "/mypage/coupon",
         "devUrl": "",
         "modals": []
       },
@@ -516,7 +573,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/payments",
+        "mockupUrl": "/mypage/payments",
         "devUrl": "",
         "modals": []
       },
@@ -528,7 +585,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/payment-info",
+        "mockupUrl": "/mypage/payment-info",
         "devUrl": "",
         "modals": []
       },
@@ -540,7 +597,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/posts",
+        "mockupUrl": "/mypage/posts",
         "devUrl": "",
         "modals": []
       },
@@ -552,7 +609,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/inquiry/write",
+        "mockupUrl": "/mypage/inquiry/write",
         "devUrl": "",
         "modals": []
       },
@@ -564,7 +621,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/inquiry",
+        "mockupUrl": "/mypage/inquiry",
         "devUrl": "",
         "modals": []
       },
@@ -576,7 +633,7 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/inquiry/detail",
+        "mockupUrl": "/mypage/inquiry/detail",
         "devUrl": "",
         "modals": []
       },
@@ -588,16 +645,50 @@ export const screenAreas: ScreenArea[] = [
         "publish": true,
         "dev": false,
         "test": false,
-        "mockupUrl": "https://solsol-mockup.pages.dev/mypage/profile",
+        "mockupUrl": "/mypage/profile",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-FR01-0301-112_pu01",
+            "name": "프로필 설정 모달(이미지/1:1 크롭)",
+            "group": "마이페이지",
+            "design": true,
+            "publish": true,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "/mypage/profile",
+            "devUrl": ""
+          },
+          {
+            "id": "S-FR01-0301-112_pu02",
+            "name": "닉네임 변경 모달(2~15자/중복체크)",
+            "group": "마이페이지",
+            "design": true,
+            "publish": true,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "/mypage/profile",
+            "devUrl": ""
+          },
+          {
+            "id": "S-FR01-0301-112_pu03",
+            "name": "계정 탈퇴 모달(사유 입력)",
+            "group": "마이페이지",
+            "design": true,
+            "publish": true,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "/mypage/profile",
+            "devUrl": ""
+          }
+        ]
       }
     ]
   },
   {
     "key": "creator-admin",
     "label": "쏠쏠 크리에이터 관리자단",
-    "source": "검증 화면목록 00_화면목록.md · AD01 (Figma 출처)",
+    "source": "검증 화면목록 00_화면목록.md · AD01 (v1.2)",
     "screens": [
       {
         "id": "S-AD01-0100-001",
@@ -638,7 +729,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-AD01-0903-001",
         "name": "통계 - 콘텐츠 통계",
-        "group": "콘텐츠",
+        "group": "통계",
         "design": true,
         "publish": false,
         "dev": false,
@@ -693,19 +784,7 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": [
-          {
-            "id": "S-AD01-0302-002-P01",
-            "name": "강도바·성공/오류 모달",
-            "group": "설정",
-            "design": true,
-            "publish": false,
-            "dev": false,
-            "test": false,
-            "mockupUrl": "",
-            "devUrl": ""
-          }
-        ]
+        "modals": []
       },
       {
         "id": "S-AD01-0303-001",
@@ -743,8 +822,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-9003-001-P01",
-            "name": "프로필 설정 모달",
+            "id": "S-AD01-9003-001_pu01",
+            "name": "프로필 설정 모달(5MB·5:5 크롭)",
             "group": "문의·계정",
             "design": true,
             "publish": false,
@@ -803,8 +882,19 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-9005-001-P01",
-            "name": "내역/영수증/상세 모달",
+            "id": "S-AD01-9005-001_pu01",
+            "name": "크레딧 영수증 모달",
+            "group": "크레딧",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-9005-001_pu02",
+            "name": "크레딧 상세 모달(결제취소)",
             "group": "크레딧",
             "design": true,
             "publish": false,
@@ -863,8 +953,41 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0101-002-P01",
-            "name": "·수료변경·수강강좌/구독/다운로드 모달",
+            "id": "S-AD01-0101-002_pu01",
+            "name": "수강 강좌 목록 모달",
+            "group": "사용자",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0101-002_pu02",
+            "name": "구독관리 모달(멤버십/커뮤니티)",
+            "group": "사용자",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0101-002_pu03",
+            "name": "수료여부 변경 모달",
+            "group": "사용자",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0101-002_pu04",
+            "name": "다운로드 내역 모달",
             "group": "사용자",
             "design": true,
             "publish": false,
@@ -887,8 +1010,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0102-001-P01",
-            "name": "KPI3·초대모달",
+            "id": "S-AD01-0102-001_pu01",
+            "name": "강사 초대 모달",
             "group": "사용자",
             "design": true,
             "publish": false,
@@ -911,8 +1034,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0102-002-P01",
-            "name": "·권한설정 모달",
+            "id": "S-AD01-0102-002_pu01",
+            "name": "개설 강의 목록 모달",
             "group": "사용자",
             "design": true,
             "publish": false,
@@ -922,8 +1045,8 @@ export const screenAreas: ScreenArea[] = [
             "devUrl": ""
           },
           {
-            "id": "S-AD01-0102-002-P02",
-            "name": "·개설강의/수강자수 모달",
+            "id": "S-AD01-0102-002_pu02",
+            "name": "수강자수 모달",
             "group": "사용자",
             "design": true,
             "publish": false,
@@ -944,7 +1067,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0103-001_pu01",
+            "name": "관리자 초대 모달",
+            "group": "사용자",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0103-002",
@@ -970,8 +1105,30 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0201-001-P01",
-            "name": "I3·카테고리선택/복사/카테고리이동 모달",
+            "id": "S-AD01-0201-001_pu01",
+            "name": "카테고리 선택 모달(목록 필터)",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0201-001_pu02",
+            "name": "상품 복사 모달(후기복사 옵션)",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0201-001_pu03",
+            "name": "카테고리 이동 모달",
             "group": "상품",
             "design": true,
             "publish": false,
@@ -994,8 +1151,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0202-001-P01",
-            "name": "최대2단계·드래그순서·상품정렬설정 모달",
+            "id": "S-AD01-0202-001_pu01",
+            "name": "상품 정렬 설정 모달",
             "group": "상품",
             "design": true,
             "publish": false,
@@ -1018,8 +1175,41 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0201-002-P01",
-            "name": "·서브강사/운영설정·카테고리 라디오 모달",
+            "id": "S-AD01-0201-002_pu01",
+            "name": "썸네일 설정 모달(16:9 크롭)",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0201-002_pu02",
+            "name": "카테고리 선택 모달(상품생성·라디오)",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0201-002_pu03",
+            "name": "대표강사 추가 모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0201-002_pu04",
+            "name": "서브강사 추가 모달",
             "group": "상품",
             "design": true,
             "publish": false,
@@ -1033,7 +1223,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-AD01-0201-003",
         "name": "일반강의 생성 Step2.커리큘럼",
-        "group": "〃",
+        "group": "기타",
         "design": true,
         "publish": false,
         "dev": false,
@@ -1054,8 +1244,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0201-004-P01",
-            "name": "텐츠연결/맛보기·재생설정·콘텐츠선택 모달",
+            "id": "S-AD01-0201-004_pu01",
+            "name": "콘텐츠 선택 모달(일반강의·단일)",
             "group": "콘텐츠",
             "design": true,
             "publish": false,
@@ -1090,8 +1280,19 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0201-006-P01",
-            "name": "·수료증/학습기간 모달",
+            "id": "S-AD01-0201-006_pu01",
+            "name": "수료증 미리보기 모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0201-006_pu02",
+            "name": "학습기간 설정 모달",
             "group": "상품",
             "design": true,
             "publish": false,
@@ -1196,7 +1397,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0205-002_pu01",
+            "name": "콘텐츠 선택 모달(디지털·다중)",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0205-003",
@@ -1208,7 +1421,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0205-003_pu01",
+            "name": "파일별 다운로드 상태 모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0206-001",
@@ -1234,8 +1459,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0206-002-P01",
-            "name": "상품검색모달",
+            "id": "S-AD01-0206-002_pu01",
+            "name": "상품 검색 모달(패키지 구성)",
             "group": "상품",
             "design": true,
             "publish": false,
@@ -1292,12 +1517,24 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0207-003_pu01",
+            "name": "일괄 고정글설정 모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0207-004",
         "name": "커뮤니티 게시글 쓰기(어드민)",
-        "group": "커뮤니티",
+        "group": "기타",
         "design": true,
         "publish": false,
         "dev": false,
@@ -1309,7 +1546,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-AD01-0207-005",
         "name": "커뮤니티 게시글 상세(어드민)",
-        "group": "커뮤니티",
+        "group": "기타",
         "design": true,
         "publish": false,
         "dev": false,
@@ -1376,7 +1613,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0301-002_pu01",
+            "name": "폴더 이동 모달(라이브러리 일괄)",
+            "group": "콘텐츠",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0301-003",
@@ -1400,7 +1649,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0301-004_pu01",
+            "name": "폴더 변경 모달(콘텐츠 상세)",
+            "group": "콘텐츠",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0301-005",
@@ -1460,7 +1721,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0402-002_pu01",
+            "name": "개별 상품 선택 모달(쿠폰 적용범위)",
+            "group": "판매",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0403-001",
@@ -1534,8 +1807,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0501-004-P01",
-            "name": "·댓글/답글·일괄 비밀글설정 모달",
+            "id": "S-AD01-0501-004_pu01",
+            "name": "일괄 비밀글설정 모달",
             "group": "운영",
             "design": true,
             "publish": false,
@@ -1570,8 +1843,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0502-002-P01",
-            "name": "5 크롭 모달",
+            "id": "S-AD01-0502-002_pu01",
+            "name": "팝업 이미지 설정 모달(4:5 크롭)",
             "group": "운영",
             "design": true,
             "publish": false,
@@ -1606,8 +1879,19 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0601-002-P01",
-            "name": "·설문폼/테스트발송 모달",
+            "id": "S-AD01-0601-002_pu01",
+            "name": "설문폼 추가 모달(캠페인)",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0601-002_pu02",
+            "name": "테스트 발송 모달",
             "group": "마케팅",
             "design": true,
             "publish": false,
@@ -1628,19 +1912,7 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": [
-          {
-            "id": "S-AD01-0602-001-P01",
-            "name": "·카카오 채널 연결/해제 모달",
-            "group": "마케팅",
-            "design": true,
-            "publish": false,
-            "dev": false,
-            "test": false,
-            "mockupUrl": "",
-            "devUrl": ""
-          }
-        ]
+        "modals": []
       },
       {
         "id": "S-AD01-0602-002",
@@ -1652,7 +1924,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0602-002_pu01",
+            "name": "재발송 모달(발송내역 상세)",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0603-001",
@@ -1678,8 +1962,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0603-002-P01",
-            "name": "12 모달",
+            "id": "S-AD01-0603-002_pu01",
+            "name": "수신자 추가 모달(개인별)",
             "group": "마케팅",
             "design": true,
             "publish": false,
@@ -1702,8 +1986,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0604-001-P01",
-            "name": "·미리보기 모달",
+            "id": "S-AD01-0604-001_pu01",
+            "name": "메시지 템플릿 미리보기 모달",
             "group": "마케팅",
             "design": true,
             "publish": false,
@@ -1724,19 +2008,7 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": [
-          {
-            "id": "S-AD01-0604-002-P01",
-            "name": "·카카오 채널 연결 모달",
-            "group": "마케팅",
-            "design": true,
-            "publish": false,
-            "dev": false,
-            "test": false,
-            "mockupUrl": "",
-            "devUrl": ""
-          }
-        ]
+        "modals": []
       },
       {
         "id": "S-AD01-0605-001",
@@ -1750,8 +2022,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0605-001-P01",
-            "name": "·미리보기 모달",
+            "id": "S-AD01-0605-001_pu01",
+            "name": "설문폼 미리보기 모달",
             "group": "마케팅",
             "design": true,
             "publish": false,
@@ -1774,8 +2046,30 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0605-002-P01",
-            "name": "·설문추가/답변보기/알림톡번호 모달",
+            "id": "S-AD01-0605-002_pu01",
+            "name": "설문 추가 모달(질문 추가)",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0605-002_pu02",
+            "name": "답변 보기 모달(개별 응답)",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0605-002_pu03",
+            "name": "알림톡 발송번호 선택 모달",
             "group": "마케팅",
             "design": true,
             "publish": false,
@@ -1822,8 +2116,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-0607-002-P01",
-            "name": "·미리보기 모달",
+            "id": "S-AD01-0607-002_pu01",
+            "name": "가입 랜딩(기본형) 미리보기 모달",
             "group": "마케팅",
             "design": true,
             "publish": false,
@@ -1844,7 +2138,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0607-003_pu01",
+            "name": "가입 랜딩(확장형) 미리보기 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0701-001",
@@ -1916,7 +2222,63 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0703-003_pu01",
+            "name": "페이지 빌더 미리보기 모달",
+            "group": "사이트 디자인",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0703-003_pu02",
+            "name": "로케이션 주소 검색 모달",
+            "group": "사이트 디자인",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0703-003_pu03",
+            "name": "게시판 섹션 - 게시글 선택 모달(검색·다중)",
+            "group": "사이트 디자인",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0703-003_pu04",
+            "name": "후기 섹션 - 후기 선택 모달(검색·다중)",
+            "group": "사이트 디자인",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "S-AD01-0703-003_pu05",
+            "name": "설문 섹션 - 설문폼 선택 모달(발행상태만)",
+            "group": "사이트 디자인",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0704-001",
@@ -1940,7 +2302,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-0705-001_pu01",
+            "name": "SEO 변수 추가 모달",
+            "group": "사이트 디자인",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0706-001",
@@ -2084,7 +2458,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-1104-001_pu01",
+            "name": "노출대상 리스트 보기 모달",
+            "group": "설정",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-1104-002",
@@ -2098,8 +2484,8 @@ export const screenAreas: ScreenArea[] = [
         "devUrl": "",
         "modals": [
           {
-            "id": "S-AD01-1104-002-P01",
-            "name": "·대상 추가 모달",
+            "id": "S-AD01-1104-002_pu01",
+            "name": "노출대상 추가 모달",
             "group": "설정",
             "design": true,
             "publish": false,
@@ -2120,14 +2506,103 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-AD01-1105-001_pu01",
+            "name": "학습자 알림 미리보기 모달",
+            "group": "설정",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
+      },
+      {
+        "id": "S-AD01-C10",
+        "name": "간단 메모 모달",
+        "group": "공유 모달 컴포넌트",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": ""
+      },
+      {
+        "id": "S-AD01-C11",
+        "name": "수신자 그룹 선택 모달",
+        "group": "공유 모달 컴포넌트",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": ""
+      },
+      {
+        "id": "S-AD01-C12",
+        "name": "카테고리/개별상품 선택 모달",
+        "group": "공유 모달 컴포넌트",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": ""
+      },
+      {
+        "id": "S-AD01-C13",
+        "name": "연결 대상(페이지/게시판) 선택 모달",
+        "group": "공유 모달 컴포넌트",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": ""
+      },
+      {
+        "id": "S-AD01-C14",
+        "name": "카카오 채널 연결 모달",
+        "group": "공유 모달 컴포넌트",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": ""
+      },
+      {
+        "id": "S-AD01-C15",
+        "name": "어드민 공지 확인 모달(로그인 시)",
+        "group": "공유 모달 컴포넌트",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": ""
+      },
+      {
+        "id": "S-AD01-C16",
+        "name": "권한 설정 모달(RBAC 체크트리)",
+        "group": "공유 모달 컴포넌트",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": ""
       }
     ]
   },
   {
     "key": "brand-front",
     "label": "쏠쏠 브랜드 사용자단",
-    "source": "검증 화면목록 00_화면목록.md · BR01 (Figma 출처)",
+    "source": "검증 화면목록 00_화면목록.md · BR01 (v1.2)",
     "screens": [
       {
         "id": "S-BR01-0101-001",
@@ -2157,7 +2632,7 @@ export const screenAreas: ScreenArea[] = [
         "id": "S-BR01-0103-001",
         "name": "프로덕트",
         "group": "메인·소개",
-        "design": true,
+        "design": false,
         "publish": false,
         "dev": false,
         "test": false,
@@ -2211,7 +2686,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-BR01-0301-002_pu01",
+            "name": "인증코드 발송 PU(3분 유효)",
+            "group": "회원·인증",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-BR01-0301-003",
@@ -2259,7 +2746,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-BR01-0302-003_pu01",
+            "name": "새 비밀번호 설정 - 완료 컨펌",
+            "group": "회원·인증",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-BR01-0401-001",
@@ -2271,7 +2770,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-BR01-0401-001_pu01",
+            "name": "도메인 중복 체크 결과",
+            "group": "사이트 관리",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-BR01-0401-002",
@@ -2324,7 +2835,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-BR01-0601-002",
         "name": "유료플랜 구매/플랜 업그레이드",
-        "group": "가격·결제",
+        "group": "회원·인증",
         "design": true,
         "publish": false,
         "dev": false,
@@ -2420,19 +2931,31 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-BR01-0801-001",
         "name": "마이페이지 - 이용상품 정보(상태별)",
-        "group": "메인·소개",
+        "group": "계정·이용상품",
         "design": true,
         "publish": false,
         "dev": false,
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-BR01-0801-001_pu01",
+            "name": "구독 취소 완료",
+            "group": "계정·이용상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-BR01-0801-002",
         "name": "마이페이지 - 사용 연장하기",
-        "group": "메인·소개",
+        "group": "계정·이용상품",
         "design": true,
         "publish": false,
         "dev": false,
@@ -2444,7 +2967,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-BR01-0901-001",
         "name": "마이페이지 - 계정관리(계정정보)",
-        "group": "계정",
+        "group": "계정·이용상품",
         "design": true,
         "publish": false,
         "dev": false,
@@ -2463,7 +2986,19 @@ export const screenAreas: ScreenArea[] = [
         "test": false,
         "mockupUrl": "",
         "devUrl": "",
-        "modals": []
+        "modals": [
+          {
+            "id": "S-BR01-0901-002_pu01",
+            "name": "결제 이메일 인증코드 발송 PU(3분)",
+            "group": "가격·결제",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-BR01-1001-001",
@@ -2540,7 +3075,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-BR01-9001-001",
         "name": "시스템 일부 에러 페이지",
-        "group": "시스템",
+        "group": "시스템·공통",
         "design": true,
         "publish": false,
         "dev": false,
@@ -2552,7 +3087,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-BR01-9001-002",
         "name": "404 페이지",
-        "group": "시스템",
+        "group": "시스템·공통",
         "design": true,
         "publish": false,
         "dev": false,
@@ -2564,7 +3099,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-BR01-9001-003",
         "name": "네트워크 연결 오류",
-        "group": "시스템",
+        "group": "시스템·공통",
         "design": true,
         "publish": false,
         "dev": false,
@@ -2576,7 +3111,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-BR01-9001-004",
         "name": "서비스 긴급점검(전체장애)",
-        "group": "시스템",
+        "group": "시스템·공통",
         "design": true,
         "publish": false,
         "dev": false,
@@ -2588,7 +3123,7 @@ export const screenAreas: ScreenArea[] = [
       {
         "id": "S-BR01-9001-005",
         "name": "서비스 정기점검",
-        "group": "시스템",
+        "group": "시스템·공통",
         "design": true,
         "publish": false,
         "dev": false,
@@ -2596,6 +3131,17 @@ export const screenAreas: ScreenArea[] = [
         "mockupUrl": "",
         "devUrl": "",
         "modals": []
+      },
+      {
+        "id": "S-BR01-C01",
+        "name": "약관 상세보기 모달",
+        "group": "공유 모달 컴포넌트",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": ""
       }
     ]
   },
