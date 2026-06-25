@@ -1,489 +1,1951 @@
-// 화면 진척 데이터 — 4개 영역 × (일반 페이지 / 모달) × 상태(디자인·퍼블리싱·개발·테스트)
-// 크리에이터 사용자단(FR01)은 Figma "CustomerLMS 01. Customer Front" + 검증 화면목록에서 추출.
-// 나머지 3개 영역은 Figma 추출 대기(추후 채움). 정본: docs/validation/00_화면목록.md (읽기 전용).
+// 화면 진척 데이터 — docs/validation/00_화면목록.md(정본·읽기전용) 검증 추출.
+// FR01/AD01/BR01 전 화면(P타입=일반 페이지), 모달은 비고의 모달/팝업 언급 추출.
+// design=true(증류완료=Figma 디자인 존재). publish/dev/test 는 진행에 따라 갱신.
 
 export interface ScreenItem { id: string; name: string; group: string; design: boolean; publish: boolean; dev: boolean; test: boolean }
 export interface ScreenArea { key: string; label: string; source: string; pages: ScreenItem[]; modals: ScreenItem[]; pending?: boolean }
 
 export const screenAreas: ScreenArea[] = [
   {
-    key: 'creator-front',
-    label: '쏠쏠 크리에이터 사용자단',
-    source: 'Figma · CustomerLMS 01. Customer Front (FR01)',
-    pages: [
-  {
-    "id": "S-FR01-9001-001",
-    "name": "결제 유예기간 이용 제한 인트로",
-    "group": "시스템·공통",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
+    "key": "creator-front",
+    "label": "쏠쏠 크리에이터 사용자단",
+    "source": "검증 화면목록 00_화면목록.md · FR01 (Figma 출처)",
+    "pages": [
+      {
+        "id": "S-FR01-9001-001",
+        "name": "결제 유예기간 이용 제한 인트로",
+        "group": "시스템·공통",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-001",
+        "name": "회원가입 - 소셜 시작",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-002",
+        "name": "회원가입 - 약관 동의",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0302-001",
+        "name": "로그인 (소셜)",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-9002-001",
+        "name": "알림센터",
+        "group": "시스템·공통",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0102-001",
+        "name": "일반강의 목록",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0102-002",
+        "name": "일반강의 상세",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0103-001",
+        "name": "라이브강의 목록",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0103-002",
+        "name": "라이브강의 상세",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0104-001",
+        "name": "화상강의 목록",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0104-002",
+        "name": "화상강의 상세",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0105-001",
+        "name": "패키지상품 목록",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0105-002",
+        "name": "패키지상품 상세",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0106-001",
+        "name": "디지털 상품 목록",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0106-002",
+        "name": "디지털 상품 상세",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0107-001",
+        "name": "프리미엄 커뮤니티(소개/구독)",
+        "group": "커뮤니티·게시판",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0107-002",
+        "name": "커뮤니티 게시판 리스트",
+        "group": "커뮤니티·게시판",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0107-003",
+        "name": "커뮤니티 게시글 글쓰기",
+        "group": "커뮤니티·게시판",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0107-004",
+        "name": "커뮤니티 게시글 상세",
+        "group": "커뮤니티·게시판",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0107-005",
+        "name": "커뮤니티 게시글 수정",
+        "group": "커뮤니티·게시판",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0108-001",
+        "name": "멤버십 상품(구독)",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0109-001/002",
+        "name": "공지사항 목록·상세",
+        "group": "커뮤니티·게시판",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0110-001~005",
+        "name": "자유게시판 (목록/상세/글쓰기/수정)",
+        "group": "커뮤니티·게시판",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0111-001",
+        "name": "FAQ (자주 묻는 질문)",
+        "group": "커뮤니티·게시판",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0201-001",
+        "name": "결제 (주문/결제)",
+        "group": "결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0201-002",
+        "name": "결제 완료",
+        "group": "결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0201-003",
+        "name": "결제 실패",
+        "group": "결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-101",
+        "name": "마이페이지 - 구독 관리",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-102",
+        "name": "마이페이지 - 내 상품",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-201",
+        "name": "강의실 (영상 플레이어·커리큘럼/AI튜터/자료실)",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-202",
+        "name": "강의실 - 대시보드",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-203",
+        "name": "라이브 강의실 (라이브 참여하기)",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-103",
+        "name": "마이페이지 - 수료증",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-104",
+        "name": "마이페이지 - 찜하기",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-105",
+        "name": "마이페이지 - 쿠폰",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-106",
+        "name": "마이페이지 - 결제 내역",
+        "group": "결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-107",
+        "name": "마이페이지 - 결제 정보",
+        "group": "결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-108",
+        "name": "마이페이지 - 내 게시글",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-109",
+        "name": "1:1 문의하기 (작성)",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-110",
+        "name": "1:1 문의내역 (목록)",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-111",
+        "name": "1:1 문의 상세",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-FR01-0301-112",
+        "name": "마이페이지 - 프로필 (설정)",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      }
+    ],
+    "modals": [
+      {
+        "id": "",
+        "name": "전체동의연동·보기모달",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "본인확인/쿠폰선택/약관/카드등록 4모달",
+        "group": "결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "멤버십/커뮤니티 구독·취소 모달",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "유형별 카드·패키지/디지털 리스트 모달",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "/상품후기·후기작성 모달",
+        "group": "강의·상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "강의단위 카드·수료증 모달",
+        "group": "마이페이지",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      }
+    ]
   },
   {
-    "id": "S-FR01-0301-001",
-    "name": "회원가입 - 소셜 시작",
-    "group": "회원·인증",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
+    "key": "creator-admin",
+    "label": "쏠쏠 크리에이터 관리자단",
+    "source": "검증 화면목록 00_화면목록.md · AD01 (Figma 출처)",
+    "pages": [
+      {
+        "id": "S-AD01-0100-001",
+        "name": "대시보드",
+        "group": "대시보드",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0901-001",
+        "name": "통계 - 학습자 통계",
+        "group": "통계",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0902-001",
+        "name": "통계 - 매출 통계",
+        "group": "통계",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0903-001",
+        "name": "통계 - 콘텐츠 통계",
+        "group": "콘텐츠",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9001-001",
+        "name": "결제 유예 이용 제한(어드민 차단)",
+        "group": "시스템·공통",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0301-001",
+        "name": "어드민 로그인",
+        "group": "인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0302-001",
+        "name": "비밀번호 찾기(재설정 메일)",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0302-002",
+        "name": "새 비밀번호 설정",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0303-001",
+        "name": "어드민 회원가입",
+        "group": "인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9002-001",
+        "name": "알림센터",
+        "group": "시스템·공통",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9003-001",
+        "name": "내 정보(계정 정보)",
+        "group": "문의·계정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9004-001",
+        "name": "1:1 문의 관리(목록)",
+        "group": "문의·계정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9004-002",
+        "name": "1:1 문의 상세",
+        "group": "문의·계정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9004-003",
+        "name": "1:1 문의 수정",
+        "group": "문의·계정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9005-001",
+        "name": "크레딧 관리",
+        "group": "크레딧",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9005-002",
+        "name": "크레딧 충전",
+        "group": "크레딧",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-9005-003",
+        "name": "크레딧 결제완료/실패",
+        "group": "크레딧",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0101-001",
+        "name": "사용자 - 학습자 목록",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0101-002",
+        "name": "사용자 - 학습자 상세",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0102-001",
+        "name": "사용자 - 강사 목록",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0102-002",
+        "name": "사용자 - 강사 상세",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0103-001",
+        "name": "사용자 - 관리자 목록",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0103-002",
+        "name": "사용자 - 관리자 상세",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0201-001",
+        "name": "상품 - 일반강의 목록",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0202-001",
+        "name": "상품 - 카테고리 관리",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0201-002",
+        "name": "일반강의 생성 Step1.상품정보",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0201-003",
+        "name": "일반강의 생성 Step2.커리큘럼",
+        "group": "〃",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0201-004",
+        "name": "일반강의 생성 Step3.콘텐츠 등록",
+        "group": "콘텐츠",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0201-005",
+        "name": "일반강의 생성 Step4.결제설정",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0201-006",
+        "name": "일반강의 상세페이지(탭형)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0203-001",
+        "name": "상품 - 라이브강의 목록",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0203-002",
+        "name": "라이브강의 생성(3단계)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0203-003",
+        "name": "라이브강의 상세페이지(탭형)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0204-001",
+        "name": "상품 - 화상강의 목록",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0204-002",
+        "name": "화상강의 생성(3단계)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0204-003",
+        "name": "화상강의 상세페이지(탭형)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0205-001",
+        "name": "상품 - 디지털 상품 목록",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0205-002",
+        "name": "디지털 상품 생성(3단계)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0205-003",
+        "name": "디지털 상품 상세페이지(탭형)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0206-001",
+        "name": "상품 - 패키지 상품 목록",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0206-002",
+        "name": "패키지 상품 생성(3단계)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0206-003",
+        "name": "패키지 상품 상세페이지(탭형)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0207-001",
+        "name": "상품 - 프리미엄 커뮤니티 목록",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0207-002",
+        "name": "프리미엄 커뮤니티 생성(2단계)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0207-003",
+        "name": "프리미엄 커뮤니티 상세페이지(탭형)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0207-004",
+        "name": "커뮤니티 게시글 쓰기(어드민)",
+        "group": "커뮤니티",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0207-005",
+        "name": "커뮤니티 게시글 상세(어드민)",
+        "group": "커뮤니티",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0208-001",
+        "name": "상품 - 멤버십(목록·탭형)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0208-002",
+        "name": "멤버십 생성(2단계)",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0208-003",
+        "name": "멤버십 상세페이지",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0301-001",
+        "name": "콘텐츠 라이브러리(목록)",
+        "group": "콘텐츠",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0301-002",
+        "name": "콘텐츠 - 폴더 관리",
+        "group": "콘텐츠",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0301-003",
+        "name": "콘텐츠 등록(업로드)",
+        "group": "콘텐츠",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0301-004",
+        "name": "콘텐츠 상세페이지(탭형)",
+        "group": "콘텐츠",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0301-005",
+        "name": "콘텐츠 - 자막 편집",
+        "group": "콘텐츠",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0401-001",
+        "name": "판매 - 주문(목록)",
+        "group": "판매",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0401-002",
+        "name": "주문 상세페이지",
+        "group": "판매",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0402-001",
+        "name": "판매 - 쿠폰(목록)",
+        "group": "판매",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0402-002",
+        "name": "쿠폰 등록/수정/조회(일원화)",
+        "group": "판매",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0403-001",
+        "name": "판매 - 환불(목록)",
+        "group": "판매",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0403-002",
+        "name": "환불 상세/접수",
+        "group": "판매",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0501-001",
+        "name": "운영 - 게시판(목록)",
+        "group": "운영",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0501-002",
+        "name": "게시판 생성",
+        "group": "운영",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0501-003",
+        "name": "게시판 상세페이지(탭형)",
+        "group": "운영",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0501-004",
+        "name": "게시판 상세(자유게시판)",
+        "group": "운영",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0502-001",
+        "name": "운영 - 팝업(목록)",
+        "group": "운영",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0502-002",
+        "name": "팝업 생성/수정",
+        "group": "운영",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0601-001",
+        "name": "마케팅 - 캠페인(목록)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0601-002",
+        "name": "캠페인 생성/수정",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0602-001",
+        "name": "마케팅 - 발송내역(목록)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0602-002",
+        "name": "발송내역 상세",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0603-001",
+        "name": "마케팅 - 수신자 그룹(목록)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0603-002",
+        "name": "수신자 그룹 생성/수정",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0604-001",
+        "name": "마케팅 - 메시지 템플릿(목록)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0604-002",
+        "name": "메시지 템플릿 생성/수정",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0605-001",
+        "name": "마케팅 - 설문폼 관리(목록)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0605-002",
+        "name": "설문폼 상세/등록(탭형)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0606-001",
+        "name": "마케팅 - 마케팅 툴 연동",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0607-001",
+        "name": "마케팅 - 가입 랜딩페이지(목록)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0607-002",
+        "name": "가입 랜딩페이지 생성/수정(기본형)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0607-003",
+        "name": "가입 랜딩페이지 생성/수정(확장형)",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0701-001",
+        "name": "사이트 디자인 - 기본 정보",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0702-001",
+        "name": "사이트 디자인 - 메뉴 목록",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0702-002",
+        "name": "사이트 디자인 - 메뉴 생성/수정",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0703-001",
+        "name": "사이트 디자인 - 페이지 목록",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0703-002",
+        "name": "사이트 디자인 - 페이지 생성/수정",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0703-003",
+        "name": "사이트 디자인 - 페이지 빌더(꾸미기)",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0704-001",
+        "name": "사이트 디자인 - 메타코드",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0705-001",
+        "name": "사이트 디자인 - SEO 설정(3탭)",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-0706-001",
+        "name": "사이트 디자인 - 푸터",
+        "group": "사이트 디자인",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1001-001",
+        "name": "정산 - 정산 정보(미등록)",
+        "group": "정산",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1001-002",
+        "name": "정산 - 정산 정보 등록/수정(3유형)",
+        "group": "정산",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1002-001",
+        "name": "정산 - 정산 내역 목록",
+        "group": "정산",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1002-002",
+        "name": "정산 - 정산 내역 상세(3탭)",
+        "group": "정산",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1003-001",
+        "name": "정산 - 부가세 신고 자료 목록",
+        "group": "정산",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1003-002",
+        "name": "정산 - 부가세 신고 자료 상세",
+        "group": "정산",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1101-001",
+        "name": "설정 - 기본정보",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1102-001",
+        "name": "설정 - 플레이어",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1103-001",
+        "name": "설정 - 수료증 템플릿 목록",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1103-002",
+        "name": "설정 - 수료증 템플릿 상세",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1104-001",
+        "name": "설정 - 강사/관리자 공지 목록",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1104-002",
+        "name": "설정 - 공지 등록/수정",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-AD01-1105-001",
+        "name": "설정 - 학습자 알림",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      }
+    ],
+    "modals": [
+      {
+        "id": "",
+        "name": "강도바·성공/오류 모달",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "프로필 설정 모달",
+        "group": "문의·계정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "내역/영수증/상세 모달",
+        "group": "크레딧",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·수료변경·수강강좌/구독/다운로드 모달",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "KPI3·초대모달",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·권한설정 모달",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·개설강의/수강자수 모달",
+        "group": "사용자",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "I3·카테고리선택/복사/카테고리이동 모달",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "최대2단계·드래그순서·상품정렬설정 모달",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·서브강사/운영설정·카테고리 라디오 모달",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "텐츠연결/맛보기·재생설정·콘텐츠선택 모달",
+        "group": "콘텐츠",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·수료증/학습기간 모달",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "상품검색모달",
+        "group": "상품",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·댓글/답글·일괄 비밀글설정 모달",
+        "group": "운영",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "5 크롭 모달",
+        "group": "운영",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·설문폼/테스트발송 모달",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·카카오 채널 연결/해제 모달",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "12 모달",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·미리보기 모달",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·카카오 채널 연결 모달",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·설문추가/답변보기/알림톡번호 모달",
+        "group": "마케팅",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "",
+        "name": "·대상 추가 모달",
+        "group": "설정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      }
+    ]
   },
   {
-    "id": "S-FR01-0301-002",
-    "name": "회원가입 - 약관 동의",
-    "group": "회원·인증",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
+    "key": "brand-front",
+    "label": "쏠쏠 브랜드 사용자단",
+    "source": "검증 화면목록 00_화면목록.md · BR01 (Figma 출처)",
+    "pages": [
+      {
+        "id": "S-BR01-0101-001",
+        "name": "메인(main 랜딩)",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0102-001",
+        "name": "플랫폼 소개",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0103-001",
+        "name": "프로덕트",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0104-001",
+        "name": "데모보기",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0105-001",
+        "name": "주요기능 소개",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0301-001",
+        "name": "회원가입 - Free",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0301-002",
+        "name": "회원가입(동의 통합 폼)",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0301-003",
+        "name": "회원가입 - Free 완료",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0302-001",
+        "name": "로그인",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0302-002",
+        "name": "비밀번호 재설정(인증메일)",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0302-003",
+        "name": "새 비밀번호 설정",
+        "group": "회원·인증",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0401-001",
+        "name": "내 사이트 만들기",
+        "group": "사이트 관리",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0401-002",
+        "name": "내 사이트 관리(목록)",
+        "group": "사이트 관리",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0501-001",
+        "name": "공지/소식(목록)",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0501-002",
+        "name": "공지/소식 상세",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0601-001",
+        "name": "가격(요금제 main)",
+        "group": "가격·결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0601-002",
+        "name": "유료플랜 구매/플랜 업그레이드",
+        "group": "가격·결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0601-003",
+        "name": "결제 완료(최초)",
+        "group": "가격·결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0601-004",
+        "name": "결제 완료(플랜 업그레이드)",
+        "group": "가격·결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0601-005",
+        "name": "결제 실패",
+        "group": "가격·결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0701-001",
+        "name": "문의하기",
+        "group": "문의",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0701-002",
+        "name": "문의하기 - 접수 완료",
+        "group": "문의",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0702-001",
+        "name": "마이페이지 - 문의 내역(목록)",
+        "group": "문의",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0702-002",
+        "name": "마이페이지 - 문의 내역 상세",
+        "group": "문의",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0801-001",
+        "name": "마이페이지 - 이용상품 정보(상태별)",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0801-002",
+        "name": "마이페이지 - 사용 연장하기",
+        "group": "메인·소개",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0901-001",
+        "name": "마이페이지 - 계정관리(계정정보)",
+        "group": "계정",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-0901-002",
+        "name": "마이페이지 - 결제 이메일 변경",
+        "group": "가격·결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-1001-001",
+        "name": "마이페이지 - 결제 내역",
+        "group": "가격·결제",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-1101-001",
+        "name": "이용약관",
+        "group": "약관·정책",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-1101-002",
+        "name": "무료약정상품 이용약관",
+        "group": "약관·정책",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-1101-003",
+        "name": "유료약정상품 이용약관",
+        "group": "약관·정책",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-1101-004",
+        "name": "개인정보처리방침",
+        "group": "약관·정책",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-1101-005",
+        "name": "마케팅 정보 수신 동의",
+        "group": "약관·정책",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-9001-001",
+        "name": "시스템 일부 에러 페이지",
+        "group": "시스템",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-9001-002",
+        "name": "404 페이지",
+        "group": "시스템",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-9001-003",
+        "name": "네트워크 연결 오류",
+        "group": "시스템",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-9001-004",
+        "name": "서비스 긴급점검(전체장애)",
+        "group": "시스템",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      },
+      {
+        "id": "S-BR01-9001-005",
+        "name": "서비스 정기점검",
+        "group": "시스템",
+        "design": true,
+        "publish": false,
+        "dev": false,
+        "test": false
+      }
+    ],
+    "modals": []
   },
   {
-    "id": "S-FR01-0302-001",
-    "name": "로그인 (소셜)",
-    "group": "회원·인증",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-9002-001",
-    "name": "알림센터",
-    "group": "시스템·공통",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0102-001",
-    "name": "일반강의 목록",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0102-002",
-    "name": "일반강의 상세",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0103-001",
-    "name": "라이브강의 목록",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0103-002",
-    "name": "라이브강의 상세",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0104-001",
-    "name": "화상강의 목록",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0104-002",
-    "name": "화상강의 상세",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0105-001",
-    "name": "패키지상품 목록",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0105-002",
-    "name": "패키지상품 상세",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0106-001",
-    "name": "디지털 상품 목록",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0106-002",
-    "name": "디지털 상품 상세",
-    "group": "강의·상품",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0107-001",
-    "name": "프리미엄 커뮤니티(소개/구독)",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0107-002",
-    "name": "커뮤니티 게시판 리스트",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0107-003",
-    "name": "커뮤니티 게시글 글쓰기",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0107-004",
-    "name": "커뮤니티 게시글 상세",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0107-005",
-    "name": "커뮤니티 게시글 수정",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0108-001",
-    "name": "멤버십 상품(구독)",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0109-001/002",
-    "name": "공지사항 목록·상세",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0110-001~005",
-    "name": "자유게시판 (목록/상세/글쓰기/수정)",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0111-001",
-    "name": "FAQ (자주 묻는 질문)",
-    "group": "커뮤니티·게시판",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0201-001",
-    "name": "결제 (주문/결제)",
-    "group": "결제",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0201-002",
-    "name": "결제 완료",
-    "group": "결제",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0201-003",
-    "name": "결제 실패",
-    "group": "결제",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-101",
-    "name": "마이페이지 - 구독 관리",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-102",
-    "name": "마이페이지 - 내 상품",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-201",
-    "name": "강의실 (영상 플레이어·커리큘럼/AI튜터/자료실)",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-202",
-    "name": "강의실 - 대시보드",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-203",
-    "name": "라이브 강의실 (라이브 참여하기)",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-103",
-    "name": "마이페이지 - 수료증",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-104",
-    "name": "마이페이지 - 찜하기",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-105",
-    "name": "마이페이지 - 쿠폰",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-106",
-    "name": "마이페이지 - 결제 내역",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-107",
-    "name": "마이페이지 - 결제 정보",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-108",
-    "name": "마이페이지 - 내 게시글",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-109",
-    "name": "1:1 문의하기 (작성)",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-110",
-    "name": "1:1 문의내역 (목록)",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-111",
-    "name": "1:1 문의 상세",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "S-FR01-0301-112",
-    "name": "마이페이지 - 프로필 (설정)",
-    "group": "마이페이지·강의실",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
+    "key": "brand-admin",
+    "label": "쏠쏠 브랜드 관리자단",
+    "source": "화면목록 미정 (대기)",
+    "pages": [],
+    "modals": [],
+    "pending": true
   }
-],
-    modals: [
-  {
-    "id": "",
-    "name": "공유 모달",
-    "group": "강의 상세 > 공유(P01)",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "맛보기 영상 모달",
-    "group": "강의 상세 > 맛보기(P02)",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "본인확인 모달 (NICE)",
-    "group": "결제 > 본인확인",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "쿠폰 선택 모달",
-    "group": "결제 > 쿠폰",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "약관 동의 모달",
-    "group": "결제·회원가입 > 약관",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "카드 등록 모달 (toss)",
-    "group": "결제 > 카드등록",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "구독 취소 모달",
-    "group": "구독 관리(P01)",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "상품 리스트 모달",
-    "group": "내 상품(P01/P02)",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "영상 전체보기 모달",
-    "group": "강의실(P01)",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  },
-  {
-    "id": "",
-    "name": "게시글 신고/더보기 모달",
-    "group": "커뮤니티 상세",
-    "design": true,
-    "publish": false,
-    "dev": false,
-    "test": false
-  }
-],
-  },
-  { key: 'creator-admin', label: '쏠쏠 크리에이터 관리자단', source: 'Figma 추출 대기 (AD01)', pages: [], modals: [], pending: true },
-  { key: 'brand-front', label: '쏠쏠 브랜드 사용자단', source: 'Figma 추출 대기 (BR01)', pages: [], modals: [], pending: true },
-  { key: 'brand-admin', label: '쏠쏠 브랜드 관리자단', source: 'Figma 추출 대기', pages: [], modals: [], pending: true },
 ]
