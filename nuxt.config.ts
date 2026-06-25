@@ -25,7 +25,7 @@ function collectDocRoutes(dir: string, base = ''): string[] {
 
 // '/' 와 '/board' 는 런타임에 D1(/api/board)을 조회하므로 프리렌더하지 않고 SSR(Functions).
 // /wbs 는 D1(/api/wbs) 런타임 조회 + 편집이라 SSR(프리렌더 제외).
-const prerenderRoutes = ['/docs', '/history', ...collectDocRoutes(docDir)]
+const prerenderRoutes = ['/docs', '/history', '/validation', ...collectDocRoutes(docDir)]
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',

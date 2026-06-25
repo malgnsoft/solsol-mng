@@ -1,12 +1,16 @@
 <template>
   <div class="page">
-    <h1 class="page-title">문서</h1>
-    <p class="page-desc">solsol <code>doc/</code> 트리의 공통·도메인 정본 문서입니다.</p>
+    <h1 class="page-title">검증</h1>
+    <p class="page-desc">
+      Figma 화면설계서 기반 검증 SoT(정본). 개발은 화면ID 단위로 이 문서에 대조한다.
+      <br />
+      연동 절차: <NuxtLink to="/docs/dev_validation_process" class="page-link">DEV_VALIDATION_PROCESS.md</NuxtLink>
+    </p>
 
     <ul class="doc-list">
-      <li v-for="doc in docs" :key="doc.path">
+      <li v-for="doc in validationDocs" :key="doc.path">
         <NuxtLink :to="'/docs' + doc.path" class="doc-row">
-          <UIcon name="i-lucide-file-text" class="doc-row-ico" />
+          <UIcon name="i-lucide-clipboard-check" class="doc-row-ico" />
           <span class="doc-row-body">
             <span class="doc-row-title">{{ doc.title || doc.path }}</span>
             <span v-if="doc.description" class="doc-row-desc">{{ doc.description }}</span>
@@ -19,10 +23,37 @@
 </template>
 
 <script setup lang="ts">
+import { useAllDocs } from '~/composables/useDocs'
+
+// 정렬 기준: 권장 순서 맵 (낮을수록 앞)
+const ORDER: Record<string, number> = {
+  'readme':                0,
+  '00_검증가이드':          1,
+  '00_화면목록':            2,
+  '01_검증체크리스트':       3,
+  '01_customer-front':      4,
+  '02_customer-admin':      5,
+  '03_brand-site':          6,
+  '04_정책요약':            7,
+  '05_정책설계서':          8,
+}
+
+function sortKey(path: string): number {
+  // path 예: /validation/01_customer-front
+  const filename = path.split('/').pop()?.toLowerCase() ?? ''
+  const idx = ORDER[filename]
+  return idx !== undefined ? idx : 99
+}
+
 const { data: all } = await useAllDocs()
-const docs = computed(() =>
-  (all.value ?? []).filter(d => !isHistory(d.path) && !d.path.startsWith('/validation'))
+
+const validationDocs = computed(() =>
+  (all.value ?? [])
+    .filter(d => d.path.startsWith('/validation/'))
+    .sort((a, b) => sortKey(a.path) - sortKey(b.path))
 )
+
+useSeoMeta({ title: '검증' })
 </script>
 
 <style scoped>
@@ -40,13 +71,15 @@ const docs = computed(() =>
   margin: 6px 0 28px;
   font-size: 14px;
   color: var(--ink-500);
+  line-height: 1.7;
 }
-.page-desc code {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  background: var(--ink-50);
-  padding: 1px 5px;
-  border-radius: 4px;
+.page-link {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.page-link:hover {
+  opacity: 0.75;
 }
 .doc-list {
   display: flex;

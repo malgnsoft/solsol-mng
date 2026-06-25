@@ -35,3 +35,6 @@ node_modules
 # wrangler local state
 .wrangler
 .dev.vars
+
+# 검증 캡처(대용량 1.2GB) — 앱은 .md만 렌더, _exports 는 추적 제외
+docs/validation/_exports/
