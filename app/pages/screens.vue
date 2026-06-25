@@ -169,7 +169,7 @@ const grouped = computed(() => {
 .tbl tr:last-child td { border-bottom: 0; }
 .c-id { width: 150px; } .c-id code { font-family: var(--font-mono); font-size: 11px; color: var(--ink-600); }
 .c-nm { color: var(--ink-900); font-weight: 500; }
-.c-st { width: 60px; text-align: center !important; }
+.c-st { width: 78px; text-align: center !important; white-space: nowrap; }
 .c-lk { width: 96px; }
 .row-modal td { background: var(--ink-50); border-bottom-color: var(--white); }
 .row-modal .c-nm { font-weight: 400; color: var(--ink-600); }
