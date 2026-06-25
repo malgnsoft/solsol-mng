@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { screenAreas } from '~/utils/screenList'
-import type { ScreenItem } from '~/utils/screenList'
+import type { ScreenItem, ScreenArea } from '~/utils/screenList'
 
-useHead({ title: '화면 진척' })
+useHead({ title: '페이지' })
 
 const STAGES = [
   { key: 'design', label: '디자인' },
@@ -11,93 +11,118 @@ const STAGES = [
   { key: 'test', label: '테스트' },
 ] as const
 
+// 선택 영역(도메인 카드 클릭 필터). 기본 = 첫 번째 채워진 영역.
+const selected = ref<string>(screenAreas.find(a => !a.pending)?.key ?? screenAreas[0]!.key)
+const current = computed(() => screenAreas.find(a => a.key === selected.value)!)
+
+function countModals(a: ScreenArea): number {
+  return a.screens.reduce((n, s) => n + (s.modals?.length ?? 0), 0)
+}
+function flat(a: ScreenArea): ScreenItem[] {
+  return a.screens.flatMap(s => [s, ...(s.modals ?? [])])
+}
 function pct(items: ScreenItem[], stage: keyof ScreenItem): number {
   if (!items.length) return 0
-  const done = items.filter(i => i[stage] === true).length
-  return Math.round((done / items.length) * 100)
+  return Math.round((items.filter(i => i[stage] === true).length / items.length) * 100)
 }
-function areaAll(area: typeof screenAreas[number]) {
-  return [...area.pages, ...area.modals]
-}
+// 그룹 순서대로 페이지 나열(그룹별)
+const grouped = computed(() => {
+  const map = new Map<string, ScreenItem[]>()
+  for (const s of current.value.screens) {
+    if (!map.has(s.group)) map.set(s.group, [])
+    map.get(s.group)!.push(s)
+  }
+  return [...map.entries()].map(([group, pages]) => ({ group, pages }))
+})
 </script>
 
 <template>
   <div class="page">
     <header class="head">
-      <h1>화면 진척</h1>
-      <p class="sub">영역별 화면 목록과 <b>디자인 · 퍼블리싱(목업) · 개발 · 테스트</b> 진척. 일반 페이지와 모달창을 구분합니다.
+      <h1>페이지</h1>
+      <p class="sub">영역별 화면 목록과 <b>디자인 · 퍼블리싱(목업) · 개발 · 테스트</b> 진척. 모달은 해당 화면 아래에 함께 표시됩니다.
         화면 정본은 <NuxtLink to="/validation" class="lnk">검증 화면목록</NuxtLink>(읽기 전용).</p>
     </header>
 
-    <!-- 영역 요약 -->
-    <div class="summary">
-      <div v-for="a in screenAreas" :key="a.key" class="sum-card" :class="{ pending: a.pending }">
-        <div class="sum-top">
-          <span class="sum-label">{{ a.label }}</span>
-          <span v-if="a.pending" class="sum-badge">대기</span>
-          <span v-else class="sum-count">{{ a.pages.length }}P · {{ a.modals.length }}M</span>
+    <!-- 영역(도메인) 탭 — 클릭 시 해당 영역만 -->
+    <div class="tabs">
+      <button
+        v-for="a in screenAreas"
+        :key="a.key"
+        type="button"
+        class="tab"
+        :class="{ active: selected === a.key, pending: a.pending }"
+        @click="selected = a.key"
+      >
+        <div class="tab-top">
+          <span class="tab-label">{{ a.label }}</span>
+          <span v-if="a.pending" class="tab-badge">대기</span>
+          <span v-else class="tab-count">{{ a.screens.length }}P · {{ countModals(a) }}M</span>
         </div>
-        <div v-if="!a.pending" class="sum-bars">
-          <div v-for="s in STAGES" :key="s.key" class="sum-bar">
-            <span class="sb-l">{{ s.label }}</span>
-            <span class="sb-track"><i :style="{ width: pct(areaAll(a), s.key) + '%' }" /></span>
-            <span class="sb-v">{{ pct(areaAll(a), s.key) }}%</span>
+        <div v-if="!a.pending" class="tab-bars">
+          <div v-for="s in STAGES" :key="s.key" class="tab-bar">
+            <span class="tb-l">{{ s.label }}</span>
+            <span class="tb-track"><i :style="{ width: pct(flat(a), s.key) + '%' }" /></span>
+            <span class="tb-v">{{ pct(flat(a), s.key) }}%</span>
           </div>
         </div>
-        <div v-else class="sum-pending">{{ a.source }}</div>
-      </div>
+        <div v-else class="tab-pending">{{ a.source }}</div>
+      </button>
     </div>
 
-    <!-- 영역별 상세 -->
-    <section v-for="a in screenAreas" :key="a.key" class="area">
-      <div class="area-head">
-        <h2>{{ a.label }}</h2>
-        <span class="area-src">{{ a.source }}</span>
+    <!-- 선택 영역 상세 -->
+    <section class="detail">
+      <div class="detail-head">
+        <h2>{{ current.label }}</h2>
+        <span class="detail-src">{{ current.source }}</span>
       </div>
 
-      <div v-if="a.pending" class="empty">Figma 추출 대기 — 해당 영역 링크를 주시면 같은 방식으로 채웁니다.</div>
+      <div v-if="current.pending" class="empty">
+        Figma 화면목록 추출 대기 — 해당 영역 정본을 주시면 같은 방식으로 채웁니다.
+      </div>
 
       <template v-else>
-        <!-- 일반 페이지 -->
-        <h3 class="grp-title">일반 페이지 <span class="n">{{ a.pages.length }}</span></h3>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead>
-              <tr><th class="c-grp">구분</th><th class="c-id">화면ID</th><th class="c-nm">화면명</th>
-                <th v-for="s in STAGES" :key="s.key" class="c-st">{{ s.label }}</th></tr>
-            </thead>
-            <tbody>
-              <tr v-for="(it, i) in a.pages" :key="a.key + 'p' + i">
-                <td class="c-grp">{{ it.group }}</td>
-                <td class="c-id"><code v-if="it.id">{{ it.id }}</code><span v-else class="dash">—</span></td>
-                <td class="c-nm">{{ it.name }}</td>
-                <td v-for="s in STAGES" :key="s.key" class="c-st">
-                  <span class="dot" :class="it[s.key] ? 'on' : 'off'">{{ it[s.key] ? '✓' : '·' }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- 모달창 -->
-        <h3 class="grp-title">모달창 <span class="n">{{ a.modals.length }}</span></h3>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead>
-              <tr><th class="c-grp">위치</th><th class="c-id">화면ID</th><th class="c-nm">모달명</th>
-                <th v-for="s in STAGES" :key="s.key" class="c-st">{{ s.label }}</th></tr>
-            </thead>
-            <tbody>
-              <tr v-for="(it, i) in a.modals" :key="a.key + 'm' + i">
-                <td class="c-grp">{{ it.group }}</td>
-                <td class="c-id"><span class="dash">—</span></td>
-                <td class="c-nm">{{ it.name }}</td>
-                <td v-for="s in STAGES" :key="s.key" class="c-st">
-                  <span class="dot" :class="it[s.key] ? 'on' : 'off'">{{ it[s.key] ? '✓' : '·' }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div v-for="g in grouped" :key="g.group" class="grp">
+          <h3 class="grp-title">{{ g.group }} <span class="n">{{ g.pages.length }}</span></h3>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th class="c-id">화면ID</th><th class="c-nm">화면명</th>
+                  <th v-for="s in STAGES" :key="s.key" class="c-st">{{ s.label }}</th>
+                  <th class="c-lk">링크</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-for="(p, pi) in g.pages" :key="g.group + pi">
+                  <!-- 페이지 행 -->
+                  <tr class="row-page">
+                    <td class="c-id"><code>{{ p.id }}</code></td>
+                    <td class="c-nm">{{ p.name }}</td>
+                    <td v-for="s in STAGES" :key="s.key" class="c-st">
+                      <span class="dot" :class="p[s.key] ? 'on' : 'off'">{{ p[s.key] ? '✓' : '·' }}</span>
+                    </td>
+                    <td class="c-lk">
+                      <a v-if="p.publish && p.mockupUrl" :href="p.mockupUrl" target="_blank" rel="noopener" class="lk lk-mock">목업</a>
+                      <a v-if="p.dev && p.devUrl" :href="p.devUrl" target="_blank" rel="noopener" class="lk lk-dev">개발</a>
+                    </td>
+                  </tr>
+                  <!-- 해당 페이지의 모달들 (아래 연속 배치) -->
+                  <tr v-for="(m, mi) in (p.modals ?? [])" :key="g.group + pi + 'm' + mi" class="row-modal">
+                    <td class="c-id"><span class="modal-tag">모달</span></td>
+                    <td class="c-nm"><span class="modal-arrow">↳</span>{{ m.name }}</td>
+                    <td v-for="s in STAGES" :key="s.key" class="c-st">
+                      <span class="dot sm" :class="m[s.key] ? 'on' : 'off'">{{ m[s.key] ? '✓' : '·' }}</span>
+                    </td>
+                    <td class="c-lk">
+                      <a v-if="m.publish && m.mockupUrl" :href="m.mockupUrl" target="_blank" rel="noopener" class="lk lk-mock">목업</a>
+                      <a v-if="m.dev && m.devUrl" :href="m.devUrl" target="_blank" rel="noopener" class="lk lk-dev">개발</a>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
         </div>
       </template>
     </section>
@@ -111,41 +136,51 @@ function areaAll(area: typeof screenAreas[number]) {
 .sub b { color: var(--ink-800); font-weight: 600; }
 .lnk { color: var(--accent-ink); font-weight: 600; }
 
-.summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 36px; }
-@media (max-width: 880px) { .summary { grid-template-columns: 1fr 1fr; } }
-.sum-card { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
-.sum-card.pending { background: var(--ink-50); }
-.sum-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.sum-label { font-size: 13px; font-weight: 700; color: var(--ink-900); }
-.sum-count { font-size: 11px; color: var(--ink-400); font-variant-numeric: tabular-nums; }
-.sum-badge { font-size: 10px; font-weight: 700; color: var(--ink-400); background: var(--ink-100); padding: 2px 7px; border-radius: 999px; }
-.sum-bars { display: flex; flex-direction: column; gap: 6px; }
-.sum-bar { display: grid; grid-template-columns: 48px 1fr 34px; align-items: center; gap: 8px; }
-.sb-l { font-size: 11px; color: var(--ink-500); }
-.sb-track { height: 6px; background: var(--ink-50); border-radius: 3px; overflow: hidden; }
-.sb-track i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
-.sb-v { font-size: 11px; color: var(--ink-500); text-align: right; font-variant-numeric: tabular-nums; }
-.sum-pending { font-size: 11px; color: var(--ink-400); }
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 36px; }
+@media (max-width: 880px) { .tabs { grid-template-columns: 1fr 1fr; } }
+.tab { text-align: left; background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 16px; cursor: pointer; transition: border-color .15s, box-shadow .15s; font-family: inherit; }
+.tab:hover { border-color: var(--ink-300); }
+.tab.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.tab.pending { background: var(--ink-50); }
+.tab-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
+.tab-label { font-size: 13px; font-weight: 700; color: var(--ink-900); }
+.tab-count { font-size: 11px; color: var(--ink-400); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tab-badge { font-size: 10px; font-weight: 700; color: var(--ink-400); background: var(--ink-100); padding: 2px 7px; border-radius: 999px; }
+.tab-bars { display: flex; flex-direction: column; gap: 6px; }
+.tab-bar { display: grid; grid-template-columns: 48px 1fr 34px; align-items: center; gap: 8px; }
+.tb-l { font-size: 11px; color: var(--ink-500); }
+.tb-track { height: 6px; background: var(--ink-50); border-radius: 3px; overflow: hidden; }
+.tb-track i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+.tb-v { font-size: 11px; color: var(--ink-500); text-align: right; font-variant-numeric: tabular-nums; }
+.tab-pending { font-size: 11px; color: var(--ink-400); }
 
-.area { margin-bottom: 44px; }
-.area-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--ink-900); }
-.area-head h2 { font-size: 18px; font-weight: 700; color: var(--ink-900); }
-.area-src { font-size: 12px; color: var(--ink-400); }
+.detail-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--ink-900); }
+.detail-head h2 { font-size: 18px; font-weight: 700; color: var(--ink-900); }
+.detail-src { font-size: 12px; color: var(--ink-400); }
 .empty { padding: 28px; text-align: center; font-size: 13px; color: var(--ink-400); background: var(--white); border: 1px dashed var(--line); border-radius: 12px; }
-.grp-title { font-size: 14px; font-weight: 700; color: var(--ink-800); margin: 22px 0 10px; }
-.grp-title .n { font-size: 12px; font-weight: 600; color: var(--ink-400); margin-left: 4px; }
 
+.grp { margin-bottom: 22px; }
+.grp-title { font-size: 14px; font-weight: 700; color: var(--ink-800); margin: 0 0 10px; }
+.grp-title .n { font-size: 12px; font-weight: 600; color: var(--ink-400); margin-left: 4px; }
 .tbl-wrap { background: var(--white); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
 .tbl { width: 100%; border-collapse: collapse; }
-.tbl th, .tbl td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--ink-50); text-align: left; }
+.tbl th, .tbl td { padding: 9px 12px; font-size: 13px; border-bottom: 1px solid var(--ink-50); text-align: left; }
 .tbl th { background: var(--ink-50); font-size: 11px; font-weight: 600; color: var(--ink-500); }
 .tbl tr:last-child td { border-bottom: 0; }
-.c-grp { width: 150px; color: var(--ink-500); font-size: 12px; }
 .c-id { width: 150px; } .c-id code { font-family: var(--font-mono); font-size: 11px; color: var(--ink-600); }
 .c-nm { color: var(--ink-900); font-weight: 500; }
-.c-st { width: 64px; text-align: center !important; }
-.dash { color: var(--ink-300); }
+.c-st { width: 60px; text-align: center !important; }
+.c-lk { width: 96px; }
+.row-modal td { background: var(--ink-50); border-bottom-color: var(--white); }
+.row-modal .c-nm { font-weight: 400; color: var(--ink-600); }
+.modal-arrow { color: var(--ink-300); margin-right: 6px; }
+.modal-tag { font-size: 10px; font-weight: 700; color: var(--accent-ink); background: var(--accent-soft); padding: 2px 6px; border-radius: 4px; }
 .dot { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+.dot.sm { width: 20px; height: 20px; font-size: 11px; }
 .dot.on { background: #e9f9e8; color: #16a34a; }
 .dot.off { background: var(--ink-50); color: var(--ink-300); }
+.row-modal .dot.off { background: var(--white); }
+.lk { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; margin-right: 4px; }
+.lk-mock { background: var(--accent-soft); color: var(--accent-ink); }
+.lk-dev { background: #e9f9e8; color: #16a34a; }
 </style>

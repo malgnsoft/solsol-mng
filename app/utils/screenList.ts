@@ -1,16 +1,21 @@
-// 화면 진척 데이터 — docs/validation/00_화면목록.md(정본·읽기전용) 검증 추출.
-// FR01/AD01/BR01 전 화면(P타입=일반 페이지), 모달은 비고의 모달/팝업 언급 추출.
-// design=true(증류완료=Figma 디자인 존재). publish/dev/test 는 진행에 따라 갱신.
+// 페이지 진척 데이터 — docs/validation/00_화면목록.md(정본·읽기전용) 검증 추출.
+// 각 페이지(P) 아래에 비고에서 추출한 모달을 modals[]로 중첩(그 화면 종속).
+// design=true(증류완료=Figma 존재). publish→mockupUrl, dev→devUrl 채워지면 링크 노출.
 
-export interface ScreenItem { id: string; name: string; group: string; design: boolean; publish: boolean; dev: boolean; test: boolean }
-export interface ScreenArea { key: string; label: string; source: string; pages: ScreenItem[]; modals: ScreenItem[]; pending?: boolean }
+export interface ScreenItem {
+  id: string; name: string; group: string
+  design: boolean; publish: boolean; dev: boolean; test: boolean
+  mockupUrl?: string; devUrl?: string
+  modals?: ScreenItem[]
+}
+export interface ScreenArea { key: string; label: string; source: string; screens: ScreenItem[]; pending?: boolean }
 
 export const screenAreas: ScreenArea[] = [
   {
     "key": "creator-front",
     "label": "쏠쏠 크리에이터 사용자단",
     "source": "검증 화면목록 00_화면목록.md · FR01 (Figma 출처)",
-    "pages": [
+    "screens": [
       {
         "id": "S-FR01-9001-001",
         "name": "결제 유예기간 이용 제한 인트로",
@@ -18,7 +23,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-001",
@@ -27,7 +35,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-002",
@@ -36,7 +47,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "전체동의연동·보기모달",
+            "group": "회원·인증",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-FR01-0302-001",
@@ -45,7 +71,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-9002-001",
@@ -54,7 +83,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0102-001",
@@ -63,7 +95,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0102-002",
@@ -72,7 +107,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0103-001",
@@ -81,7 +119,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0103-002",
@@ -90,7 +131,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0104-001",
@@ -99,7 +143,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0104-002",
@@ -108,7 +155,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0105-001",
@@ -117,7 +167,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0105-002",
@@ -126,7 +179,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0106-001",
@@ -135,7 +191,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0106-002",
@@ -144,7 +203,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0107-001",
@@ -153,7 +215,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0107-002",
@@ -162,7 +227,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0107-003",
@@ -171,7 +239,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0107-004",
@@ -180,7 +251,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0107-005",
@@ -189,7 +263,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0108-001",
@@ -198,7 +275,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0109-001/002",
@@ -207,7 +287,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0110-001~005",
@@ -216,7 +299,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0111-001",
@@ -225,7 +311,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0201-001",
@@ -234,7 +323,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "본인확인/쿠폰선택/약관/카드등록 4모달",
+            "group": "결제",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-FR01-0201-002",
@@ -243,7 +347,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0201-003",
@@ -252,7 +359,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-101",
@@ -261,7 +371,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "멤버십/커뮤니티 구독·취소 모달",
+            "group": "마이페이지",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-FR01-0301-102",
@@ -270,7 +395,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "유형별 카드·패키지/디지털 리스트 모달",
+            "group": "강의·상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-FR01-0301-201",
@@ -279,7 +419,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-202",
@@ -288,7 +431,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "/상품후기·후기작성 모달",
+            "group": "강의·상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-FR01-0301-203",
@@ -297,7 +455,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-103",
@@ -306,7 +467,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "강의단위 카드·수료증 모달",
+            "group": "마이페이지",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-FR01-0301-104",
@@ -315,7 +491,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-105",
@@ -324,7 +503,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-106",
@@ -333,7 +515,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-107",
@@ -342,7 +527,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-108",
@@ -351,7 +539,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-109",
@@ -360,7 +551,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-110",
@@ -369,7 +563,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-111",
@@ -378,7 +575,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-FR01-0301-112",
@@ -387,63 +587,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
-      }
-    ],
-    "modals": [
-      {
-        "id": "",
-        "name": "전체동의연동·보기모달",
-        "group": "회원·인증",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "본인확인/쿠폰선택/약관/카드등록 4모달",
-        "group": "결제",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "멤버십/커뮤니티 구독·취소 모달",
-        "group": "마이페이지",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "유형별 카드·패키지/디지털 리스트 모달",
-        "group": "강의·상품",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "/상품후기·후기작성 모달",
-        "group": "강의·상품",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "강의단위 카드·수료증 모달",
-        "group": "마이페이지",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       }
     ]
   },
@@ -451,7 +598,7 @@ export const screenAreas: ScreenArea[] = [
     "key": "creator-admin",
     "label": "쏠쏠 크리에이터 관리자단",
     "source": "검증 화면목록 00_화면목록.md · AD01 (Figma 출처)",
-    "pages": [
+    "screens": [
       {
         "id": "S-AD01-0100-001",
         "name": "대시보드",
@@ -459,7 +606,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0901-001",
@@ -468,7 +618,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0902-001",
@@ -477,7 +630,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0903-001",
@@ -486,7 +642,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-9001-001",
@@ -495,7 +654,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0301-001",
@@ -504,7 +666,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0302-001",
@@ -513,7 +678,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0302-002",
@@ -522,7 +690,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "강도바·성공/오류 모달",
+            "group": "설정",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0303-001",
@@ -531,7 +714,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-9002-001",
@@ -540,7 +726,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-9003-001",
@@ -549,7 +738,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "프로필 설정 모달",
+            "group": "문의·계정",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-9004-001",
@@ -558,7 +762,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-9004-002",
@@ -567,7 +774,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-9004-003",
@@ -576,7 +786,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-9005-001",
@@ -585,7 +798,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "내역/영수증/상세 모달",
+            "group": "크레딧",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-9005-002",
@@ -594,7 +822,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-9005-003",
@@ -603,7 +834,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0101-001",
@@ -612,7 +846,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0101-002",
@@ -621,7 +858,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·수료변경·수강강좌/구독/다운로드 모달",
+            "group": "사용자",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0102-001",
@@ -630,7 +882,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "KPI3·초대모달",
+            "group": "사용자",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0102-002",
@@ -639,7 +906,33 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·권한설정 모달",
+            "group": "사용자",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          },
+          {
+            "id": "",
+            "name": "·개설강의/수강자수 모달",
+            "group": "사용자",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0103-001",
@@ -648,7 +941,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0103-002",
@@ -657,7 +953,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0201-001",
@@ -666,7 +965,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "I3·카테고리선택/복사/카테고리이동 모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0202-001",
@@ -675,7 +989,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "최대2단계·드래그순서·상품정렬설정 모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0201-002",
@@ -684,7 +1013,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·서브강사/운영설정·카테고리 라디오 모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0201-003",
@@ -693,7 +1037,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0201-004",
@@ -702,7 +1049,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "텐츠연결/맛보기·재생설정·콘텐츠선택 모달",
+            "group": "콘텐츠",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0201-005",
@@ -711,7 +1073,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0201-006",
@@ -720,7 +1085,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·수료증/학습기간 모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0203-001",
@@ -729,7 +1109,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0203-002",
@@ -738,7 +1121,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0203-003",
@@ -747,7 +1133,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0204-001",
@@ -756,7 +1145,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0204-002",
@@ -765,7 +1157,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0204-003",
@@ -774,7 +1169,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0205-001",
@@ -783,7 +1181,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0205-002",
@@ -792,7 +1193,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0205-003",
@@ -801,7 +1205,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0206-001",
@@ -810,7 +1217,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0206-002",
@@ -819,7 +1229,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "상품검색모달",
+            "group": "상품",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0206-003",
@@ -828,7 +1253,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0207-001",
@@ -837,7 +1265,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0207-002",
@@ -846,7 +1277,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0207-003",
@@ -855,7 +1289,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0207-004",
@@ -864,7 +1301,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0207-005",
@@ -873,7 +1313,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0208-001",
@@ -882,7 +1325,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0208-002",
@@ -891,7 +1337,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0208-003",
@@ -900,7 +1349,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0301-001",
@@ -909,7 +1361,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0301-002",
@@ -918,7 +1373,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0301-003",
@@ -927,7 +1385,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0301-004",
@@ -936,7 +1397,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0301-005",
@@ -945,7 +1409,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0401-001",
@@ -954,7 +1421,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0401-002",
@@ -963,7 +1433,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0402-001",
@@ -972,7 +1445,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0402-002",
@@ -981,7 +1457,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0403-001",
@@ -990,7 +1469,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0403-002",
@@ -999,7 +1481,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0501-001",
@@ -1008,7 +1493,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0501-002",
@@ -1017,7 +1505,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0501-003",
@@ -1026,7 +1517,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0501-004",
@@ -1035,7 +1529,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·댓글/답글·일괄 비밀글설정 모달",
+            "group": "운영",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0502-001",
@@ -1044,7 +1553,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0502-002",
@@ -1053,7 +1565,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "5 크롭 모달",
+            "group": "운영",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0601-001",
@@ -1062,7 +1589,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0601-002",
@@ -1071,7 +1601,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·설문폼/테스트발송 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0602-001",
@@ -1080,7 +1625,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·카카오 채널 연결/해제 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0602-002",
@@ -1089,7 +1649,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0603-001",
@@ -1098,7 +1661,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0603-002",
@@ -1107,7 +1673,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "12 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0604-001",
@@ -1116,7 +1697,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·미리보기 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0604-002",
@@ -1125,7 +1721,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·카카오 채널 연결 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0605-001",
@@ -1134,7 +1745,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·미리보기 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0605-002",
@@ -1143,7 +1769,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·설문추가/답변보기/알림톡번호 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0606-001",
@@ -1152,7 +1793,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0607-001",
@@ -1161,7 +1805,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0607-002",
@@ -1170,7 +1817,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·미리보기 모달",
+            "group": "마케팅",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-0607-003",
@@ -1179,7 +1841,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0701-001",
@@ -1188,7 +1853,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0702-001",
@@ -1197,7 +1865,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0702-002",
@@ -1206,7 +1877,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0703-001",
@@ -1215,7 +1889,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0703-002",
@@ -1224,7 +1901,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0703-003",
@@ -1233,7 +1913,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0704-001",
@@ -1242,7 +1925,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0705-001",
@@ -1251,7 +1937,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-0706-001",
@@ -1260,7 +1949,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1001-001",
@@ -1269,7 +1961,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1001-002",
@@ -1278,7 +1973,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1002-001",
@@ -1287,7 +1985,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1002-002",
@@ -1296,7 +1997,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1003-001",
@@ -1305,7 +2009,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1003-002",
@@ -1314,7 +2021,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1101-001",
@@ -1323,7 +2033,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1102-001",
@@ -1332,7 +2045,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1103-001",
@@ -1341,7 +2057,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1103-002",
@@ -1350,7 +2069,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1104-001",
@@ -1359,7 +2081,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-AD01-1104-002",
@@ -1368,7 +2093,22 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": [
+          {
+            "id": "",
+            "name": "·대상 추가 모달",
+            "group": "설정",
+            "design": true,
+            "publish": false,
+            "dev": false,
+            "test": false,
+            "mockupUrl": "",
+            "devUrl": ""
+          }
+        ]
       },
       {
         "id": "S-AD01-1105-001",
@@ -1377,207 +2117,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
-      }
-    ],
-    "modals": [
-      {
-        "id": "",
-        "name": "강도바·성공/오류 모달",
-        "group": "설정",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "프로필 설정 모달",
-        "group": "문의·계정",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "내역/영수증/상세 모달",
-        "group": "크레딧",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·수료변경·수강강좌/구독/다운로드 모달",
-        "group": "사용자",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "KPI3·초대모달",
-        "group": "사용자",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·권한설정 모달",
-        "group": "사용자",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·개설강의/수강자수 모달",
-        "group": "사용자",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "I3·카테고리선택/복사/카테고리이동 모달",
-        "group": "상품",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "최대2단계·드래그순서·상품정렬설정 모달",
-        "group": "상품",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·서브강사/운영설정·카테고리 라디오 모달",
-        "group": "상품",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "텐츠연결/맛보기·재생설정·콘텐츠선택 모달",
-        "group": "콘텐츠",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·수료증/학습기간 모달",
-        "group": "상품",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "상품검색모달",
-        "group": "상품",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·댓글/답글·일괄 비밀글설정 모달",
-        "group": "운영",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "5 크롭 모달",
-        "group": "운영",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·설문폼/테스트발송 모달",
-        "group": "마케팅",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·카카오 채널 연결/해제 모달",
-        "group": "마케팅",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "12 모달",
-        "group": "마케팅",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·미리보기 모달",
-        "group": "마케팅",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·카카오 채널 연결 모달",
-        "group": "마케팅",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·설문추가/답변보기/알림톡번호 모달",
-        "group": "마케팅",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
-      },
-      {
-        "id": "",
-        "name": "·대상 추가 모달",
-        "group": "설정",
-        "design": true,
-        "publish": false,
-        "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       }
     ]
   },
@@ -1585,7 +2128,7 @@ export const screenAreas: ScreenArea[] = [
     "key": "brand-front",
     "label": "쏠쏠 브랜드 사용자단",
     "source": "검증 화면목록 00_화면목록.md · BR01 (Figma 출처)",
-    "pages": [
+    "screens": [
       {
         "id": "S-BR01-0101-001",
         "name": "메인(main 랜딩)",
@@ -1593,7 +2136,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0102-001",
@@ -1602,7 +2148,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0103-001",
@@ -1611,7 +2160,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0104-001",
@@ -1620,7 +2172,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0105-001",
@@ -1629,7 +2184,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0301-001",
@@ -1638,7 +2196,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0301-002",
@@ -1647,7 +2208,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0301-003",
@@ -1656,7 +2220,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0302-001",
@@ -1665,7 +2232,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0302-002",
@@ -1674,7 +2244,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0302-003",
@@ -1683,7 +2256,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0401-001",
@@ -1692,7 +2268,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0401-002",
@@ -1701,7 +2280,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0501-001",
@@ -1710,7 +2292,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0501-002",
@@ -1719,7 +2304,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0601-001",
@@ -1728,7 +2316,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0601-002",
@@ -1737,7 +2328,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0601-003",
@@ -1746,7 +2340,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0601-004",
@@ -1755,7 +2352,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0601-005",
@@ -1764,7 +2364,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0701-001",
@@ -1773,7 +2376,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0701-002",
@@ -1782,7 +2388,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0702-001",
@@ -1791,7 +2400,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0702-002",
@@ -1800,7 +2412,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0801-001",
@@ -1809,7 +2424,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0801-002",
@@ -1818,7 +2436,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0901-001",
@@ -1827,7 +2448,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-0901-002",
@@ -1836,7 +2460,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-1001-001",
@@ -1845,7 +2472,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-1101-001",
@@ -1854,7 +2484,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-1101-002",
@@ -1863,7 +2496,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-1101-003",
@@ -1872,7 +2508,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-1101-004",
@@ -1881,7 +2520,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-1101-005",
@@ -1890,7 +2532,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-9001-001",
@@ -1899,7 +2544,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-9001-002",
@@ -1908,7 +2556,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-9001-003",
@@ -1917,7 +2568,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-9001-004",
@@ -1926,7 +2580,10 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       },
       {
         "id": "S-BR01-9001-005",
@@ -1935,17 +2592,18 @@ export const screenAreas: ScreenArea[] = [
         "design": true,
         "publish": false,
         "dev": false,
-        "test": false
+        "test": false,
+        "mockupUrl": "",
+        "devUrl": "",
+        "modals": []
       }
-    ],
-    "modals": []
+    ]
   },
   {
     "key": "brand-admin",
     "label": "쏠쏠 브랜드 관리자단",
     "source": "화면목록 미정 (대기)",
-    "pages": [],
-    "modals": [],
+    "screens": [],
     "pending": true
   }
 ]
