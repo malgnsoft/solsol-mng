@@ -155,8 +155,17 @@ const directions = [
 
 // 현황 요약은 WBS(간트)와 동일 소스 — wbsStageMeta(단계 진척) + /api/wbs(항목 수).
 const STEP_EMOJI: Record<number, string> = { 1: '🎯', 2: '📋', 3: '🎨', 4: '🧩', 5: '📐', 6: '🛠️', 7: '📦' }
-const { data: wbsRes, pending: wbsPending, error: wbsError } = await useFetch<{ data: { step: number }[] }>('/api/wbs', { key: 'wbs-overview' })
+const { data: wbsRes, pending: wbsPending, error: wbsError } = await useFetch<{ data: { step: number, progress: number }[] }>('/api/wbs', { key: 'wbs-overview' })
 const wbsItems = computed(() => wbsRes.value?.data ?? [])
+
+// 단계 진척 = 해당 단계 항목 progress 평균 (자동 산출 — WBS 간트와 동일 로직).
+const stepProgress = computed<Record<number, number>>(() => {
+  const sum: Record<number, number> = {}, cnt: Record<number, number> = {}
+  for (const t of wbsItems.value) { sum[t.step] = (sum[t.step] ?? 0) + (t.progress ?? 0); cnt[t.step] = (cnt[t.step] ?? 0) + 1 }
+  const m: Record<number, number> = {}
+  for (const k in cnt) { const n = Number(k); m[n] = Math.round(sum[n]! / cnt[n]!) }
+  return m
+})
 
 const stages = computed<WbsStage[]>(() =>
   Object.keys(wbsStageMeta).map((k) => {
@@ -170,17 +179,20 @@ const stages = computed<WbsStage[]>(() =>
       name: name ?? '',
       summary: '',
       weight: meta.weight,
-      progress: meta.progress,
+      progress: stepProgress.value[num] ?? 0,
       tasks: wbsItems.value.filter(i => i.step === num) as unknown as WbsStage['tasks'],
     }
   }),
 )
 
 const weightedAverage = computed(() => {
-  const metas = Object.values(wbsStageMeta)
-  const tw = metas.reduce((a, s) => a + s.weight, 0)
-  if (!tw) return 0
-  return Math.round((metas.reduce((a, s) => a + s.weight * s.progress, 0) / tw) * 10) / 10
+  // 전체 진척 = 단계별 자동 진척 × 단계 가중치 가중평균 (항목 변경 시 자동 반영).
+  let tw = 0, ws = 0
+  for (const k in stepProgress.value) {
+    const n = Number(k); const w = wbsStageMeta[n]?.weight ?? 1
+    tw += w; ws += w * stepProgress.value[n]!
+  }
+  return tw ? Math.round((ws / tw) * 10) / 10 : 0
 })
 
 const { data: all } = await useAllDocs()
