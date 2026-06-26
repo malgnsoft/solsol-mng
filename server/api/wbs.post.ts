@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
     grp: String(b.group ?? b.grp ?? '').trim() || '미분류',
     name,
     owner: String(b.owner ?? '').trim(),
+    responsible: String(b.responsible ?? b.owner ?? '').trim() || null, // 미입력 시 담당과 동일
     start: b.start || null,
     end: b.end || null,
     progress: Math.max(0, Math.min(100, Number(b.progress) || 0)),

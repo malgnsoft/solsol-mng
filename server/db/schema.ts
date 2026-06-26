@@ -31,7 +31,8 @@ export const wbsItem = sqliteTable('wbs_item', {
   step: integer('step').notNull(),
   grp: text('grp').notNull(),
   name: text('name').notNull(),
-  owner: text('owner').notNull().default(''),
+  owner: text('owner').notNull().default(''), // 담당(실무자/작업한 에이전트)
+  responsible: text('responsible'), // 책임(책임자) — 미설정 시 owner로 표시
   start: text('start'),
   end: text('end'),
   progress: integer('progress').notNull().default(0),

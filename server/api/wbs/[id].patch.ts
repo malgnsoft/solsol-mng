@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
   if ('group' in b || 'grp' in b) patch.grp = String(b.group ?? b.grp ?? '').trim() || '미분류'
   if ('name' in b) patch.name = String(b.name ?? '').trim()
   if ('owner' in b) patch.owner = String(b.owner ?? '').trim()
+  if ('responsible' in b) patch.responsible = String(b.responsible ?? '').trim() || null
   if ('start' in b) patch.start = b.start || null
   if ('end' in b) patch.end = b.end || null
   if ('progress' in b) patch.progress = Math.max(0, Math.min(100, Number(b.progress) || 0))

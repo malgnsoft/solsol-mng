@@ -6,6 +6,7 @@ export interface GanttItem {
   group: string
   name: string
   owner: string
+  responsible?: string // 책임(미설정 시 owner로 표시)
   start?: string // 미정이면 생략(간트 막대 없음)
   end?: string
   progress: number

@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     return {
       data: wbsGantt.map((t, i) => ({
         id: i + 1, step: t.step, group: t.group, name: t.name, owner: t.owner,
+        responsible: t.responsible ?? t.owner,
         start: t.start ?? null, end: t.end ?? null, progress: t.progress,
         note: t.note ?? null, href: t.href ?? null,
       })),
@@ -18,6 +19,7 @@ export default defineEventHandler(async (event) => {
   return {
     data: rows.map(r => ({
       id: r.id, step: r.step, group: r.grp, name: r.name, owner: r.owner,
+      responsible: r.responsible ?? r.owner,
       start: r.start, end: r.end, progress: r.progress, note: r.note, href: r.href,
     })),
   }
