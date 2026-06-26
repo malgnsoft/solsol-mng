@@ -29,6 +29,8 @@
 - `app/utils/wbsData.ts`·`server/db/seed.sql` 갱신 + 라이브 D1 동기화 → <https://solsol-mng.pages.dev/wbs>
 - `/screens` 목업 링크 정상화(3영역 전수, D1 잔여행 정리).
 
+- **Step 7 세분화 재구성**(스프레드시트 107~124 반영·18항목): 통합 6항목 → 플랫폼 기획 3(서브페이지·템플릿12종·SEO)·테스트 2(산출물 체크·전체 QA)·운영 및 정책 5(운영가이드·이용약관·개인정보·마케팅동의 약관·FAQ)·마케팅 3(알림마케팅·섭외·프로모션)·계약 4(토스PG·NHN·펌뱅킹·나이스 분리)·WBS 1(D-F 관리). 누락 항목 보강. wbsData·seed·라이브 D1 일괄, stageMeta[7]=17.
+
 ## 다음 단계
 
 - 보완 라운드: FR blocker5(쿠폰 정률)·AD blocker2(학습자·빌더 모달)·BR major4(무료체험·유효시간) → 재검증.
