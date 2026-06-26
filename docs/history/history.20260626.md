@@ -23,6 +23,9 @@
 - **WBS 상단 떨림 수정**: 스크롤 접기 피드백 루프를 scrollLock(300ms)+canCollapse+히스테리시스로 차단(malgn-studio-mng 방식 이식).
 - **책임(responsible) 컬럼 신설**: 구분·작업 ↔ 담당 사이에 '책임' 컬럼 추가. `wbs_item.responsible` 컬럼(마이그레이션 0004) + 초기값=담당(owner). 운영: **책임=책임자(실무자)** / **담당=실제 작업한 클로드 에이전트**. schema·API(get/post/patch)·페이지(헤더·셀·편집폼)·seed·라이브 D1 일괄(61행 responsible=owner).
 - **책임=김도형 항목의 담당을 에이전트로 배정**(맘총괄 판단·36항목): 목업 FR/BR→frontend-developer·AD→admin-developer / 설계 DB→dba·API/외부연계→api-developer·기능명세→planner / 구현 AD→admin-developer·FR→frontend-developer(강의·상품 lms-developer)·BR→frontend-developer·공통 api-developer(인프라 deployer). 책임=김덕조 4항목(화면설계·정책·검증)은 미변경. 향후 모든 지시는 맘총괄을 통해 진행.
+- **WBS 담당 에이전트명 공식 한글화**: `~/.claude/agents` 정의(dotype:identity) 반영 — 강프개·임관개·조백개·한데관·최기획·신배담·배현우.
+- **Step 7 세분화**(스프레드시트 107~124·18항목) + **진척률 자동 산출 로직**(항목→스텝→전체 자동 연동, wbsStageMeta=가중치만) + 대시보드 동반 적용.
+- **검증 정본(docs/validation) 갱신·배포**(`eeb671c`): `00_화면목록` v1.2(+169)·`05_정책설계서`(+462)·**`06_API계약` 신설(413줄)**·`01~04`/README 정합(총 +878/−175, 10파일). 라이브 `/validation`·`/docs/validation/06_API계약` 200.
 
 ## 산출물
 
