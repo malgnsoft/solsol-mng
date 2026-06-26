@@ -90,15 +90,29 @@ const tree = computed<Step[]>(() => {
 const allTasks = computed(() => tree.value.flatMap(s => s.cats.flatMap(c => c.tasks)))
 
 /* ── KPI: 진척은 보드와 동일 가중평균, 카운트는 작업 기준 ── */
+// 스텝별 진척 = 해당 스텝 항목 progress 평균 (자동 산출). 항목이 바뀌면 스텝·전체가 함께 변함.
+const stepProgressMap = computed<Record<number, number>>(() => {
+  const sum: Record<number, number> = {}, cnt: Record<number, number> = {}
+  for (const t of allTasks.value) { sum[t.step] = (sum[t.step] ?? 0) + t.progress; cnt[t.step] = (cnt[t.step] ?? 0) + 1 }
+  const m: Record<number, number> = {}
+  for (const k in cnt) { const n = Number(k); m[n] = Math.round(sum[n]! / cnt[n]!) }
+  return m
+})
+function stepProgress(num: number) { return stepProgressMap.value[num] ?? 0 }
+
 const kpi = computed(() => {
-  const metas = Object.values(wbsStageMeta)
-  const tw = metas.reduce((a, s) => a + s.weight, 0)
-  const avg = Math.round((metas.reduce((a, s) => a + s.weight * s.progress, 0) / tw) * 10) / 10
+  // 전체 진척 = 스텝별 자동 진척 × 단계 가중치(wbsStageMeta.weight) 가중평균.
+  // → 어떤 항목 progress가 바뀌어도 스텝·전체 진척이 자동 반영된다.
+  let tw = 0, ws = 0
+  for (const k in stepProgressMap.value) {
+    const n = Number(k); const w = wbsStageMeta[n]?.weight ?? 1
+    tw += w; ws += w * stepProgressMap.value[n]!
+  }
+  const avg = tw ? Math.round((ws / tw) * 10) / 10 : 0
   const c = { done: 0, active: 0, plan: 0, late: 0 }
   allTasks.value.forEach(t => c[t.status]++)
   return { n: allTasks.value.length, avg, ...c }
 })
-function stepProgress(num: number) { return wbsStageMeta[num]?.progress ?? 0 }
 const peopleCount = computed(() => {
   const m: Record<string, number> = {}; for (const p of PEOPLE) m[p] = 0
   for (const t of allTasks.value) { if (!t.who.length) m['미정']!++; else t.who.forEach(w => { if (w in m) m[w]!++ }) }

@@ -24,15 +24,16 @@ export const wbsSteps: Record<number, string> = {
   7: "Step 7 · 운영·계약",
 }
 
-// 단계 가중치·진행률 — 현황판(board)과 동일 → WBS KPI = 프로젝트 전체 진척.
-export const wbsStageMeta: Record<number, { weight: number, progress: number }> = {
-  1: { weight: 8, progress: 95 },
-  2: { weight: 10, progress: 90 },
-  3: { weight: 6, progress: 85 },
-  4: { weight: 8, progress: 90 },
-  5: { weight: 10, progress: 48 },
-  6: { weight: 43, progress: 0 },
-  7: { weight: 15, progress: 17 },
+// 단계 가중치 — 전체 진척 가중평균에만 사용. 각 단계/항목 진척은 항목 progress에서 자동 산출(wbs.vue).
+// (단계별 상대 중요도: 구현 43 > 운영 15 > 화면설계·설계 10 …)
+export const wbsStageMeta: Record<number, { weight: number }> = {
+  1: { weight: 8 },
+  2: { weight: 10 },
+  3: { weight: 6 },
+  4: { weight: 8 },
+  5: { weight: 10 },
+  6: { weight: 43 },
+  7: { weight: 15 },
 }
 
 export const wbsGantt: GanttItem[] = [
