@@ -22,6 +22,7 @@
 - **담당 칩 정리**: WBS 담당자 필터에서 서만원·조수현 제거(`PEOPLE`). **스텝6(구현) 19항목 진행률 전부 0%**로 변경(stageMeta[6]=0 · wbsData·seed·D1). **스텝5 '개발 설계' 그룹 4항목(DB·기능명세·API·외부연계)도 새로 시작 → 0%**(stageMeta[5]=48 재계산).
 - **WBS 상단 떨림 수정**: 스크롤 접기 피드백 루프를 scrollLock(300ms)+canCollapse+히스테리시스로 차단(malgn-studio-mng 방식 이식).
 - **책임(responsible) 컬럼 신설**: 구분·작업 ↔ 담당 사이에 '책임' 컬럼 추가. `wbs_item.responsible` 컬럼(마이그레이션 0004) + 초기값=담당(owner). 운영: **책임=책임자(실무자)** / **담당=실제 작업한 클로드 에이전트**. schema·API(get/post/patch)·페이지(헤더·셀·편집폼)·seed·라이브 D1 일괄(61행 responsible=owner).
+- **책임=김도형 항목의 담당을 에이전트로 배정**(맘총괄 판단·36항목): 목업 FR/BR→frontend-developer·AD→admin-developer / 설계 DB→dba·API/외부연계→api-developer·기능명세→planner / 구현 AD→admin-developer·FR→frontend-developer(강의·상품 lms-developer)·BR→frontend-developer·공통 api-developer(인프라 deployer). 책임=김덕조 4항목(화면설계·정책·검증)은 미변경. 향후 모든 지시는 맘총괄을 통해 진행.
 
 ## 산출물
 
