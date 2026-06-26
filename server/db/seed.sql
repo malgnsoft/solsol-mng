@@ -41,10 +41,10 @@ INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) 
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (214,5,'화면설계·정책·검증','화면설계서 FR/AD/BR (01~03)','김도형','2026-06-26','2026-07-18',90,NULL,NULL,214);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (215,5,'화면설계·정책·검증','정책설계서·정책요약 (확정 6건)','김도형','2026-06-26','2026-07-11',95,NULL,NULL,215);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (216,5,'화면설계·정책·검증','검증 패키지·개발–검증 절차 (dev-validation 게이트)','김도형','2026-06-23','2026-06-25',100,'docs/validation · DEV_VALIDATION_PROCESS',NULL,216);
-INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (217,5,'개발 설계','DB 설계 (테이블·ERD)','김도형','2026-06-26','2026-07-04',100,NULL,NULL,217);
-INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (218,5,'개발 설계','기능명세서 (페이지명세서)','김도형','2026-06-26','2026-07-04',100,NULL,NULL,218);
-INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (219,5,'개발 설계','API 명세서 (1·2차)','김도형','2026-06-26','2026-08-01',70,NULL,NULL,219);
-INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (220,5,'개발 설계','외부 연계 설계 (NHN·NICE·PG·위캔디오·펌뱅킹)','김도형','2026-07-01','2026-08-29',30,'7/1~ 2개월 실연동',NULL,220);
+INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (217,5,'개발 설계','DB 설계 (테이블·ERD)','김도형','2026-06-26','2026-07-04',0,NULL,NULL,217);
+INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (218,5,'개발 설계','기능명세서 (페이지명세서)','김도형','2026-06-26','2026-07-04',0,NULL,NULL,218);
+INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (219,5,'개발 설계','API 명세서 (1·2차)','김도형','2026-06-26','2026-08-01',0,NULL,NULL,219);
+INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (220,5,'개발 설계','외부 연계 설계 (NHN·NICE·PG·위캔디오·펌뱅킹)','김도형','2026-07-01','2026-08-29',0,'7/1~ 2개월 실연동',NULL,220);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (221,6,'공통·기반','프레임워크·스키마·공통모듈','김도형','2026-06-26','2026-08-01',0,NULL,NULL,221);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (222,6,'공통·기반','외부 API 연동 (소셜·메시징·결제·본인인증·위캔디오)','김도형','2026-06-26','2026-08-29',0,NULL,NULL,222);
 INSERT INTO wbs_item (id,step,grp,name,owner,start,end,progress,note,href,sort) VALUES (223,6,'공통·기반','인프라·CI/CD','김도형','2026-06-26','2026-08-15',0,NULL,NULL,223);
