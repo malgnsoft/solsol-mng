@@ -10,7 +10,7 @@ const TODAY = useState('wbs:today', () => kstToday())
 onMounted(() => { TODAY.value = kstToday() })
 
 /* 담당자 색 */
-const PEOPLE = ['서만원', '조수현', '김도형', '김덕조', '김혜인', '방준영', '미정'] as const
+const PEOPLE = ['김도형', '김덕조', '김혜인', '방준영', '미정'] as const
 const PCOLOR: Record<string, string> = {
   서만원: '#2563eb', 조수현: '#7c3aed', 김도형: '#0d9488', 김덕조: '#0891b2',
   김혜인: '#db2777', 방준영: '#d97706', 미정: '#94a3b8',
