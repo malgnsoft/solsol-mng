@@ -189,7 +189,9 @@ const weightedAverage = computed(() => {
   // 전체 진척 = 단계별 자동 진척 × 단계 가중치 가중평균 (항목 변경 시 자동 반영).
   let tw = 0, ws = 0
   for (const k in stepProgress.value) {
-    const n = Number(k); const w = wbsStageMeta[n]?.weight ?? 1
+    const n = Number(k)
+    if (n === 7) continue // 전체 진척에서 Step 7(운영·계약) 제외
+    const w = wbsStageMeta[n]?.weight ?? 1
     tw += w; ws += w * stepProgress.value[n]!
   }
   return tw ? Math.round((ws / tw) * 10) / 10 : 0

@@ -105,7 +105,9 @@ const kpi = computed(() => {
   // → 어떤 항목 progress가 바뀌어도 스텝·전체 진척이 자동 반영된다.
   let tw = 0, ws = 0
   for (const k in stepProgressMap.value) {
-    const n = Number(k); const w = wbsStageMeta[n]?.weight ?? 1
+    const n = Number(k)
+    if (n === 7) continue // 전체 진척에서 Step 7(운영·계약) 제외
+    const w = wbsStageMeta[n]?.weight ?? 1
     tw += w; ws += w * stepProgressMap.value[n]!
   }
   const avg = tw ? Math.round((ws / tw) * 10) / 10 : 0
