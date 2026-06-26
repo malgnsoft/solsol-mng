@@ -12,8 +12,10 @@ onMounted(() => { TODAY.value = kstToday() })
 /* 담당자 색 */
 const PEOPLE = ['김도형', '김덕조', '김혜인', '방준영', '미정'] as const
 const PCOLOR: Record<string, string> = {
-  서만원: '#2563eb', 조수현: '#7c3aed', 김도형: '#0d9488', 김덕조: '#0891b2',
-  김혜인: '#db2777', 방준영: '#d97706', 미정: '#94a3b8',
+  김도형: '#0d9488', 김덕조: '#0891b2', 김혜인: '#db2777', 방준영: '#d97706', 미정: '#94a3b8',
+  // 작업 에이전트(담당) 한글명 색
+  프론트개발: '#2563eb', 관리자개발: '#0891b2', API개발: '#7c3aed', DB설계: '#db2777',
+  기획: '#d97706', 배포: '#059669', LMS개발: '#0d9488', 검증: '#dc2626',
 }
 function whoOf(owner: string): string[] {
   if (!owner || owner === '—') return []
@@ -457,7 +459,7 @@ const subtitle = 'WBS 간트 · 전체 일정 · 7단계 · 기준일'
           <label>구분<input v-model="form.group" type="text" placeholder="예: 사용자 · 발송"></label>
           <label>작업명 (화면)<input v-model="form.name" type="text" placeholder="작업/화면 이름"></label>
           <label>책임 <span class="hint">책임자(실무자)</span><input v-model="form.responsible" type="text" placeholder="예: 김도형"></label>
-          <label>담당 <span class="hint">실제 작업자(클로드 에이전트) · 쉼표 구분 · 빈칸=미정</span><input v-model="form.owner" type="text" placeholder="예: frontend-developer"></label>
+          <label>담당 <span class="hint">실제 작업자(클로드 에이전트) · 쉼표 구분 · 빈칸=미정</span><input v-model="form.owner" type="text" placeholder="예: 프론트개발, 관리자개발"></label>
           <div class="frow frow-2">
             <label>시작일<input v-model="form.start" type="date"></label>
             <label>종료일<input v-model="form.end" type="date"></label>
