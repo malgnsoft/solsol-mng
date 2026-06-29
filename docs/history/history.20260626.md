@@ -40,6 +40,8 @@
 
 - 보완 라운드: FR blocker5(쿠폰 정률)·AD blocker2(학습자·빌더 모달)·BR major4(무료체험·유효시간) → 재검증.
 - BO(브랜드 관리자단) 화면목록 확정 시 목업·구현 항목 확장.
+- **브랜드 사이트 v4 목업 재구축 + 배포**: 이전 목업 폐기 후 `design_handoff_solsol_brand_v4`로 `solsol-brand/mockup` 신규 구축(Nuxt 3 + @nuxt/ui, 다크 #0E0E10 + red #ED1B23 + 플랜색·Pretendard·1920px). **BR01 39/39**(SoT §3.3 100%) + 카탈로그, 무료체험 14일 문구 없음(정책 M-1 정합). FR01 목업 보존. `malgnsoft/solsol-brand`(`000423b`) → Pages `solsol-brand-mockup` 배포. <https://solsol-brand-mockup.pages.dev>
+
 
 ---
 
