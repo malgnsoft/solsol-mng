@@ -91,6 +91,14 @@
 - dev DB 클린 리빌드(master 14·tenant 93, 0오류). Figma 도메인2·3 제자리 갱신 — **금액 컬럼을 처음으로 ERD에 노출**(기존 파서가 DECIMAL(p,s) 콤마로 누락하던 것 수정). URL 유지.
 - 참고: 마스터 Figma 보드(`UR6M…`)의 invoice/payment/credit 금액 표기 갱신은 별도 요청 시.
 
+## 13. 설문 보기 정규화(JSON 제거)
+
+- 설문의 JSON 컬럼 제거 → 관계형 정규화. **`TB_SURVEY_OPTION`**(문항 보기) 신설(survey_question_id·seq·label).
+  - `TB_SURVEY_QUESTION.options(JSON)` 제거 → 보기는 `TB_SURVEY_OPTION` 행, rating은 `rating_max` 컬럼.
+  - `TB_SURVEY_ANSWER.answer_option(JSON)` 제거 → `survey_option_id`(radio/check, 복수선택은 보기당 1행)·`rating_value`(척도)·`answer_text`(주관식).
+- 테넌트 **94** / 총 **108**. dev DB 클린 리빌드(94, 0오류) + Figma 도메인4 제자리 갱신(URL 유지).
+- 남은 JSON 컬럼(설문 외): `TB_RECIPIENT_GROUP.condition_logic`·`TB_PAGE_SECTION.config`·`TB_CERTIFICATE_TEMPLATE.display_items` 등 — 필요 시 동일 방식 정규화 검토.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
