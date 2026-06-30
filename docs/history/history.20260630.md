@@ -38,9 +38,16 @@
 - (별도 레포·미배포) `solsol-api` 인증 API, `solsol/` 신규 프론트 앱
 - 본 배포: solsol-mng 문서 커밋·푸시(malgn). 앱 코드/콘텐츠 변경 없음 → Pages 재배포 생략.
 
+## 6. 회원 모델 조정 (소셜 비정규화 + 로그인아이디/이메일 분리)
+
+- **`TB_USER_SOCIAL` 폐지 → `TB_USER` 비정규화**: `google_uid`·`kakao_uid`·`naver_uid`·`apple_uid`·`facebook_uid`(각 UNIQUE, NULL 다건 허용) + `primary_provider`(대표 SNS). 어떤 SNS로 로그인해도 1회원, 로그인 조회는 provider별 UNIQUE 인덱스. 테넌트 91→**90**.
+- **`login_id` / `email` 분리**: staff=별도 로그인 아이디(변경불가), learner=소셜 이메일을 `login_id`·`email`에 동일 입력. `login_id` VARCHAR(255)·`uk_user_login_id` UNIQUE.
+- 영향: `solsol-api` 인증 코드(미커밋·mock)가 `TB_USER_SOCIAL`·email-as-login 전제 → 실연동 시 재작성 필요. **dev DB 재적용은 미실행**(모델 파일만 반영).
+
 ## 다음 단계 / 알려진 한계
 
-- 소셜 5종 OAuth 키 준비 → mock→실 provider 교체, 프론트↔API 실연동(`NUXT_PUBLIC_API_BASE`·refresh 쿠키 도메인).
+- **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
+- 소셜 5종 OAuth 키 준비 → mock→실 provider 교체, 프론트↔API 실연동(`NUXT_PUBLIC_API_BASE`·refresh 쿠키 도메인). 콜백 식별을 `*_uid`/`login_id` 기준으로 보강.
 - 인증 QA 라운드(화면ID 커버리지+9축) → `docs/dev-validation/auth-round1.md`.
 - 인프라: 테넌트 자동 프로비저닝 전용 DB 계정(B-7). biz-legal: 국외이전·고유식별정보 수집근거.
 - 모델 잔여 중/하: avg_rating 집계경로·instructor_user_id 명칭통일·subject_type default 등.
