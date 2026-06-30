@@ -44,6 +44,14 @@
 - **`login_id` / `email` 분리**: staff=별도 로그인 아이디(변경불가), learner=소셜 이메일을 `login_id`·`email`에 동일 입력. `login_id` VARCHAR(255)·`uk_user_login_id` UNIQUE.
 - 영향: `solsol-api` 인증 코드(미커밋·mock)가 `TB_USER_SOCIAL`·email-as-login 전제 → 실연동 시 재작성 필요. **dev DB 재적용은 미실행**(모델 파일만 반영).
 
+## 7. 게시판류 범용 엔진 재구성 + 프리미엄 커뮤니티 별도
+
+- 사용자가 제공한 **범용 게시판 엔진 DDL**(TB_BOARD/POST/COMMENT/FILE/CATEGORY, module 기반)을 **우리 컨벤션으로 변환**해 게시판류를 재구성. 소문자·`id BIGINT AI`·`DATETIME`·Y/N→TINYINT·`site_id` 없음.
+- **교체(3)**: `TB_BOARD`(엔진 정의·`uk_board_code`)·`TB_POST`(`board_type` 분기·`idx(board_id,created_at,id)`)·`TB_COMMENT`(module 기반). **신설(4)**: `TB_BOARD_CATEGORY`·`TB_FILE`(module 기반, `TB_ATTACHMENT` 대체)·`TB_COMMUNITY_POST`·`TB_COMMUNITY_COMMENT`(프리미엄 커뮤니티 별도). **삭제(6)**: `TB_FAQ`·`TB_FAQ_CATEGORY`·`TB_INQUIRY`·`TB_INQUIRY_REPLY`·`TB_POST_LIKE`·`TB_ATTACHMENT`.
+- 공지=`notice`·FAQ=`faq`·**1:1문의=`qna`**(`secret_yn`+`proc_status`)·자유=`free`. 게시판류만 적용(상품 카테고리/파일 현행 유지).
+- 테넌트 **88** / 총 **102**. dev DB 클린 리빌드 반영 완료(reset→migrate 88·seed). Figma 테넌트 보드 커뮤니티 도메인 **제자리 갱신**(URL 유지 `tds3QGtVLaj5InmKM56um5`).
+- (앞서) 회원 소셜 5종 비정규화 + `login_id`/`email` 분리도 dev DB 반영·ERD 인증 도메인 제자리 갱신 완료.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
