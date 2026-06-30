@@ -54,7 +54,7 @@ CREATE DATABASE solsol_t000123        DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 | PK | `id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY` (전 테이블) |
 | 상태 | `status INT NOT NULL DEFAULT 1` — **1=정상 / 0=중지 / -1=삭제** (전 테이블, 소프트삭제) |
 | 금액·크레딧·통화·수수료율 | `DECIMAL(18,6)` |
-| 일시 | `DATETIME` **UTC 저장**, 표시 시 시차 적용. `created_at`/`updated_at`은 `CURRENT_TIMESTAMP` 기본시 |
+| 일시 | `TIMESTAMP`(내부 **UTC** 저장 — 세션/서버 tz 무관), 표시 시 로컬(KST 등) 변환. `created_at`/`updated_at`은 `CURRENT_TIMESTAMP`/`ON UPDATE` 기본시. 날짜 단위는 `DATE`. ※ DATETIME 대신 TIMESTAMP 채택 이유: dev Aurora 서버 tz=Asia/Seoul + **Hyperdrive가 세션 `SET time_zone` 미유지**라 DATETIME은 KST로 저장됨 → TIMESTAMP로 UTC 보장(OQ-TZ) |
 | 외래키 | **약한 FK** = 논리적 FK(네이밍 + 조인 인덱스)만, DB `FOREIGN KEY` 제약·CASCADE 미설정 |
 | FK 네이밍 | 참조테이블단수`_id`. `TB_USER`→`user_id`, `TB_TENANT`→`tenant_id`, `TB_SELLER`→`seller_id`. 동일 테이블 다중 참조 → 역할명`_user_id`(예: `instructor_user_id`) |
 | 엔진/문자셋 | InnoDB / `utf8mb4` / `utf8mb4_unicode_ci` |

@@ -119,6 +119,15 @@
 - 테넌트 **91** / 총 **105**. dev DB 클린 리빌드(91, 0오류) + Figma 도메인2 제자리 갱신(URL 유지).
 - 참고: AI 자막/번역(`TB_AI_JOB` kind=ai_caption/ai_translate, `TB_CONTENT.has_ai_translate`)은 유지 — 생성 결과는 위캔디오로 반영.
 
+## 17. 시간대 UTC — DATETIME→TIMESTAMP 전면 전환 (OQ-TZ)
+
+- **문제**: dev Aurora(`malgn-dev-solsol-prv`) 서버 `time_zone=Asia/Seoul` → `DATETIME DEFAULT CURRENT_TIMESTAMP`가 KST 저장(UTC 컨벤션 위반). **Hyperdrive는 세션 `SET time_zone`을 쿼리 간 유지하지 않아**(동일 핸들 SET→SELECT도 실패, 검증) 앱 레벨 UTC 강제 불가. 파라미터그룹 UTC는 **공용 클러스터(타 프로젝트 DB 공존)** 라 영향.
+- **결정**: 시각 컬럼 **`DATETIME`→`TIMESTAMP` 전면 전환**(tenant 239·master 49건). TIMESTAMP는 세션/서버 tz와 무관하게 **내부 UTC 저장** → solsol 스키마만 바꿔 UTC 보장, 타 프로젝트 무영향. `DATE`(날짜 단위 8개)는 유지.
+- dev DB 클린 리빌드(master 14·tenant 91, 0오류 — MySQL 8.0 다중 TIMESTAMP DEFAULT OK). README 컨벤션 문구 갱신.
+- `solsol-api` DB 클라이언트(`createConn`)는 효과 없는 세션 SET 제거 + Hyperdrive 한계 주석. 공용 지식베이스(`malgn-family.md`)에 Hyperdrive 세션 비유지·DATETIME tz 함정 기록.
+- 읽기 주의: 현재 KST 세션으로 읽으면 KST로 렌더(절대시각은 UTC로 정확). UTC 문자열이 필요하면 `UNIX_TIMESTAMP`/`CONVERT_TZ` 또는 prod에서 세션 UTC.
+- ⏳ ERD 타입 라벨(일부 `datetime` 표기)은 코스메틱 미반영 — 요청 시 보드 일괄 갱신.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
