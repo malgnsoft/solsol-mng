@@ -1151,25 +1151,23 @@ CREATE TABLE TB_SURVEY_QUESTION (
   text       VARCHAR(500) NOT NULL,
   qtype      VARCHAR(20)  NOT NULL DEFAULT 'text' COMMENT 'text/long/radio/check/rating',
   rating_max INT              NULL              COMMENT 'rating 척도 최대(예 5). qtype=rating',
+  option1    VARCHAR(500)     NULL              COMMENT '보기1(radio/check)',
+  option2    VARCHAR(500)     NULL              COMMENT '보기2',
+  option3    VARCHAR(500)     NULL              COMMENT '보기3',
+  option4    VARCHAR(500)     NULL              COMMENT '보기4',
+  option5    VARCHAR(500)     NULL              COMMENT '보기5',
+  option6    VARCHAR(500)     NULL              COMMENT '보기6',
+  option7    VARCHAR(500)     NULL              COMMENT '보기7',
+  option8    VARCHAR(500)     NULL              COMMENT '보기8',
+  option9    VARCHAR(500)     NULL              COMMENT '보기9',
+  option10   VARCHAR(500)     NULL              COMMENT '보기10',
   required   TINYINT      NOT NULL DEFAULT 0,
   status     INT          NOT NULL DEFAULT 1       COMMENT '1정상 0중지 -1삭제',
   created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_question_survey (survey_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='설문 문항';
-
-CREATE TABLE TB_SURVEY_OPTION (
-  id                 BIGINT       NOT NULL AUTO_INCREMENT,
-  survey_question_id BIGINT       NOT NULL              COMMENT '문항(TB_SURVEY_QUESTION)',
-  seq                INT          NOT NULL DEFAULT 0    COMMENT '보기 순번',
-  label              VARCHAR(500) NOT NULL              COMMENT '보기 내용(radio/check)',
-  status             INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
-  created_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_surveyopt_question (survey_question_id, seq)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='설문 문항 보기(선택지)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='설문 문항(보기 option1~10 인라인)';
 
 CREATE TABLE TB_SURVEY_RESPONSE (
   id           BIGINT   NOT NULL AUTO_INCREMENT,
@@ -1187,7 +1185,7 @@ CREATE TABLE TB_SURVEY_ANSWER (
   id                 BIGINT   NOT NULL AUTO_INCREMENT,
   survey_response_id BIGINT   NOT NULL,
   survey_question_id BIGINT   NOT NULL,
-  survey_option_id   BIGINT       NULL              COMMENT '선택 보기(TB_SURVEY_OPTION) — radio/check. check는 보기당 1행',
+  option_no          INT          NULL              COMMENT '선택 보기 번호(1~10, TB_SURVEY_QUESTION.option*) — radio/check. check는 보기당 1행',
   answer_text        TEXT         NULL              COMMENT '주관식 답(text/long)',
   rating_value       INT          NULL              COMMENT '척도 답(rating)',
   status             INT      NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
@@ -1195,9 +1193,8 @@ CREATE TABLE TB_SURVEY_ANSWER (
   updated_at         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_answer_response (survey_response_id),
-  KEY idx_answer_question (survey_question_id),
-  KEY idx_answer_option (survey_option_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='문항별 답변(보기는 survey_option_id, 복수선택은 다행)';
+  KEY idx_answer_question (survey_question_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='문항별 답변(보기는 option_no, 복수선택은 다행)';
 
 CREATE TABLE TB_LANDING_PAGE (
   id               BIGINT       NOT NULL AUTO_INCREMENT,

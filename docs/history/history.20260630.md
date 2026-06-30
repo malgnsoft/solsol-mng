@@ -99,6 +99,12 @@
 - 테넌트 **94** / 총 **108**. dev DB 클린 리빌드(94, 0오류) + Figma 도메인4 제자리 갱신(URL 유지).
 - 남은 JSON 컬럼(설문 외): `TB_RECIPIENT_GROUP.condition_logic`·`TB_PAGE_SECTION.config`·`TB_CERTIFICATE_TEMPLATE.display_items` 등 — 필요 시 동일 방식 정규화 검토.
 
+## 14. 설문 보기 인라인화(option1~10) + TB_SURVEY_OPTION 삭제
+
+- 13의 정규화를 되돌려 **고정 보기 컬럼** 방식 채택: `TB_SURVEY_QUESTION`에 `option1~option10`(VARCHAR(500)) 추가. **`TB_SURVEY_OPTION` 삭제**.
+- `TB_SURVEY_ANSWER.survey_option_id`(FK) → **`option_no`**(INT, 보기 번호 1~10). radio/check 동일, 복수선택은 보기당 1행.
+- 테넌트 **93** / 총 **107**. dev DB 클린 리빌드(93, 0오류) + Figma 도메인4 제자리 갱신(URL 유지).
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
