@@ -30,7 +30,6 @@
 - API `solsol-api`: A1~A6 + M1~M7 + JWT/리프레시(해시·회전·재사용감지) + **mock provider E2E 11건 PASS**.
 - ⏸ 운영 전: 소셜 5종 OAuth 키(OQ-OAUTH)·프론트↔API 실연동·인증 QA 라운드.
 
-- **WBS 현행화**(2026-06-30): DB 설계·ERD(검증 2라운드 게이트 통과·102테이블·Figma ERD) → 스텝5 DB설계 0→95%·API명세 0→25%. 인증 슬라이스(프론트 화면+API+mock E2E) → 스텝6 프레임워크·스키마 0→35%·API개발 0→10%·외부API연동 0→5%·CF 인증·가입 0→35%. 진척 자동산출로 스텝/전체 반영(라이브 D1 + wbsData·seed 동기).
 
 ## 산출물
 
@@ -127,6 +126,15 @@
 - `solsol-api` DB 클라이언트(`createConn`)는 효과 없는 세션 SET 제거 + Hyperdrive 한계 주석. 공용 지식베이스(`malgn-family.md`)에 Hyperdrive 세션 비유지·DATETIME tz 함정 기록.
 - 읽기 주의: 현재 KST 세션으로 읽으면 KST로 렌더(절대시각은 UTC로 정확). UTC 문자열이 필요하면 `UNIX_TIMESTAMP`/`CONVERT_TZ` 또는 prod에서 세션 UTC.
 - ⏳ ERD 타입 라벨(일부 `datetime` 표기)은 코스메틱 미반영 — 요청 시 보드 일괄 갱신.
+
+## 18. 관리 허브(solsol-mng) 개선 — 화면 페이지·WBS
+
+- **`/screens` 디자인 검수 단계 추가**: 퍼블리싱↔개발 사이 **「디자인 검수」**(review) 칸 신설(클릭 토글·D1 저장). schema·마이그레이션 0005·screenStatus·API(get merge·patch)·페이지 STAGES·영역 탭 진척바 일괄.
+- **`/screens` 화면별 다중 코멘트**: `screen_comment` 테이블 + `screenComments` 유틸(D1+폴백) + API(목록/작성/삭제) + GET `/api/screens` 코멘트수 머지. 💬 버튼 → **우측 채팅 레이어(drawer)**로 작성·삭제(작성자=로그인 회원). 영역 탭 "디자인 검수" 라벨 줄바꿈 방지(라벨열 66px+nowrap).
+- **WBS 담당 필터 = 담당 ∪ 책임**: `peopleCount`·`taskPass`가 owner만 보던 것을 owner∪responsible로 확장(책임=김도형 항목도 칩에 카운트·필터).
+- **사이트 타이틀** "쏠쏠 관리" → **"쏠쏠 프로젝트 관리"**(nuxt.config title·titleTemplate).
+- **WBS 현행화**(상기 §1~5 반영): DB설계·ERD 0→95%·API명세 0→25% / 프레임워크·스키마 0→35%·API개발 0→10%·외부API연동 0→5%·CF 인증·가입 0→35%. 진척 자동산출 → 스텝5 63%·스텝6 4%·**전체 39.5→43.3%**. 라이브 D1 + wbsData·seed 동기.
+- 마이그레이션 0005(screen_status.review + screen_comment) 원격 D1 적용. solsol-mng 다수 배포.
 
 ## 다음 단계 / 알려진 한계
 
