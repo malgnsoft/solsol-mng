@@ -75,9 +75,19 @@ export const screenStatus = sqliteTable('screen_status', {
   screenId: text('screen_id').primaryKey(), // 예: S-FR01-0102-001, S-AD01-0201-004-P01
   design: integer('design', { mode: 'boolean' }).notNull().default(true),
   publish: integer('publish', { mode: 'boolean' }).notNull().default(false),
+  review: integer('review', { mode: 'boolean' }).notNull().default(false), // 디자인 검수(퍼블리싱↔개발 사이)
   dev: integer('dev', { mode: 'boolean' }).notNull().default(false),
   test: integer('test', { mode: 'boolean' }).notNull().default(false),
   mockupUrl: text('mockup_url').notNull().default(''), // 퍼블리싱 시 목업 링크
   devUrl: text('dev_url').notNull().default(''), // 개발 완료 시 개발 링크
   updatedAt: text('updated_at'), // ISO8601
+})
+
+// 화면별 코멘트(다중) — 화면ID별로 여러 개. 작성자 = 세션 회원명 스냅샷.
+export const screenComment = sqliteTable('screen_comment', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  screenId: text('screen_id').notNull(),
+  body: text('body').notNull(),
+  author: text('author').notNull().default(''),
+  createdAt: text('created_at').notNull(), // ISO8601
 })

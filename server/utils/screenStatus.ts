@@ -9,13 +9,14 @@ export interface StatusRow {
   screenId: string
   design: boolean
   publish: boolean
+  review: boolean
   dev: boolean
   test: boolean
   mockupUrl: string
   devUrl: string
   updatedAt: string | null
 }
-export type StatusPatch = Partial<Pick<StatusRow, 'design' | 'publish' | 'dev' | 'test' | 'mockupUrl' | 'devUrl'>>
+export type StatusPatch = Partial<Pick<StatusRow, 'design' | 'publish' | 'review' | 'dev' | 'test' | 'mockupUrl' | 'devUrl'>>
 
 function nowIso(): string { return new Date().toISOString() }
 
@@ -27,7 +28,7 @@ interface StatusRepo {
 // ─── dev 인메모리 폴백 ─────────────────────────────────────
 const memStore = new Map<string, StatusRow>()
 function applyPatch(prev: StatusRow | undefined, id: string, patch: StatusPatch): StatusRow {
-  const base: StatusRow = prev ?? { screenId: id, design: true, publish: false, dev: false, test: false, mockupUrl: '', devUrl: '', updatedAt: null }
+  const base: StatusRow = prev ?? { screenId: id, design: true, publish: false, review: false, dev: false, test: false, mockupUrl: '', devUrl: '', updatedAt: null }
   return { ...base, ...patch, screenId: id, updatedAt: nowIso() }
 }
 const memRepo: StatusRepo = {
@@ -48,7 +49,7 @@ function d1Repo(db: Db): StatusRepo {
       const existing = (await db.select().from(screenStatus).where(eq(screenStatus.screenId, id)).limit(1))[0] as StatusRow | undefined
       const row = applyPatch(existing, id, patch)
       await db.insert(screenStatus).values(row)
-        .onConflictDoUpdate({ target: screenStatus.screenId, set: { design: row.design, publish: row.publish, dev: row.dev, test: row.test, mockupUrl: row.mockupUrl, devUrl: row.devUrl, updatedAt: row.updatedAt } })
+        .onConflictDoUpdate({ target: screenStatus.screenId, set: { design: row.design, publish: row.publish, review: row.review, dev: row.dev, test: row.test, mockupUrl: row.mockupUrl, devUrl: row.devUrl, updatedAt: row.updatedAt } })
       return row
     },
   }

@@ -6,6 +6,7 @@ useHead({ title: '화면' })
 const STAGES = [
   { key: 'design', label: '디자인' },
   { key: 'publish', label: '퍼블리싱' },
+  { key: 'review', label: '디자인 검수' },
   { key: 'dev', label: '개발' },
   { key: 'test', label: '테스트' },
 ] as const
@@ -66,14 +67,57 @@ function editUrl(it: ScreenItem, field: 'mockupUrl' | 'devUrl') {
   if (v === null) return
   patch(it, { [field]: v.trim() })
 }
+
+// ── 코멘트(화면별 다중) ──
+interface Comment { id: number, body: string, author: string, createdAt: string }
+const openCmt = ref<string>('') // 코멘트 패널이 열린 화면ID
+const cmtList = ref<Record<string, Comment[]>>({})
+const cmtText = ref('')
+const cmtBusy = ref(false)
+async function toggleComments(it: ScreenItem) {
+  if (openCmt.value === it.id) { openCmt.value = ''; return }
+  openCmt.value = it.id
+  cmtText.value = ''
+  if (!cmtList.value[it.id]) {
+    try {
+      const r = await $fetch<{ data: Comment[] }>(`/api/screens/${encodeURIComponent(it.id)}/comments`)
+      cmtList.value[it.id] = r.data
+    }
+    catch { cmtList.value[it.id] = [] }
+  }
+}
+async function addComment(it: ScreenItem) {
+  const body = cmtText.value.trim()
+  if (!body || cmtBusy.value) return
+  cmtBusy.value = true
+  try {
+    const r = await $fetch<{ data: Comment }>(`/api/screens/${encodeURIComponent(it.id)}/comments`, { method: 'POST', body: { body } })
+    ;(cmtList.value[it.id] ??= []).push(r.data)
+    it.commentCount = (it.commentCount ?? 0) + 1
+    cmtText.value = ''
+  }
+  catch (e) { alert('저장 실패: ' + (e instanceof Error ? e.message : '')) }
+  finally { cmtBusy.value = false }
+}
+async function delComment(it: ScreenItem, cid: number) {
+  if (!window.confirm('코멘트를 삭제할까요?')) return
+  try {
+    await $fetch(`/api/screens/comments/${cid}`, { method: 'DELETE' })
+    cmtList.value[it.id] = (cmtList.value[it.id] ?? []).filter(c => c.id !== cid)
+    it.commentCount = Math.max(0, (it.commentCount ?? 1) - 1)
+  }
+  catch (e) { alert('삭제 실패: ' + (e instanceof Error ? e.message : '')) }
+}
+function fmtTime(iso: string) { return (iso ?? '').slice(0, 16).replace('T', ' ') }
+const colSpan = STAGES.length + 4 // 화면ID·화면명·링크·코멘트 + 단계들
 </script>
 
 <template>
   <div class="page">
     <header class="head">
       <h1>화면</h1>
-      <p class="sub">영역별 화면 목록과 <b>디자인 · 퍼블리싱(목업) · 개발 · 테스트</b> 진척. 상태를 클릭해 토글(D1 저장),
-        링크 칸의 ✎ 로 목업/개발 URL을 입력합니다. 모달은 해당 화면 아래에 함께 표시됩니다.
+      <p class="sub">영역별 화면 목록과 <b>디자인 · 퍼블리싱(목업) · 디자인 검수 · 개발 · 테스트</b> 진척. 상태를 클릭해 토글(D1 저장),
+        링크 칸의 ✎ 로 목업/개발 URL을 입력합니다. <b>💬</b> 로 화면별 코멘트를 남길 수 있습니다. 모달은 해당 화면 아래에 함께 표시됩니다.
         화면 정본은 <NuxtLink to="/validation" class="lnk">검증 화면목록</NuxtLink>(읽기 전용).</p>
     </header>
 
@@ -124,6 +168,7 @@ function editUrl(it: ScreenItem, field: 'mockupUrl' | 'devUrl') {
                   <th class="c-id">화면ID</th><th class="c-nm">화면명</th>
                   <th v-for="s in STAGES" :key="s.key" class="c-st">{{ s.label }}</th>
                   <th class="c-lk">링크</th>
+                  <th class="c-cmt">코멘트</th>
                 </tr>
               </thead>
               <tbody>
@@ -142,21 +187,59 @@ function editUrl(it: ScreenItem, field: 'mockupUrl' | 'devUrl') {
                       <button type="button" class="edit" title="목업 URL" @click="editUrl(p, 'mockupUrl')">✎M</button>
                       <button type="button" class="edit" title="개발 URL" @click="editUrl(p, 'devUrl')">✎D</button>
                     </td>
-                  </tr>
-                  <tr v-for="(m, mi) in (p.modals ?? [])" :key="g.group + pi + 'm' + mi" class="row-modal">
-                    <td class="c-id"><code>{{ m.id }}</code></td>
-                    <td class="c-nm"><span class="modal-arrow">↳</span><span class="modal-tag">모달</span> {{ m.name }}</td>
-                    <td v-for="s in STAGES" :key="s.key" class="c-st">
-                      <button type="button" class="dot sm" :class="m[s.key] ? 'on' : 'off'"
-                        :disabled="busy === m.id" @click="toggle(m, s.key)">{{ m[s.key] ? '✓' : '·' }}</button>
-                    </td>
-                    <td class="c-lk">
-                      <a v-if="m.publish && m.mockupUrl" :href="m.mockupUrl" target="_blank" rel="noopener" class="lk lk-mock">목업</a>
-                      <a v-if="m.dev && m.devUrl" :href="m.devUrl" target="_blank" rel="noopener" class="lk lk-dev">개발</a>
-                      <button type="button" class="edit" title="목업 URL" @click="editUrl(m, 'mockupUrl')">✎M</button>
-                      <button type="button" class="edit" title="개발 URL" @click="editUrl(m, 'devUrl')">✎D</button>
+                    <td class="c-cmt">
+                      <button type="button" class="cmt-btn" :class="{ on: openCmt === p.id, has: (p.commentCount ?? 0) > 0 }" @click="toggleComments(p)">💬 {{ p.commentCount ?? 0 }}</button>
                     </td>
                   </tr>
+                  <tr v-if="openCmt === p.id" class="row-cmt">
+                    <td :colspan="colSpan">
+                      <div class="cmt-panel">
+                        <div v-if="!(cmtList[p.id]?.length)" class="cmt-empty">아직 코멘트가 없습니다.</div>
+                        <div v-for="c in cmtList[p.id] || []" :key="c.id" class="cmt-item">
+                          <div class="cmt-meta"><b>{{ c.author || '익명' }}</b><span>{{ fmtTime(c.createdAt) }}</span><button class="cmt-del" @click="delComment(p, c.id)">삭제</button></div>
+                          <div class="cmt-body">{{ c.body }}</div>
+                        </div>
+                        <div class="cmt-add">
+                          <textarea v-model="cmtText" rows="2" placeholder="코멘트 입력 (Enter 등록 · Shift+Enter 줄바꿈)" @keydown.enter.exact.prevent="addComment(p)" />
+                          <button class="cmt-submit" :disabled="cmtBusy || !cmtText.trim()" @click="addComment(p)">등록</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <template v-for="(m, mi) in (p.modals ?? [])" :key="g.group + pi + 'm' + mi">
+                    <tr class="row-modal">
+                      <td class="c-id"><code>{{ m.id }}</code></td>
+                      <td class="c-nm"><span class="modal-arrow">↳</span><span class="modal-tag">모달</span> {{ m.name }}</td>
+                      <td v-for="s in STAGES" :key="s.key" class="c-st">
+                        <button type="button" class="dot sm" :class="m[s.key] ? 'on' : 'off'"
+                          :disabled="busy === m.id" @click="toggle(m, s.key)">{{ m[s.key] ? '✓' : '·' }}</button>
+                      </td>
+                      <td class="c-lk">
+                        <a v-if="m.publish && m.mockupUrl" :href="m.mockupUrl" target="_blank" rel="noopener" class="lk lk-mock">목업</a>
+                        <a v-if="m.dev && m.devUrl" :href="m.devUrl" target="_blank" rel="noopener" class="lk lk-dev">개발</a>
+                        <button type="button" class="edit" title="목업 URL" @click="editUrl(m, 'mockupUrl')">✎M</button>
+                        <button type="button" class="edit" title="개발 URL" @click="editUrl(m, 'devUrl')">✎D</button>
+                      </td>
+                      <td class="c-cmt">
+                        <button type="button" class="cmt-btn" :class="{ on: openCmt === m.id, has: (m.commentCount ?? 0) > 0 }" @click="toggleComments(m)">💬 {{ m.commentCount ?? 0 }}</button>
+                      </td>
+                    </tr>
+                    <tr v-if="openCmt === m.id" class="row-cmt">
+                      <td :colspan="colSpan">
+                        <div class="cmt-panel">
+                          <div v-if="!(cmtList[m.id]?.length)" class="cmt-empty">아직 코멘트가 없습니다.</div>
+                          <div v-for="c in cmtList[m.id] || []" :key="c.id" class="cmt-item">
+                            <div class="cmt-meta"><b>{{ c.author || '익명' }}</b><span>{{ fmtTime(c.createdAt) }}</span><button class="cmt-del" @click="delComment(m, c.id)">삭제</button></div>
+                            <div class="cmt-body">{{ c.body }}</div>
+                          </div>
+                          <div class="cmt-add">
+                            <textarea v-model="cmtText" rows="2" placeholder="코멘트 입력 (Enter 등록 · Shift+Enter 줄바꿈)" @keydown.enter.exact.prevent="addComment(m)" />
+                            <button class="cmt-submit" :disabled="cmtBusy || !cmtText.trim()" @click="addComment(m)">등록</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
                 </template>
               </tbody>
             </table>
@@ -225,4 +308,25 @@ function editUrl(it: ScreenItem, field: 'mockupUrl' | 'devUrl') {
 .lk-dev { background: #e9f9e8; color: #16a34a; }
 .edit { font-size: 10px; font-weight: 600; color: var(--ink-400); background: var(--ink-50); border: 0; border-radius: 5px; padding: 3px 5px; margin-right: 3px; cursor: pointer; font-family: inherit; }
 .edit:hover { color: var(--ink-900); background: var(--ink-100); }
+
+/* 코멘트 */
+.c-cmt { width: 64px; text-align: center !important; }
+.cmt-btn { font-size: 11px; font-weight: 700; color: var(--ink-500); background: var(--ink-50); border: 0; border-radius: 999px; padding: 3px 8px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.cmt-btn:hover { background: var(--ink-100); color: var(--ink-900); }
+.cmt-btn.has { color: var(--accent-ink); background: var(--accent-soft); }
+.cmt-btn.on { color: #fff; background: var(--accent); }
+.row-cmt > td { background: var(--surface-2, #f8fafc); padding: 0 !important; border-bottom: 1px solid var(--line); }
+.cmt-panel { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+.cmt-empty { font-size: 12px; color: var(--ink-400); padding: 2px 0 6px; }
+.cmt-item { background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.cmt-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--ink-400); margin-bottom: 3px; }
+.cmt-meta b { color: var(--ink-800); font-weight: 700; }
+.cmt-del { margin-left: auto; font-size: 10px; color: var(--late, #e0524d); background: none; border: 0; cursor: pointer; font-family: inherit; }
+.cmt-del:hover { text-decoration: underline; }
+.cmt-body { font-size: 13px; color: var(--ink-800); white-space: pre-wrap; line-height: 1.5; }
+.cmt-add { display: flex; gap: 8px; align-items: flex-end; margin-top: 2px; }
+.cmt-add textarea { flex: 1; resize: vertical; border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; font-size: 13px; font-family: inherit; color: var(--ink-900); background: var(--white); }
+.cmt-add textarea:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+.cmt-submit { flex-shrink: 0; height: 34px; padding: 0 14px; font-size: 12px; font-weight: 700; color: #fff; background: var(--accent); border: 0; border-radius: 8px; cursor: pointer; font-family: inherit; }
+.cmt-submit:disabled { opacity: .5; cursor: default; }
 </style>

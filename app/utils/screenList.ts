@@ -5,7 +5,9 @@
 export interface ScreenItem {
   id: string; name: string; group: string
   design: boolean; publish: boolean; dev: boolean; test: boolean
+  review?: boolean // 디자인 검수(퍼블리싱↔개발 사이)
   mockupUrl?: string; devUrl?: string
+  commentCount?: number // 코멘트 수(서버 머지)
   modals?: ScreenItem[]
 }
 export interface ScreenArea { key: string; label: string; source: string; screens: ScreenItem[]; pending?: boolean }
