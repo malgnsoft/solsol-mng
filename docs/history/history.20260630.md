@@ -83,6 +83,14 @@
 - 테넌트 **93** / 총 **107**. dev DB 클린 리빌드(93, 0오류) + Figma 도메인2 제자리 갱신(URL 유지).
 - 참고: 라이브 수료증(②수료 탭)도 템플릿이 필요하면 `TB_PRODUCT_LIVE`에 `certificate_template_id` 추가 검토(현재 course만 보유).
 
+## 12. 금액 컬럼 네이밍 통일(_price) 
+
+- **통화 금액 컬럼 = `_price` 접미** 규칙 확정: 정가 `list_price`·할인액 `discount_price`·거래액 `pay_price`. tenant 35건·master 5건 치환.
+  - 주요: `TB_PRODUCT.price→list_price` · `TB_ORDER`(subtotal→list_price·shop_discount→shop_discount_price·coupon_discount→coupon_discount_price·vat→vat_price·total→pay_price) · `TB_ORDER_ITEM`(item_discount→discount_price·amount→pay_price) · `TB_PAYMENT/INVOICE.amount→pay_price`·vat→vat_price · `TB_REFUND`(requested/refund_amount→requested/refund_price) · `TB_COUPON`(discount/min_order_amount→discount/min_order_price) · 정산·세금(gross/supply/sales_fee/pg_fee/net/canceled/paid→*_price) · 멤버십/커뮤니티 monthly_fee→monthly_price · master invoice/payment/credit_charge.pay_amount.
+  - **유지**(통화 아님): 비율 `*_rate`(sales_fee_rate)·진도율 ratio·평점 avg_rating·횟수 unit_count·크레딧 단위(balance·charge/bonus/ledger amount)·study_hours·metric_value.
+- dev DB 클린 리빌드(master 14·tenant 93, 0오류). Figma 도메인2·3 제자리 갱신 — **금액 컬럼을 처음으로 ERD에 노출**(기존 파서가 DECIMAL(p,s) 콤마로 누락하던 것 수정). URL 유지.
+- 참고: 마스터 Figma 보드(`UR6M…`)의 invoice/payment/credit 금액 표기 갱신은 별도 요청 시.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
