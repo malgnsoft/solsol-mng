@@ -113,6 +113,12 @@
 - 테넌트 **93** 유지. dev DB 클린 리빌드(93, 0오류) + Figma 도메인2 제자리 갱신(URL 유지).
 - 후속: 위캔디오 업로드/재생(서명URL·플레이어) 연동 시 API 키·웹훅(인코딩 완료 콜백) 설계. 자막(TB_SUBTITLE)·AI 자막/번역은 위캔디오 소스 기준 처리.
 
+## 16. 자막 테이블 삭제(위캔디오 관리)
+
+- 자막을 **위캔디오가 보관·제공**하므로 `TB_SUBTITLE`·`TB_SUBTITLE_LINE` 삭제(별도 저장 불필요).
+- 테넌트 **91** / 총 **105**. dev DB 클린 리빌드(91, 0오류) + Figma 도메인2 제자리 갱신(URL 유지).
+- 참고: AI 자막/번역(`TB_AI_JOB` kind=ai_caption/ai_translate, `TB_CONTENT.has_ai_translate`)은 유지 — 생성 결과는 위캔디오로 반영.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).

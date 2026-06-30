@@ -11,7 +11,7 @@
 | 파일 | 스키마(기본) | 적용 단위 | 테이블 |
 | --- | --- | --- | --- |
 | [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **14** |
-| [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **93** |
+| [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **91** |
 
 > **개발(dev) 스키마 매핑 — 확정(2026-06-29)**: malgn-dev-db의 `solsol` 유저가 신규 DB 생성 권한이 없어,
 > 이미 전권을 가진 기존 DB 2개를 사용한다. **마스터 = `solsol`**(Hyperdrive `malgn-dev-solsol-prv` 기본 DB와 일치),
@@ -22,7 +22,7 @@
 > Round1 교정 반영(2026-06-30): B-1~B-6 blocker 해소 + 중결함 유니크/인덱스/INVOICE 컬럼 적용.
 > 소셜 통합(2026-06-30): `TB_USER_SOCIAL` 폐지 → `TB_USER`에 5종 SNS 컬럼(`google_uid`~`facebook_uid`, 각 UNIQUE) + `primary_provider` **비정규화**. 어떤 SNS로 로그인해도 1회원.
 > 게시판 엔진화(2026-06-30): 게시판류=범용 엔진(`TB_BOARD`/`TB_POST`/`TB_COMMENT`/`TB_FILE`/`TB_BOARD_CATEGORY`, module 기반)으로 재구성, 우리 컨벤션 변환, schema-per-tenant라 `site_id` 없음. `TB_FAQ`·`TB_FAQ_CATEGORY`·`TB_INQUIRY`·`TB_INQUIRY_REPLY`·`TB_POST_LIKE`·`TB_ATTACHMENT` 6종은 엔진으로 흡수. 프리미엄 커뮤니티는 별도(`TB_COMMUNITY_POST`/`TB_COMMUNITY_COMMENT`). (총 89+14=103 테이블)
-> 강좌 도메인 재정의(2026-06-30): `TB_PRODUCT.type` `general`→`course`. **강좌=`TB_PRODUCT`(공통)+`TB_COURSE`(확장·커리큘럼 루트)→`TB_SECTION`(course_id)→`TB_LESSON`(차시)** 계층 정립. `TB_LECTURE`→`TB_LESSON`, `TB_LECTURE_PROGRESS`→`TB_LESSON_PROGRESS`(`lecture_id`→`lesson_id`)로 개명. 라이브=**YouTube Live 전용**(`TB_PRODUCT_LIVE` 재모델: `live_kind`/`platform`/`capacity`/`stream_url` 제거, `youtube_url`·`youtube_video_id`·`recorded_content_id` 추가), 화상=`TB_PRODUCT_VIDEO_CALL`(zoom/google_meet) **신설 분리**. (+`TB_COURSE`·`TB_PRODUCT_VIDEO_CALL` → 총 93+14=107 테이블)
+> 강좌 도메인 재정의(2026-06-30): `TB_PRODUCT.type` `general`→`course`. **강좌=`TB_PRODUCT`(공통)+`TB_COURSE`(확장·커리큘럼 루트)→`TB_SECTION`(course_id)→`TB_LESSON`(차시)** 계층 정립. `TB_LECTURE`→`TB_LESSON`, `TB_LECTURE_PROGRESS`→`TB_LESSON_PROGRESS`(`lecture_id`→`lesson_id`)로 개명. 라이브=**YouTube Live 전용**(`TB_PRODUCT_LIVE` 재모델: `live_kind`/`platform`/`capacity`/`stream_url` 제거, `youtube_url`·`youtube_video_id`·`recorded_content_id` 추가), 화상=`TB_PRODUCT_VIDEO_CALL`(zoom/google_meet) **신설 분리**. (+`TB_COURSE`·`TB_PRODUCT_VIDEO_CALL` → 총 91+14=105 테이블)
 > 수강 등록 재구성(2026-06-30): `TB_ENROLLMENT`→**`TB_COURSE_USER`(수강생관리)** 개명·확장. LM `LM_COURSE_USER` 참고로 진도(`progress_ratio`/`progress_score`)·성적(`exam`/`homework`/`forum`/`etc`/`total`)·수료(`complete_yn`/`complete_no`/`complete_date`)·정지(`pause_cnt`/`pause_day`)·마감·구독·`course_id`/`package_id`/`subscription_id`/`order_item_id`/`tutor_user_id` 추가, 날짜 varchar→DATE/DATETIME·점수 DECIMAL·Y/N→TINYINT 변환. 참조 3종(`TB_LESSON_PROGRESS`/`TB_CERTIFICATE`/`TB_REVIEW`)의 `enrollment_id`→`course_user_id`. LM의 `SITE_ID`/`TERM_ID`/`TERM_USER_ID`/`LC_EXAM_ID`/`SUBSCRIBE_USER_ID`/`ENROLL_NOTI_RECEIVED`는 범위 밖 제외. (개명만 — 테이블 수 91 불변)
 
 - **마스터** = 플랫폼 ↔ 크리에이터 관계: 테넌트 레지스트리, 셀러 계정, SaaS 요금제·구독·청구·결제,
@@ -109,5 +109,5 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 
 ## 검증 상태
 
-- 정적 구조: master(14)·tenant(93) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건. 강좌 도메인 재정의 후 `TB_LECTURE`/`lecture_id` 잔존 0, `TB_SECTION.product_id` 0, `TB_PRODUCT_LIVE` 내 `live_kind`/`platform`/`stream_url`/`capacity` 0건 확인. 수강 등록 재구성 후 `TB_ENROLLMENT`/`enrollment_id` 잔존 0건(전부 `TB_COURSE_USER`/`course_user_id`) 확인.
+- 정적 구조: master(14)·tenant(91) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건. 강좌 도메인 재정의 후 `TB_LECTURE`/`lecture_id` 잔존 0, `TB_SECTION.product_id` 0, `TB_PRODUCT_LIVE` 내 `live_kind`/`platform`/`stream_url`/`capacity` 0건 확인. 수강 등록 재구성 후 `TB_ENROLLMENT`/`enrollment_id` 잔존 0건(전부 `TB_COURSE_USER`/`course_user_id`) 확인.
 - ⚠️ **라이브 DB 문법 검증 미실행**(로컬 MySQL 미기동). Aurora/MySQL 8.0에서 `SOURCE` 1회 적용 검증 권장.

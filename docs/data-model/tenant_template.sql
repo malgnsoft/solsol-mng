@@ -475,33 +475,7 @@ CREATE TABLE TB_CONTENT (
   KEY idx_content_folder (folder_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='콘텐츠(미디어 자산)';
 
-CREATE TABLE TB_SUBTITLE (
-  id              BIGINT      NOT NULL AUTO_INCREMENT,
-  content_id      BIGINT      NOT NULL,
-  lang            VARCHAR(5)  NOT NULL              COMMENT 'ko/en/ja/zh/...(AI 75개국)',
-  is_ai_generated TINYINT     NOT NULL DEFAULT 0,
-  is_default      TINYINT     NOT NULL DEFAULT 0,
-  vtt_key         VARCHAR(255)    NULL,
-  status          INT         NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
-  created_at      DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at      DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_subtitle_lang (content_id, lang)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='자막 트랙(다국어)';
-
-CREATE TABLE TB_SUBTITLE_LINE (
-  id          BIGINT   NOT NULL AUTO_INCREMENT,
-  subtitle_id BIGINT   NOT NULL,
-  seq         INT      NOT NULL,
-  start_ms    INT      NOT NULL,
-  end_ms      INT      NOT NULL,
-  text        TEXT     NOT NULL,
-  status      INT      NOT NULL DEFAULT 1           COMMENT '1정상 0중지 -1삭제',
-  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_subline_subtitle (subtitle_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='자막 라인';
+-- 자막은 위캔디오(Wecandeo)가 보관·제공 → 별도 TB_SUBTITLE/TB_SUBTITLE_LINE 미사용(삭제)
 
 CREATE TABLE TB_COURSE_USER (
   id              BIGINT        NOT NULL AUTO_INCREMENT,
