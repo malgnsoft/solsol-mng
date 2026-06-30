@@ -41,14 +41,14 @@ INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (214,5,'화면설계·정책·검증','화면설계서 FR/AD/BR (01~03)','김덕조','김덕조','2026-06-26','2026-07-18',90,NULL,NULL,214);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (215,5,'화면설계·정책·검증','정책설계서·정책요약 (확정 6건)','김덕조','김덕조','2026-06-26','2026-07-11',95,NULL,NULL,215);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (216,5,'화면설계·정책·검증','검증 패키지·개발–검증 절차 (dev-validation 게이트)','김덕조','김덕조','2026-06-23','2026-06-25',100,'docs/validation · DEV_VALIDATION_PROCESS',NULL,216);
-INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (217,5,'개발 설계','DB 설계 (테이블·ERD)','한데관','김도형','2026-06-26','2026-07-04',0,NULL,NULL,217);
+INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (217,5,'개발 설계','DB 설계 (테이블·ERD)','한데관','김도형','2026-06-26','2026-07-04',95,NULL,NULL,217);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (218,5,'개발 설계','기능명세서 (페이지명세서)','최기획','김도형','2026-06-26','2026-07-04',0,NULL,NULL,218);
-INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (219,5,'개발 설계','API 명세서 (1·2차)','조백개','김도형','2026-06-26','2026-08-01',0,NULL,NULL,219);
+INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (219,5,'개발 설계','API 명세서 (1·2차)','조백개','김도형','2026-06-26','2026-08-01',25,NULL,NULL,219);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (220,5,'개발 설계','외부 연계 설계 (NHN·NICE·PG·위캔디오·펌뱅킹)','조백개','김도형','2026-07-01','2026-08-29',0,'7/1~ 2개월 실연동',NULL,220);
-INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (221,6,'공통·기반','프레임워크·스키마·공통모듈','조백개','김도형','2026-06-26','2026-08-01',0,NULL,NULL,221);
-INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (222,6,'공통·기반','외부 API 연동 (소셜·메시징·결제·본인인증·위캔디오)','조백개','김도형','2026-06-26','2026-08-29',0,NULL,NULL,222);
+INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (221,6,'공통·기반','프레임워크·스키마·공통모듈','조백개','김도형','2026-06-26','2026-08-01',35,NULL,NULL,221);
+INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (222,6,'공통·기반','외부 API 연동 (소셜·메시징·결제·본인인증·위캔디오)','조백개','김도형','2026-06-26','2026-08-29',5,NULL,NULL,222);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (223,6,'공통·기반','인프라·CI/CD','신배담','김도형','2026-06-26','2026-08-15',0,NULL,NULL,223);
-INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (224,6,'공통·기반','API 개발','조백개','김도형','2026-06-26','2026-08-22',0,NULL,NULL,224);
+INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (224,6,'공통·기반','API 개발','조백개','김도형','2026-06-26','2026-08-22',10,NULL,NULL,224);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (225,6,'공통·기반','배치 프로세스','조백개','김도형','2026-08-03','2026-08-29',0,NULL,NULL,225);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (226,6,'관리자단 구현(AD01)','AD 인증·사용자','임관개','김도형','2026-06-26','2026-07-11',0,NULL,NULL,226);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (227,6,'관리자단 구현(AD01)','AD 상품 (강의·디지털·패키지·커뮤니티·멤버십)','임관개','김도형','2026-06-26','2026-08-08',0,NULL,NULL,227);
@@ -57,7 +57,7 @@ INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (230,6,'관리자단 구현(AD01)','AD 운영·설정','임관개','김도형','2026-06-26','2026-08-01',0,NULL,NULL,230);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (231,6,'관리자단 구현(AD01)','AD 마케팅·사이트디자인','임관개','김도형','2026-07-01','2026-08-29',0,NULL,NULL,231);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (232,6,'관리자단 구현(AD01)','AD 정산·통계','임관개','김도형','2026-07-15','2026-09-12',0,NULL,NULL,232);
-INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (233,6,'사용자단 구현(FR01)','CF 인증·가입','강프개','김도형','2026-06-26','2026-07-25',0,NULL,NULL,233);
+INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (233,6,'사용자단 구현(FR01)','CF 인증·가입','강프개','김도형','2026-06-26','2026-07-25',35,NULL,NULL,233);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (234,6,'사용자단 구현(FR01)','CF 강의·상품 (6유형)','배현우','김도형','2026-06-26','2026-08-15',0,NULL,NULL,234);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (235,6,'사용자단 구현(FR01)','CF 결제·마이페이지','강프개','김도형','2026-07-15','2026-09-05',0,NULL,NULL,235);
 INSERT INTO wbs_item (id,step,grp,name,owner,responsible,start,end,progress,note,href,sort) VALUES (236,6,'사용자단 구현(FR01)','CF 커뮤니티·멤버십·게시판','강프개','김도형','2026-07-15','2026-09-12',0,NULL,NULL,236);

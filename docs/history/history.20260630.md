@@ -30,6 +30,8 @@
 - API `solsol-api`: A1~A6 + M1~M7 + JWT/리프레시(해시·회전·재사용감지) + **mock provider E2E 11건 PASS**.
 - ⏸ 운영 전: 소셜 5종 OAuth 키(OQ-OAUTH)·프론트↔API 실연동·인증 QA 라운드.
 
+- **WBS 현행화**(2026-06-30): DB 설계·ERD(검증 2라운드 게이트 통과·102테이블·Figma ERD) → 스텝5 DB설계 0→95%·API명세 0→25%. 인증 슬라이스(프론트 화면+API+mock E2E) → 스텝6 프레임워크·스키마 0→35%·API개발 0→10%·외부API연동 0→5%·CF 인증·가입 0→35%. 진척 자동산출로 스텝/전체 반영(라이브 D1 + wbsData·seed 동기).
+
 ## 산출물
 
 - `docs/data-model/`: `master.sql`·`tenant_template.sql`·`README.md`·`ERD.md`
