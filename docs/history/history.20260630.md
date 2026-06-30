@@ -105,6 +105,14 @@
 - `TB_SURVEY_ANSWER.survey_option_id`(FK) → **`option_no`**(INT, 보기 번호 1~10). radio/check 동일, 복수선택은 보기당 1행.
 - 테넌트 **93** / 총 **107**. dev DB 클린 리빌드(93, 0오류) + Figma 도메인4 제자리 갱신(URL 유지).
 
+## 15. 영상 콘텐츠 = 위캔디오(Wecandeo) VOD
+
+- 강의 영상 호스팅을 **위캔디오** 서비스로 결정. `TB_CONTENT` 반영:
+  - `source_type` 기본값 `upload`→**`wecandeo`**(영상 VOD)/youtube(임베드)/upload(문서·이미지 R2)
+  - **`wecandeo_video_key`**(위캔디오 VOD 키/ID) 신설. `r2_key`는 문서·이미지용으로 한정, 썸네일/인코딩 상태 주석 갱신.
+- 테넌트 **93** 유지. dev DB 클린 리빌드(93, 0오류) + Figma 도메인2 제자리 갱신(URL 유지).
+- 후속: 위캔디오 업로드/재생(서명URL·플레이어) 연동 시 API 키·웹훅(인코딩 완료 콜백) 설계. 자막(TB_SUBTITLE)·AI 자막/번역은 위캔디오 소스 기준 처리.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
