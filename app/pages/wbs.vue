@@ -117,7 +117,12 @@ const kpi = computed(() => {
 })
 const peopleCount = computed(() => {
   const m: Record<string, number> = {}; for (const p of PEOPLE) m[p] = 0
-  for (const t of allTasks.value) { if (!t.who.length) m['미정']!++; else t.who.forEach(w => { if (w in m) m[w]!++ }) }
+  // 담당(who) ∪ 책임(resp) 중 하나만 해당돼도 카운트
+  for (const t of allTasks.value) {
+    const names = new Set([...t.who, ...t.resp]); names.delete('미정')
+    if (!names.size) { m['미정']!++; continue }
+    names.forEach(w => { if (w in m) m[w]!++ })
+  }
   return m
 })
 
@@ -138,7 +143,12 @@ function toggleAll() { const v = !allOpen.value; for (const s of tree.value) { s
 function taskPass(t: Task): boolean {
   if (fStatus.value !== 'all' && t.status !== fStatus.value) return false
   if (fSearch.value && !t.name.toLowerCase().includes(fSearch.value.toLowerCase())) return false
-  if (fPeople.value.size) { const set = fPeople.value; if (!(t.who.length ? t.who.some(w => set.has(w)) : set.has('미정'))) return false }
+  // 담당(who) 또는 책임(resp) 중 하나만 set 에 해당돼도 표시
+  if (fPeople.value.size) {
+    const set = fPeople.value
+    const real = [...new Set([...t.who, ...t.resp])].filter(n => n !== '미정')
+    if (!(real.length ? real.some(w => set.has(w)) : set.has('미정'))) return false
+  }
   return true
 }
 
