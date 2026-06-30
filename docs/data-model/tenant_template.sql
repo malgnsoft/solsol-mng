@@ -38,14 +38,20 @@ CREATE TABLE TB_SITE_CONFIG (
 CREATE TABLE TB_USER (
   id                 BIGINT       NOT NULL AUTO_INCREMENT,
   user_type          VARCHAR(20)  NOT NULL DEFAULT 'learner' COMMENT 'learner(수강생)/staff(강사·서브강사·운영자)',
-  email              VARCHAR(255)     NULL                COMMENT '로그인 ID 겸용(staff 필수·변경불가)',
+  login_id           VARCHAR(255)     NULL                COMMENT '로그인 아이디. staff=별도 아이디(변경불가) / learner=소셜 이메일과 동일(login_id=email)',
+  email              VARCHAR(255)     NULL                COMMENT '이메일(연락·소셜 통합 키). learner=소셜 이메일(login_id와 동일)',
   nickname           VARCHAR(15)      NULL                COMMENT '2~15자 단일규칙(C-1)·중복/금칙어',
   name               VARCHAR(50)      NULL                COMMENT '실명',
   phone              VARCHAR(20)      NULL,
   dept               VARCHAR(50)      NULL                COMMENT '부서(staff)',
   intro              TEXT             NULL                COMMENT '소개글(강사)',
   avatar_key         VARCHAR(255)     NULL                COMMENT '프로필 이미지 R2 키',
-  is_primary_account TINYINT      NOT NULL DEFAULT 0      COMMENT '최초 연동 SNS=대표(learner)',
+  google_uid         VARCHAR(255)     NULL                COMMENT 'Google 소셜 고유 ID(연동 시 비NULL)',
+  kakao_uid          VARCHAR(255)     NULL                COMMENT 'Kakao 소셜 고유 ID(연동 시 비NULL)',
+  naver_uid          VARCHAR(255)     NULL                COMMENT 'Naver 소셜 고유 ID(연동 시 비NULL)',
+  apple_uid          VARCHAR(255)     NULL                COMMENT 'Apple 소셜 고유 ID(연동 시 비NULL)',
+  facebook_uid       VARCHAR(255)     NULL                COMMENT 'Facebook 소셜 고유 ID(연동 시 비NULL)',
+  primary_provider   VARCHAR(20)      NULL                COMMENT '대표(최초 연동) SNS: google/kakao/naver/apple/facebook',
   marketing_agreed   TINYINT      NOT NULL DEFAULT 0      COMMENT '마케팅 수신 동의 스냅샷(정본은 TB_USER_AGREEMENT)',
   last_login_at      DATETIME         NULL,
   withdrawn_at       DATETIME         NULL                COMMENT '탈퇴 시각(status=-1 연동)',
@@ -53,26 +59,16 @@ CREATE TABLE TB_USER (
   created_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '가입일',
   updated_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
+  UNIQUE KEY uk_user_login_id (login_id),
   UNIQUE KEY uk_user_nickname (nickname),
   UNIQUE KEY uk_user_email (email),
+  UNIQUE KEY uk_user_google (google_uid),
+  UNIQUE KEY uk_user_kakao (kakao_uid),
+  UNIQUE KEY uk_user_naver (naver_uid),
+  UNIQUE KEY uk_user_apple (apple_uid),
+  UNIQUE KEY uk_user_facebook (facebook_uid),
   KEY idx_user_type (user_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='통합 회원(수강생/강사/서브강사/운영자)';
-
-CREATE TABLE TB_USER_SOCIAL (
-  id             BIGINT       NOT NULL AUTO_INCREMENT,
-  user_id        BIGINT       NOT NULL,
-  provider       VARCHAR(20)  NOT NULL                COMMENT 'google/kakao/naver/apple/facebook',
-  provider_uid   VARCHAR(255) NOT NULL                COMMENT '소셜 측 고유 ID',
-  provider_email VARCHAR(255)     NULL,
-  is_primary     TINYINT      NOT NULL DEFAULT 0,
-  linked_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  status         INT          NOT NULL DEFAULT 1      COMMENT '1정상 0중지 -1삭제',
-  created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_social_provider (provider, provider_uid),
-  KEY idx_social_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='소셜 로그인 연동(수강생)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='통합 회원(수강생/강사/서브강사/운영자) — 소셜 5종 비정규화(어떤 SNS로 로그인해도 1회원)';
 
 CREATE TABLE TB_USER_CREDENTIAL (
   id                  BIGINT       NOT NULL AUTO_INCREMENT,

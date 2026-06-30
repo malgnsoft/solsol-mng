@@ -11,7 +11,7 @@
 | 파일 | 스키마(기본) | 적용 단위 | 테이블 |
 | --- | --- | --- | --- |
 | [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **14** |
-| [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **91** |
+| [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **90** |
 
 > **개발(dev) 스키마 매핑 — 확정(2026-06-29)**: malgn-dev-db의 `solsol` 유저가 신규 DB 생성 권한이 없어,
 > 이미 전권을 가진 기존 DB 2개를 사용한다. **마스터 = `solsol`**(Hyperdrive `malgn-dev-solsol-prv` 기본 DB와 일치),
@@ -19,7 +19,8 @@
 > DDL은 스키마명을 하드코딩하지 않으므로(파일은 CREATE TABLE만), master.sql→`solsol`, tenant_template.sql→`solsol_lms`로 적용한다.
 > 라우팅 정본은 `solsol.TB_TENANT.schema_name`(테넌트1=`solsol_lms`). prod에서는 위 `solsol_master`/`solsol_t*`로 전환.
 > ⚠️ 추가 테넌트의 `CREATE DATABASE`는 관리자 권한 필요(앱 `solsol` 유저 불가) — 자동 온보딩 경로는 prod OQ.
-> Round1 교정 반영(2026-06-30): B-1~B-6 blocker 해소 + 중결함 유니크/인덱스/INVOICE 컬럼 적용(총 91+14=105 테이블).
+> Round1 교정 반영(2026-06-30): B-1~B-6 blocker 해소 + 중결함 유니크/인덱스/INVOICE 컬럼 적용.
+> 소셜 통합(2026-06-30): `TB_USER_SOCIAL` 폐지 → `TB_USER`에 5종 SNS 컬럼(`google_uid`~`facebook_uid`, 각 UNIQUE) + `primary_provider` **비정규화**. 어떤 SNS로 로그인해도 1회원. (총 90+14=104 테이블)
 
 - **마스터** = 플랫폼 ↔ 크리에이터 관계: 테넌트 레지스트리, 셀러 계정, SaaS 요금제·구독·청구·결제,
   **크레딧(플랫폼이 크리에이터에게 판매)**, 토스 웹훅, 플랫폼 운영자, 프로비저닝 이력.
@@ -63,7 +64,7 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 ## 핵심 설계 결정
 
 1. **통합 `TB_USER`(테넌트 내)** — 수강생/강사/서브강사/운영자를 `user_type`+RBAC로 구분.
-   인증수단 분리(`TB_USER_SOCIAL`/`TB_USER_CREDENTIAL`), 권한(`TB_ROLE`/`TB_USER_ROLE`/`TB_ADMIN_PERMISSION` M-2).
+   소셜 로그인은 `TB_USER`에 5종 SNS 컬럼 비정규화(`*_uid` 각 UNIQUE·`primary_provider`), ID/PW만 `TB_USER_CREDENTIAL` 분리. 권한(`TB_ROLE`/`TB_USER_ROLE`/`TB_ADMIN_PERMISSION` M-2).
 2. **셀러/플랫폼 계정은 마스터** — 크리에이터의 플랫폼 로그인은 `master.TB_SELLER`, 쏠쏠 운영자는 `TB_PLATFORM_ADMIN`.
 3. **구독 분리** — 셀러 SaaS 구독은 `master.TB_SUBSCRIPTION`(plan 기반), 학습자 멤버십/커뮤니티 구독은 `tenant.TB_SUBSCRIPTION`.
 4. **크레딧은 마스터** — 플랫폼이 크리에이터에게 판매(`TB_CREDIT_ACCOUNT/CHARGE/LEDGER`, 종량제·멱등 M-3).
@@ -101,5 +102,5 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 
 ## 검증 상태
 
-- 정적 구조: master(14)·tenant(91) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건.
+- 정적 구조: master(14)·tenant(90) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건.
 - ⚠️ **라이브 DB 문법 검증 미실행**(로컬 MySQL 미기동). Aurora/MySQL 8.0에서 `SOURCE` 1회 적용 검증 권장.
