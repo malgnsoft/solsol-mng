@@ -11,7 +11,7 @@
 | 파일 | 스키마(기본) | 적용 단위 | 테이블 |
 | --- | --- | --- | --- |
 | [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **14** |
-| [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **90** |
+| [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **88** |
 
 > **개발(dev) 스키마 매핑 — 확정(2026-06-29)**: malgn-dev-db의 `solsol` 유저가 신규 DB 생성 권한이 없어,
 > 이미 전권을 가진 기존 DB 2개를 사용한다. **마스터 = `solsol`**(Hyperdrive `malgn-dev-solsol-prv` 기본 DB와 일치),
@@ -20,7 +20,8 @@
 > 라우팅 정본은 `solsol.TB_TENANT.schema_name`(테넌트1=`solsol_lms`). prod에서는 위 `solsol_master`/`solsol_t*`로 전환.
 > ⚠️ 추가 테넌트의 `CREATE DATABASE`는 관리자 권한 필요(앱 `solsol` 유저 불가) — 자동 온보딩 경로는 prod OQ.
 > Round1 교정 반영(2026-06-30): B-1~B-6 blocker 해소 + 중결함 유니크/인덱스/INVOICE 컬럼 적용.
-> 소셜 통합(2026-06-30): `TB_USER_SOCIAL` 폐지 → `TB_USER`에 5종 SNS 컬럼(`google_uid`~`facebook_uid`, 각 UNIQUE) + `primary_provider` **비정규화**. 어떤 SNS로 로그인해도 1회원. (총 90+14=104 테이블)
+> 소셜 통합(2026-06-30): `TB_USER_SOCIAL` 폐지 → `TB_USER`에 5종 SNS 컬럼(`google_uid`~`facebook_uid`, 각 UNIQUE) + `primary_provider` **비정규화**. 어떤 SNS로 로그인해도 1회원.
+> 게시판 엔진화(2026-06-30): 게시판류=범용 엔진(`TB_BOARD`/`TB_POST`/`TB_COMMENT`/`TB_FILE`/`TB_BOARD_CATEGORY`, module 기반)으로 재구성, 우리 컨벤션 변환, schema-per-tenant라 `site_id` 없음. `TB_FAQ`·`TB_FAQ_CATEGORY`·`TB_INQUIRY`·`TB_INQUIRY_REPLY`·`TB_POST_LIKE`·`TB_ATTACHMENT` 6종은 엔진으로 흡수. 프리미엄 커뮤니티는 별도(`TB_COMMUNITY_POST`/`TB_COMMUNITY_COMMENT`). (총 88+14=102 테이블)
 
 - **마스터** = 플랫폼 ↔ 크리에이터 관계: 테넌트 레지스트리, 셀러 계정, SaaS 요금제·구독·청구·결제,
   **크레딧(플랫폼이 크리에이터에게 판매)**, 토스 웹훅, 플랫폼 운영자, 프로비저닝 이력.
@@ -71,6 +72,7 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
    테넌트의 캠페인/AI 작업은 `credit_ledger_id`로 마스터 원장을 논리 참조.
 5. **상품 7종 통합(CTI)** — `TB_PRODUCT`(`type`) + 유형별 확장. 알림 단일 라우팅(R-1), 쿠폰 정액 only(C-4), 결제 비가역(M-8).
 6. `TB_SITE`(구 단일DB) → 테넌트 내 단일행 `TB_SITE_CONFIG`(표시 설정)로 전환. 테넌트 레지스트리는 `master.TB_TENANT`.
+7. **게시판류=범용 엔진** — `TB_BOARD`(정의)/`TB_POST`(게시물)/`TB_COMMENT`(댓글)/`TB_FILE`(첨부)/`TB_BOARD_CATEGORY`(카테고리)를 `module`/`module_id` 기반으로 통합. 공지·FAQ·1:1문의(qna)·자유게시판을 `board_type`으로 분기. 기존 `TB_FAQ*`·`TB_INQUIRY*`·`TB_POST_LIKE`·`TB_ATTACHMENT`는 흡수. **프리미엄 커뮤니티는 별도**(`TB_COMMUNITY_POST`/`TB_COMMUNITY_COMMENT`, 첨부는 `TB_FILE module='community_post'` 재사용).
 
 ---
 
@@ -102,5 +104,5 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 
 ## 검증 상태
 
-- 정적 구조: master(14)·tenant(90) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건.
+- 정적 구조: master(14)·tenant(88) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건.
 - ⚠️ **라이브 DB 문법 검증 미실행**(로컬 MySQL 미기동). Aurora/MySQL 8.0에서 `SOURCE` 1회 적용 검증 권장.

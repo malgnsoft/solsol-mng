@@ -742,7 +742,7 @@ CREATE TABLE TB_REFUND (
   reason           VARCHAR(255)      NULL,
   transfer_note    VARCHAR(255)      NULL              COMMENT '이체내역(저장 전 계좌/예금주 마스킹)',
   channel          INT           NOT NULL DEFAULT 1   COMMENT '1=self/2=inquiry',
-  inquiry_id       BIGINT            NULL,
+  inquiry_id       BIGINT            NULL              COMMENT '(1:1문의=TB_POST board_type=qna 의 게시물 id)',
   revoke_course    TINYINT       NOT NULL DEFAULT 0   COMMENT '수강권 회수',
   void_certificate TINYINT       NOT NULL DEFAULT 0   COMMENT '수료증 무효',
   requested_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1150,7 +1150,7 @@ CREATE TABLE TB_NOTIFICATION (
   channel           VARCHAR(20)  NOT NULL,
   title             VARCHAR(300) NOT NULL,
   body              TEXT             NULL,
-  ref_type          VARCHAR(20)      NULL             COMMENT 'inquiry/order/refund/content/campaign/settlement',
+  ref_type          VARCHAR(20)      NULL             COMMENT 'post(1:1문의)/order/refund/content/campaign/settlement',
   ref_id            BIGINT           NULL,
   filter_type       VARCHAR(20)      NULL             COMMENT 'inquiry/payment/system',
   is_read           TINYINT      NOT NULL DEFAULT 0,
@@ -1191,93 +1191,158 @@ CREATE TABLE TB_STAT_DAILY (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='일/월 통계 사전집계(선택)';
 
 CREATE TABLE TB_BOARD (
-  id                 BIGINT       NOT NULL AUTO_INCREMENT,
-  type               INT          NOT NULL             COMMENT '1notice/2faq/3free/4premium (변경불가)',
-  product_id         BIGINT           NULL             COMMENT 'premium 유형일 때 상품 참조',
-  name               VARCHAR(100) NOT NULL,
-  write_permission   INT          NOT NULL DEFAULT 1   COMMENT '1all/2member/3admin',
-  comment_permission INT          NOT NULL DEFAULT 1   COMMENT '1all/2member/3admin/0none',
-  allow_secret       TINYINT      NOT NULL DEFAULT 0,
-  menu_linked        TINYINT      NOT NULL DEFAULT 0,
-  sort_order         INT          NOT NULL DEFAULT 0,
-  status             INT          NOT NULL DEFAULT 1   COMMENT '1공개 0비공개 -1삭제',
-  created_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  id            BIGINT        NOT NULL AUTO_INCREMENT,
+  code          VARCHAR(50)   NOT NULL              COMMENT '코드',
+  board_nm      VARCHAR(100)  NOT NULL              COMMENT '게시판명',
+  layout        VARCHAR(100)      NULL              COMMENT '레이아웃',
+  breadcrumb    VARCHAR(255)      NULL              COMMENT '현재경로명',
+  board_type    VARCHAR(50)       NULL              COMMENT '게시판타입(notice/faq/qna/free 등)',
+  admin_idx     VARCHAR(1000)     NULL DEFAULT '||' COMMENT '게시판관리자',
+  auth_list     VARCHAR(1000)     NULL              COMMENT '목록권한',
+  auth_read     VARCHAR(1000)     NULL              COMMENT '읽기권한',
+  auth_write    VARCHAR(1000)     NULL              COMMENT '쓰기권한',
+  auth_reply    VARCHAR(1000)     NULL              COMMENT '답글권한',
+  auth_comm     VARCHAR(1000)     NULL              COMMENT '댓글권한',
+  auth_download VARCHAR(1000)     NULL              COMMENT '다운로드권한',
+  list_num      INT               NULL DEFAULT 10   COMMENT '게시물수',
+  notice_yn     TINYINT       NOT NULL DEFAULT 0    COMMENT '공지글사용',
+  reply_yn      TINYINT       NOT NULL DEFAULT 0    COMMENT '답글사용',
+  delete_yn     TINYINT       NOT NULL DEFAULT 1    COMMENT '덧글달린글삭제가능',
+  comment_yn    TINYINT       NOT NULL DEFAULT 0    COMMENT '댓글사용',
+  category_yn   TINYINT       NOT NULL DEFAULT 0    COMMENT '카테고리사용',
+  upload_yn     TINYINT       NOT NULL DEFAULT 0    COMMENT '파일첨부사용',
+  image_yn      TINYINT       NOT NULL DEFAULT 1    COMMENT '목록이미지노출',
+  captcha_yn    TINYINT       NOT NULL DEFAULT 0    COMMENT '자동등록방지',
+  private_yn    TINYINT       NOT NULL DEFAULT 0    COMMENT '작성자글만보기',
+  point_yn      TINYINT           NULL DEFAULT 0    COMMENT '포인트부여',
+  allow_type    VARCHAR(255)      NULL              COMMENT '허용확장자',
+  deny_ext      VARCHAR(255)      NULL              COMMENT '거부확장자',
+  header_html   VARCHAR(4000)     NULL              COMMENT '상단HTML',
+  footer_html   VARCHAR(4000)     NULL              COMMENT '하단HTML',
+  user_template MEDIUMTEXT        NULL              COMMENT '사용자단 게시물템플릿',
+  sort_type     VARCHAR(50)       NULL DEFAULT 'rd desc' COMMENT '정렬타입',
+  sort          INT           NOT NULL DEFAULT 1    COMMENT '정렬순서',
+  status        INT           NOT NULL DEFAULT 1    COMMENT '1공개 0비공개 -1삭제',
+  created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_board_product (product_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시판 정의';
+  UNIQUE KEY uk_board_code (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시판 정의(범용 엔진)';
+
+CREATE TABLE TB_BOARD_CATEGORY (
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  module      VARCHAR(50)  NOT NULL              COMMENT '모듈(board 등)',
+  module_id   BIGINT           NULL              COMMENT '모듈아이디(board_id)',
+  category_nm VARCHAR(100) NOT NULL              COMMENT '카테고리명',
+  sort        INT              NULL              COMMENT '순서',
+  status      INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_boardcat_module (module, module_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시판류 카테고리(범용)';
 
 CREATE TABLE TB_POST (
-  id            BIGINT       NOT NULL AUTO_INCREMENT,
-  board_id      BIGINT       NOT NULL,
-  user_id       BIGINT       NOT NULL              COMMENT '작성자',
-  author_role   INT              NULL              COMMENT '1admin/2instructor/3member(캐시)',
-  sub_type      INT              NULL              COMMENT 'premium 분류 1일반/2질문/3공지',
-  title         VARCHAR(100) NOT NULL,
-  content       TEXT         NOT NULL,
-  is_secret     TINYINT      NOT NULL DEFAULT 0,
-  is_pinned     TINYINT      NOT NULL DEFAULT 0,
-  view_count    INT          NOT NULL DEFAULT 0,
-  like_count    INT          NOT NULL DEFAULT 0,
-  comment_count INT          NOT NULL DEFAULT 0,
-  status        INT          NOT NULL DEFAULT 1    COMMENT '1공개 0비공개 -1삭제',
-  created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  board_id    BIGINT           NULL              COMMENT 'FK(TB_BOARD)',
+  category_id BIGINT           NULL              COMMENT 'FK(TB_BOARD_CATEGORY)',
+  thread      INT          NOT NULL              COMMENT '쓰레드',
+  depth       VARCHAR(255)     NULL              COMMENT '깊이',
+  user_id     BIGINT           NULL              COMMENT 'FK(TB_USER)',
+  writer      VARCHAR(100)     NULL              COMMENT '글쓴이',
+  subject     VARCHAR(255)     NULL              COMMENT '제목',
+  content     TEXT             NULL              COMMENT '내용',
+  youtube_cd  VARCHAR(50)      NULL              COMMENT '유튜브코드',
+  notice_yn   TINYINT      NOT NULL DEFAULT 0    COMMENT '공지글',
+  secret_yn   TINYINT      NOT NULL DEFAULT 0    COMMENT '비밀글(1:1문의 등)',
+  hit_cnt     INT          NOT NULL DEFAULT 0    COMMENT '조회수',
+  comm_cnt    INT          NOT NULL DEFAULT 0    COMMENT '댓글수',
+  recomm_cnt  INT          NOT NULL DEFAULT 0    COMMENT '추천수',
+  report_cnt  INT          NOT NULL DEFAULT 0    COMMENT '신고수',
+  file_cnt    INT          NOT NULL DEFAULT 0    COMMENT '첨부수',
+  display_yn  TINYINT      NOT NULL DEFAULT 1    COMMENT '노출여부',
+  sort        INT              NULL DEFAULT 1    COMMENT '순서',
+  proc_status INT          NOT NULL DEFAULT 0    COMMENT '진행상태(1:1문의 답변상태 등)',
+  status      INT          NOT NULL DEFAULT 1    COMMENT '1공개 0비공개 -1삭제',
+  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_post_board (board_id),
-  KEY idx_post_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시글';
+  KEY idx_post_board (board_id, created_at, id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시물(범용 엔진 — 공지/FAQ/1:1문의/자유)';
 
 CREATE TABLE TB_COMMENT (
-  id          BIGINT   NOT NULL AUTO_INCREMENT,
-  post_id     BIGINT   NOT NULL,
-  parent_id   BIGINT       NULL                   COMMENT '상위 댓글(self). NULL=댓글, 값=답글',
-  user_id     BIGINT   NOT NULL,
-  author_role INT          NULL                   COMMENT '1admin/2instructor/3member',
-  content     TEXT     NOT NULL,
-  is_secret   TINYINT  NOT NULL DEFAULT 0,
-  is_deleted  TINYINT  NOT NULL DEFAULT 0         COMMENT '삭제유지(스레드 보존)',
-  status      INT      NOT NULL DEFAULT 1         COMMENT '1정상 0중지 -1삭제',
-  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  id            BIGINT      NOT NULL AUTO_INCREMENT,
+  parent_id     BIGINT          NULL DEFAULT 0     COMMENT '답글대상',
+  module        VARCHAR(50) NOT NULL DEFAULT 'post' COMMENT '모듈',
+  module_id     BIGINT      NOT NULL DEFAULT 0     COMMENT '모듈아이디',
+  post_id       BIGINT          NULL              COMMENT 'FK(TB_POST) 게시물(편의)',
+  user_id       BIGINT          NULL              COMMENT 'FK(TB_USER)',
+  writer        VARCHAR(50)     NULL              COMMENT '작성자',
+  reply_user_id BIGINT          NULL DEFAULT 0    COMMENT '답글대상회원',
+  content       MEDIUMTEXT      NULL              COMMENT '내용',
+  status        INT         NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_comment_post (post_id),
-  KEY idx_comment_parent (parent_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='댓글/답글';
+  KEY idx_comment_module (module, module_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='댓글(범용 module 기반)';
 
-CREATE TABLE TB_POST_LIKE (
-  id         BIGINT   NOT NULL AUTO_INCREMENT,
-  post_id    BIGINT   NOT NULL,
-  user_id    BIGINT   NOT NULL,
-  status     INT      NOT NULL DEFAULT 1          COMMENT '1정상 0중지 -1삭제',
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+CREATE TABLE TB_FILE (
+  id           BIGINT       NOT NULL AUTO_INCREMENT,
+  module       VARCHAR(50)  NOT NULL              COMMENT '모듈',
+  module_id    BIGINT       NOT NULL DEFAULT 0    COMMENT '모듈아이디',
+  main_yn      TINYINT      NOT NULL DEFAULT 0    COMMENT '메인여부',
+  file_nm      VARCHAR(255)     NULL              COMMENT '표시 파일명',
+  filename     VARCHAR(255) NOT NULL              COMMENT '원본파일명',
+  realname     VARCHAR(255) NOT NULL              COMMENT '서버 실파일명(R2 키)',
+  filesize     BIGINT           NULL              COMMENT '파일크기(byte)',
+  filetype     VARCHAR(100)     NULL              COMMENT '파일종류',
+  file_uuid    VARCHAR(40)      NULL              COMMENT '파일UUID',
+  download_cnt INT          NOT NULL DEFAULT 0    COMMENT '다운로드횟수',
+  download_yn  TINYINT      NOT NULL DEFAULT 1    COMMENT '다운로드가능',
+  status       INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_postlike (post_id, user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시글 좋아요';
+  KEY idx_file_module (module, module_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='첨부파일(범용 module 기반)';
 
-CREATE TABLE TB_FAQ_CATEGORY (
-  id         BIGINT      NOT NULL AUTO_INCREMENT,
-  name       VARCHAR(50) NOT NULL,
-  sort_order INT         NOT NULL DEFAULT 0,
-  status     INT         NOT NULL DEFAULT 1       COMMENT '1정상 0중지 -1삭제',
-  created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='FAQ 카테고리';
-
-CREATE TABLE TB_FAQ (
-  id              BIGINT       NOT NULL AUTO_INCREMENT,
-  faq_category_id BIGINT           NULL,
-  question        VARCHAR(255) NOT NULL,
-  answer          TEXT         NOT NULL,
-  sort_order      INT          NOT NULL DEFAULT 0,
-  status          INT          NOT NULL DEFAULT 1 COMMENT '1노출 0숨김 -1삭제',
-  created_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+CREATE TABLE TB_COMMUNITY_POST (
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  product_id  BIGINT       NOT NULL              COMMENT 'FK 커뮤니티 상품(TB_PRODUCT type=community)',
+  category_id BIGINT           NULL              COMMENT 'FK(TB_BOARD_CATEGORY module=community)',
+  user_id     BIGINT       NOT NULL              COMMENT 'FK 작성자(TB_USER)',
+  subject     VARCHAR(255)     NULL              COMMENT '제목',
+  content     TEXT             NULL              COMMENT '내용',
+  notice_yn   TINYINT      NOT NULL DEFAULT 0    COMMENT '공지',
+  secret_yn   TINYINT      NOT NULL DEFAULT 0    COMMENT '비밀글',
+  hit_cnt     INT          NOT NULL DEFAULT 0    COMMENT '조회수',
+  comm_cnt    INT          NOT NULL DEFAULT 0    COMMENT '댓글수',
+  recomm_cnt  INT          NOT NULL DEFAULT 0    COMMENT '추천수',
+  report_cnt  INT          NOT NULL DEFAULT 0    COMMENT '신고수',
+  file_cnt    INT          NOT NULL DEFAULT 0    COMMENT '첨부수',
+  display_yn  TINYINT      NOT NULL DEFAULT 1    COMMENT '노출여부',
+  sort        INT              NULL DEFAULT 1    COMMENT '순서',
+  status      INT          NOT NULL DEFAULT 1    COMMENT '1공개 0비공개 -1삭제',
+  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_faq_cat (faq_category_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='FAQ 항목';
+  KEY idx_community_post_product (product_id, created_at, id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='프리미엄 커뮤니티 게시물(별도)';
+
+CREATE TABLE TB_COMMUNITY_COMMENT (
+  id                BIGINT     NOT NULL AUTO_INCREMENT,
+  community_post_id BIGINT     NOT NULL           COMMENT 'FK 커뮤니티 게시물',
+  parent_id         BIGINT         NULL DEFAULT 0 COMMENT '답글대상',
+  user_id           BIGINT     NOT NULL           COMMENT 'FK(TB_USER)',
+  reply_user_id     BIGINT         NULL DEFAULT 0 COMMENT '답글대상회원',
+  content           MEDIUMTEXT     NULL           COMMENT '내용',
+  status            INT        NOT NULL DEFAULT 1 COMMENT '1정상 0중지 -1삭제',
+  created_at        DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at        DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_community_comment_post (community_post_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='프리미엄 커뮤니티 댓글(별도)';
 
 CREATE TABLE TB_ADMIN_NOTICE (
   id              BIGINT       NOT NULL AUTO_INCREMENT,
@@ -1305,40 +1370,6 @@ CREATE TABLE TB_ADMIN_NOTICE_READ (
   PRIMARY KEY (id),
   UNIQUE KEY uk_noticeread (admin_notice_id, user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='공지 읽음 처리';
-
-CREATE TABLE TB_INQUIRY (
-  id                BIGINT       NOT NULL AUTO_INCREMENT,
-  user_id           BIGINT       NOT NULL              COMMENT '작성 학습자',
-  type              INT          NOT NULL              COMMENT '1product/2payment/3report/4etc',
-  ref_type          VARCHAR(20)      NULL              COMMENT 'product/post/comment/order',
-  ref_id            BIGINT           NULL,
-  title             VARCHAR(100) NOT NULL,
-  content           TEXT         NOT NULL,
-  inquiry_state     INT          NOT NULL DEFAULT 1    COMMENT '1waiting/2in_progress/3answered/4closed',
-  assignee_user_id  BIGINT           NULL              COMMENT '담당자(최초 답변자)',
-  has_attachment    TINYINT      NOT NULL DEFAULT 0,
-  last_reply_at     DATETIME         NULL,
-  status            INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
-  created_at        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '접수일',
-  updated_at        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_inquiry_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='1:1 문의(헤더)';
-
-CREATE TABLE TB_INQUIRY_REPLY (
-  id          BIGINT   NOT NULL AUTO_INCREMENT,
-  inquiry_id  BIGINT   NOT NULL,
-  parent_id   BIGINT       NULL                   COMMENT '답글(self)',
-  author_type INT      NOT NULL                   COMMENT '1admin(답변)/2user(추가질문)',
-  user_id     BIGINT       NULL                   COMMENT '작성자(TB_USER)',
-  content     TEXT     NOT NULL,
-  is_deleted  TINYINT  NOT NULL DEFAULT 0         COMMENT '삭제유지',
-  status      INT      NOT NULL DEFAULT 1         COMMENT '1정상 0중지 -1삭제',
-  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_reply_inquiry (inquiry_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='문의 답변/추가질문';
 
 CREATE TABLE TB_SITE_FOOTER (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
@@ -1460,25 +1491,9 @@ CREATE TABLE TB_BANNER (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='배너';
 
-CREATE TABLE TB_ATTACHMENT (
-  id            BIGINT       NOT NULL AUTO_INCREMENT,
-  owner_type    VARCHAR(20)  NOT NULL              COMMENT 'post/comment/inquiry/inquiry_reply',
-  owner_id      BIGINT       NOT NULL,
-  user_id       BIGINT           NULL              COMMENT '업로더',
-  r2_key        VARCHAR(255) NOT NULL,
-  original_name VARCHAR(255) NOT NULL,
-  display_name  VARCHAR(255)     NULL,
-  mime_type     VARCHAR(100)     NULL,
-  size_bytes    BIGINT           NULL,
-  sort_order    INT          NOT NULL DEFAULT 0,
-  status        INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
-  created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_attachment_owner (owner_type, owner_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='공용 첨부파일(polymorphic)';
-
 -- =====================================================================
---  끝. 테넌트 91개 테이블.
+--  끝. 테넌트 88개 테이블.
 --  (Round1 교정 반영: TB_REVIEW 추가, 토큰/코드 해시, 정산프로필 소유자, 유니크/인덱스 보강)
+--  (Round2: 게시판류=범용 엔진(TB_BOARD/POST/COMMENT/FILE/BOARD_CATEGORY, module 기반)으로
+--   재구성, 우리 컨벤션 변환. FAQ/INQUIRY/POST_LIKE/ATTACHMENT 흡수. 프리미엄 커뮤니티는 별도(TB_COMMUNITY_*).)
 -- =====================================================================
