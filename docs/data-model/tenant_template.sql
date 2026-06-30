@@ -228,7 +228,7 @@ CREATE TABLE TB_PRODUCT (
   id                BIGINT        NOT NULL AUTO_INCREMENT,
   owner_user_id     BIGINT        NOT NULL              COMMENT '담당 강사(TB_USER). 데이터스코프 기준',
   category_id       BIGINT            NULL              COMMENT '1상품 1카테고리(멤버십 제외)',
-  type              VARCHAR(20)   NOT NULL              COMMENT 'general/live/video_call/digital/package/membership/community',
+  type              VARCHAR(20)   NOT NULL              COMMENT 'course/live/video_call/digital/package/membership/community',
   title             VARCHAR(100)  NOT NULL,
   sub_title         VARCHAR(255)      NULL,
   description       TEXT              NULL,
@@ -252,23 +252,38 @@ CREATE TABLE TB_PRODUCT (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='상품 공통(7종 통합)';
 
 CREATE TABLE TB_PRODUCT_LIVE (
-  id               BIGINT       NOT NULL AUTO_INCREMENT,
-  product_id       BIGINT       NOT NULL,
-  live_kind        VARCHAR(12)  NOT NULL              COMMENT 'youtube_live/video_call',
-  platform         VARCHAR(12)      NULL              COMMENT 'zoom/google_meet(화상)',
-  start_at         DATETIME     NOT NULL,
-  end_at           DATETIME         NULL,
-  stream_url       VARCHAR(500)     NULL,
-  capacity         INT              NULL              COMMENT '모집인원(화상 필수)',
-  enter_open_min   INT          NOT NULL DEFAULT 10   COMMENT '입장 활성(시작 N분 전) 10~60',
-  live_status      VARCHAR(10)  NOT NULL DEFAULT 'upcoming' COMMENT 'upcoming/live/ended',
-  instant_complete TINYINT      NOT NULL DEFAULT 1    COMMENT '입장 즉시 자동수료(라이브)',
-  status           INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
-  created_at       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  id                  BIGINT       NOT NULL AUTO_INCREMENT,
+  product_id          BIGINT       NOT NULL              COMMENT '상품(TB_PRODUCT type=live)',
+  youtube_url         VARCHAR(500)     NULL              COMMENT '유튜브 라이브 URL',
+  youtube_video_id    VARCHAR(50)      NULL              COMMENT '유튜브 영상 ID',
+  start_at            DATETIME         NULL              COMMENT '방송 시작',
+  end_at              DATETIME         NULL              COMMENT '방송 종료',
+  enter_open_min      INT          NOT NULL DEFAULT 10   COMMENT '입장 활성(시작 N분 전) 10~60',
+  live_status         VARCHAR(10)  NOT NULL DEFAULT 'upcoming' COMMENT 'upcoming/live/ended',
+  instant_complete    TINYINT      NOT NULL DEFAULT 1    COMMENT '입장 즉시 자동수료',
+  recorded_content_id BIGINT           NULL              COMMENT '종료 후 녹화본(TB_CONTENT)',
+  status              INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uk_live_product (product_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='라이브/화상강의 확장';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='라이브 강의(YouTube Live 전용)';
+
+CREATE TABLE TB_PRODUCT_VIDEO_CALL (
+  id             BIGINT       NOT NULL AUTO_INCREMENT,
+  product_id     BIGINT       NOT NULL              COMMENT '상품(TB_PRODUCT type=video_call)',
+  platform       VARCHAR(12)      NULL              COMMENT 'zoom/google_meet',
+  meeting_url    VARCHAR(500)     NULL              COMMENT '접속 URL',
+  start_at       DATETIME         NULL,
+  end_at         DATETIME         NULL,
+  capacity       INT              NULL              COMMENT '모집인원',
+  enter_open_min INT          NOT NULL DEFAULT 10   COMMENT '입장 활성(시작 N분 전)',
+  status         INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_videocall_product (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='화상 강의(zoom/google_meet)';
 
 CREATE TABLE TB_PRODUCT_DIGITAL_FILE (
   id             BIGINT       NOT NULL AUTO_INCREMENT,
@@ -344,37 +359,68 @@ CREATE TABLE TB_PRODUCT_BENEFIT (
   KEY idx_benefit_product (product_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='멤버십/커뮤니티 혜택';
 
+CREATE TABLE TB_COURSE (
+  id                 BIGINT       NOT NULL AUTO_INCREMENT,
+  product_id         BIGINT       NOT NULL              COMMENT '상품(TB_PRODUCT type=course)',
+  level              VARCHAR(20)      NULL              COMMENT '난이도(beginner/intermediate/advanced)',
+  total_section_cnt  INT          NOT NULL DEFAULT 0    COMMENT '섹션수(캐시)',
+  total_lesson_cnt   INT          NOT NULL DEFAULT 0    COMMENT '강의수(캐시)',
+  total_duration_sec INT          NOT NULL DEFAULT 0    COMMENT '총 재생시간 초(캐시)',
+  status             INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_course_product (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='강좌(type=course 확장·커리큘럼 루트)';
+
+CREATE TABLE TB_COURSE_TUTOR (
+  id          BIGINT        NOT NULL AUTO_INCREMENT,
+  course_id   BIGINT        NOT NULL              COMMENT '강좌(TB_COURSE)',
+  user_id     BIGINT        NOT NULL              COMMENT '강사(TB_USER)',
+  type        VARCHAR(10)   NOT NULL              COMMENT '구분(main 주강사/sub 보조강사 등)',
+  class       VARCHAR(100)  NOT NULL DEFAULT '1'  COMMENT '분반',
+  ratio       DECIMAL(18,6) NOT NULL DEFAULT 0    COMMENT '정산비율(%)',
+  sort_order  INT               NULL DEFAULT 0    COMMENT '정렬순서',
+  is_display  TINYINT       NOT NULL DEFAULT 1    COMMENT '노출여부',
+  status      INT           NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_coursetutor (course_id, user_id, type),
+  KEY idx_coursetutor_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='과정강사관리(강좌-강사)';
+
 CREATE TABLE TB_SECTION (
   id         BIGINT       NOT NULL AUTO_INCREMENT,
-  product_id BIGINT       NOT NULL,
+  course_id  BIGINT       NOT NULL                 COMMENT '강좌(TB_COURSE)',
   title      VARCHAR(255) NOT NULL,
   sort_order INT          NOT NULL DEFAULT 0,
   status     INT          NOT NULL DEFAULT 1       COMMENT '1정상 0중지 -1삭제',
   created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_section_product (product_id)
+  KEY idx_section_course (course_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='강의 섹션';
 
-CREATE TABLE TB_LECTURE (
+CREATE TABLE TB_LESSON (
   id         BIGINT       NOT NULL AUTO_INCREMENT,
-  section_id BIGINT       NOT NULL,
-  product_id BIGINT       NOT NULL                 COMMENT '비정규화(조인 단축)',
-  content_id BIGINT           NULL                 COMMENT '연결 콘텐츠(차시당 1개)',
+  section_id BIGINT       NOT NULL                 COMMENT '섹션(TB_SECTION)',
+  course_id  BIGINT       NOT NULL                 COMMENT '강좌(TB_COURSE) 비정규화',
+  content_id BIGINT           NULL                 COMMENT '연결 콘텐츠(강의당 1개)',
   title      VARCHAR(255) NOT NULL,
-  seq        INT          NOT NULL DEFAULT 0       COMMENT '섹션 내 차시번호',
+  seq        INT          NOT NULL DEFAULT 0       COMMENT '섹션 내 순번',
   is_preview TINYINT      NOT NULL DEFAULT 0       COMMENT '맛보기(무료공개)',
   status     INT          NOT NULL DEFAULT 1       COMMENT '1정상 0중지 -1삭제',
   created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_lecture_section (section_id),
-  KEY idx_lecture_product (product_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='차시';
+  KEY idx_lesson_section (section_id),
+  KEY idx_lesson_course (course_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='강의(차시)';
 
 CREATE TABLE TB_COMPLETION_RULE (
   id                     BIGINT      NOT NULL AUTO_INCREMENT,
-  product_id             BIGINT      NOT NULL,
+  product_id             BIGINT      NOT NULL              COMMENT '상품(TB_PRODUCT) (type=course 강좌 기준)',
   min_progress_rate      INT         NOT NULL DEFAULT 80  COMMENT '수료 최소 진도율 10~100',
   min_exam_score         INT             NULL             COMMENT '시험 점수 기준(시험 기능 P1(미구현) — 별도 TB_EXAM* 신설 시 활성)',
   certificate_template_id BIGINT         NULL             COMMENT '설정 시 자동발급',
@@ -446,40 +492,109 @@ CREATE TABLE TB_SUBTITLE_LINE (
   KEY idx_subline_subtitle (subtitle_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='자막 라인';
 
-CREATE TABLE TB_ENROLLMENT (
-  id            BIGINT      NOT NULL AUTO_INCREMENT,
-  user_id       BIGINT      NOT NULL,
-  product_id    BIGINT      NOT NULL,
-  grant_source  VARCHAR(12) NOT NULL DEFAULT 'purchase' COMMENT 'purchase/subscription/package/membership',
-  order_id      BIGINT          NULL,
-  learn_status  VARCHAR(12) NOT NULL DEFAULT 'before' COMMENT 'before/learning/completed',
-  progress_rate INT         NOT NULL DEFAULT 0    COMMENT '전체 진도율(%)',
-  started_at    DATETIME        NULL,
-  expire_at     DATETIME        NULL              COMMENT '만료일. NULL=무제한',
-  completed_at  DATETIME        NULL,
-  status        INT         NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
-  created_at    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '구매/등록일',
-  updated_at    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+CREATE TABLE TB_COURSE_USER (
+  id              BIGINT        NOT NULL AUTO_INCREMENT,
+  product_id      BIGINT        NOT NULL              COMMENT '수강 상품(TB_PRODUCT)',
+  course_id       BIGINT            NULL              COMMENT '강좌(TB_COURSE) — type=course일 때',
+  package_id      BIGINT            NULL              COMMENT '패키지 상품(TB_PRODUCT type=package) 경유 구매 시',
+  user_id         BIGINT        NOT NULL              COMMENT '수강생(TB_USER)',
+  order_id        BIGINT            NULL              COMMENT '주문(TB_ORDER)',
+  order_item_id   BIGINT            NULL              COMMENT '주문항목(TB_ORDER_ITEM)',
+  subscription_id BIGINT            NULL              COMMENT '정기구독(TB_SUBSCRIPTION) — 구독 부여 시',
+  grant_source    VARCHAR(12)   NOT NULL DEFAULT 'purchase' COMMENT 'purchase/subscription/package/membership',
+  learn_status    VARCHAR(12)   NOT NULL DEFAULT 'before'   COMMENT 'before/learning/completed(편의 상태)',
+  start_date      DATE              NULL              COMMENT '수강시작일',
+  end_date        DATE              NULL              COMMENT '수강종료일',
+  renew_cnt       INT           NOT NULL DEFAULT 0    COMMENT '연장횟수',
+  class           VARCHAR(255)      NULL DEFAULT '1'  COMMENT '반명',
+  tutor_user_id   BIGINT            NULL              COMMENT '담당 강사(TB_USER)',
+  grade           INT               NULL DEFAULT 1    COMMENT '회원등급',
+  progress_ratio  DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '진도율',
+  progress_score  DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '진도점수',
+  exam_value      DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '시험점수(100점기준)',
+  exam_score      DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '시험점수',
+  homework_value  DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '과제점수(100점기준)',
+  homework_score  DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '과제점수',
+  forum_value     DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '토론점수(100점기준)',
+  forum_score     DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '토론점수',
+  etc_value       DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '기타점수(100점기준)',
+  etc_score       DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '기타점수',
+  total_score     DECIMAL(11,2) NOT NULL DEFAULT 0.00 COMMENT '전체점수',
+  credit          INT               NULL DEFAULT 1    COMMENT '학점',
+  is_complete     TINYINT       NOT NULL DEFAULT 0    COMMENT '수료여부(1수료 0미수료)',
+  complete_no     VARCHAR(50)       NULL              COMMENT '수료번호',
+  complete_date   DATETIME          NULL              COMMENT '수료일',
+  complete_dept   VARCHAR(100)      NULL              COMMENT '수료당시 소속(스냅샷)',
+  fail_reason     VARCHAR(1000)     NULL              COMMENT '미수료사유',
+  memo            TEXT              NULL              COMMENT '관리자메모',
+  is_close        TINYINT       NOT NULL DEFAULT 0    COMMENT '마감여부(1마감 0)',
+  close_date      DATETIME          NULL              COMMENT '마감일',
+  close_user_id   BIGINT            NULL              COMMENT '마감자(TB_USER)',
+  pause_cnt       INT           NOT NULL DEFAULT 0    COMMENT '정지횟수',
+  pause_day       INT           NOT NULL DEFAULT 0    COMMENT '총정지일수',
+  is_subscribe    TINYINT       NOT NULL DEFAULT 0    COMMENT '구독사용유무(1사용 0)',
+  change_date     DATETIME          NULL              COMMENT '상태변경일',
+  status          INT           NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '구매/등록일',
+  updated_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_enroll_user_product (user_id, product_id),
-  KEY idx_enroll_product (product_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='수강권';
+  KEY idx_courseuser_user (user_id),
+  KEY idx_courseuser_product (product_id),
+  KEY idx_courseuser_course (course_id, user_id),
+  KEY idx_courseuser_order (order_id),
+  KEY idx_courseuser_dashboard (status, is_complete, course_id, user_id),
+  KEY idx_courseuser_period (status, end_date, start_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='수강생관리(수강 등록·진도·성적·수료)';
 
-CREATE TABLE TB_LECTURE_PROGRESS (
-  id                BIGINT   NOT NULL AUTO_INCREMENT,
-  enrollment_id     BIGINT   NOT NULL,
-  lecture_id        BIGINT   NOT NULL,
-  user_id           BIGINT   NOT NULL              COMMENT '비정규화',
-  completed         TINYINT  NOT NULL DEFAULT 0,
-  watched_sec       INT      NOT NULL DEFAULT 0,
-  last_position_sec INT      NOT NULL DEFAULT 0    COMMENT '이어보기 위치',
-  status            INT      NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
-  created_at        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+CREATE TABLE TB_LESSON_PROGRESS (
+  id             BIGINT         NOT NULL AUTO_INCREMENT,
+  course_user_id BIGINT         NOT NULL              COMMENT '수강(TB_COURSE_USER)',
+  lesson_id      BIGINT         NOT NULL              COMMENT '강의(TB_LESSON)',
+  course_id      BIGINT         NOT NULL              COMMENT '강좌(TB_COURSE) 비정규화',
+  user_id        BIGINT         NOT NULL              COMMENT '회원(TB_USER) 비정규화',
+  chapter        INT                NULL              COMMENT '장',
+  ai_session_id  BIGINT             NULL              COMMENT 'AI튜터 세션',
+  lesson_type    VARCHAR(2)         NULL              COMMENT '영상/콘텐츠 타입',
+  study_page     INT            NOT NULL DEFAULT 0    COMMENT '학습페이지 수',
+  study_time     INT            NOT NULL DEFAULT 0    COMMENT '학습시간(초)',
+  curr_page      VARCHAR(255)       NULL              COMMENT '현재 페이지(문서형)',
+  curr_time      INT            NOT NULL DEFAULT 0    COMMENT '현재 위치(초, 이어보기)',
+  last_time      INT            NOT NULL DEFAULT 0    COMMENT '최대 위치(초)',
+  paragraph      VARCHAR(4000)      NULL              COMMENT '수강한 절 번호',
+  ratio          DECIMAL(11,2)  NOT NULL DEFAULT 0.00 COMMENT '진도율',
+  is_complete    TINYINT        NOT NULL DEFAULT 0    COMMENT '완료여부',
+  complete_date  DATETIME           NULL              COMMENT '완료일',
+  view_cnt       INT            NOT NULL DEFAULT 0    COMMENT '수강 횟수',
+  last_date      DATETIME           NULL              COMMENT '마지막 수강일',
+  change_user_id BIGINT             NULL              COMMENT '임의변경자(TB_USER)',
+  status         INT            NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at     DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at     DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_progress_enroll_lecture (enrollment_id, lecture_id),
-  KEY idx_progress_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='차시별 진도';
+  UNIQUE KEY uk_progress_courseuser_lesson (course_user_id, lesson_id),
+  KEY idx_lessonprog_course_lesson (course_id, lesson_id),
+  KEY idx_lessonprog_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='진도관리(강의별 진도)';
+
+CREATE TABLE TB_COURSE_USER_LOG (
+  id                   BIGINT         NOT NULL AUTO_INCREMENT,
+  course_user_id       BIGINT         NOT NULL              COMMENT '수강(TB_COURSE_USER)',
+  user_id              BIGINT         NOT NULL              COMMENT '회원(TB_USER)',
+  course_id            BIGINT             NULL              COMMENT '강좌(TB_COURSE)',
+  lesson_id            BIGINT         NOT NULL              COMMENT '강의(TB_LESSON)',
+  chapter              INT                NULL              COMMENT '차시(장)',
+  progress_ratio       DECIMAL(11,2)      NULL              COMMENT '차시진도율',
+  is_progress_complete TINYINT            NULL              COMMENT '차시완료여부',
+  ip_addr              VARCHAR(64)        NULL              COMMENT '접속주소',
+  user_agent           VARCHAR(500)       NULL              COMMENT '접속환경',
+  status               INT            NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at           DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '접속일',
+  updated_at           DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_courseuserlog_courseuser (course_user_id, created_at),
+  KEY idx_courseuserlog_user (user_id),
+  KEY idx_courseuserlog_lesson (lesson_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='학습 기록(강의실 접속 로그)';
 
 CREATE TABLE TB_CERTIFICATE_TEMPLATE (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
@@ -500,7 +615,7 @@ CREATE TABLE TB_CERTIFICATE_TEMPLATE (
 
 CREATE TABLE TB_CERTIFICATE (
   id            BIGINT        NOT NULL AUTO_INCREMENT,
-  enrollment_id BIGINT        NOT NULL,
+  course_user_id BIGINT       NOT NULL              COMMENT '수강(TB_COURSE_USER)',
   user_id       BIGINT        NOT NULL,
   product_id    BIGINT        NOT NULL,
   template_id   BIGINT        NOT NULL              COMMENT '발급 시점 템플릿',
@@ -518,7 +633,7 @@ CREATE TABLE TB_CERTIFICATE (
   PRIMARY KEY (id),
   UNIQUE KEY uk_cert_no (cert_no),
   KEY idx_cert_user (user_id),
-  KEY idx_cert_enroll (enrollment_id)
+  KEY idx_cert_courseuser (course_user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='수료증 발급 이력';
 
 CREATE TABLE TB_WISHLIST (
@@ -536,7 +651,7 @@ CREATE TABLE TB_REVIEW (
   id            BIGINT   NOT NULL AUTO_INCREMENT,
   user_id       BIGINT   NOT NULL                   COMMENT '작성 수강생(TB_USER)',
   product_id    BIGINT   NOT NULL                   COMMENT '대상 상품(TB_PRODUCT)',
-  enrollment_id BIGINT       NULL                   COMMENT '수강권(TB_ENROLLMENT). NULL=구매 없이 작성 불가 정책 적용 시 NOT NULL로 변경',
+  course_user_id BIGINT      NULL                   COMMENT '수강(TB_COURSE_USER). NULL=구매 없이 작성 불가 정책 적용 시 NOT NULL로 변경',
   rating        INT      NOT NULL                   COMMENT '별점 1~5',
   content       TEXT         NULL                   COMMENT '후기 본문',
   status        INT      NOT NULL DEFAULT 1         COMMENT '1공개 0숨김(운영자) -1삭제',
@@ -1205,16 +1320,16 @@ CREATE TABLE TB_BOARD (
   auth_comm     VARCHAR(1000)     NULL              COMMENT '댓글권한',
   auth_download VARCHAR(1000)     NULL              COMMENT '다운로드권한',
   list_num      INT               NULL DEFAULT 10   COMMENT '게시물수',
-  notice_yn     TINYINT       NOT NULL DEFAULT 0    COMMENT '공지글사용',
-  reply_yn      TINYINT       NOT NULL DEFAULT 0    COMMENT '답글사용',
-  delete_yn     TINYINT       NOT NULL DEFAULT 1    COMMENT '덧글달린글삭제가능',
-  comment_yn    TINYINT       NOT NULL DEFAULT 0    COMMENT '댓글사용',
-  category_yn   TINYINT       NOT NULL DEFAULT 0    COMMENT '카테고리사용',
-  upload_yn     TINYINT       NOT NULL DEFAULT 0    COMMENT '파일첨부사용',
-  image_yn      TINYINT       NOT NULL DEFAULT 1    COMMENT '목록이미지노출',
-  captcha_yn    TINYINT       NOT NULL DEFAULT 0    COMMENT '자동등록방지',
-  private_yn    TINYINT       NOT NULL DEFAULT 0    COMMENT '작성자글만보기',
-  point_yn      TINYINT           NULL DEFAULT 0    COMMENT '포인트부여',
+  is_notice     TINYINT       NOT NULL DEFAULT 0    COMMENT '공지글사용',
+  is_reply      TINYINT       NOT NULL DEFAULT 0    COMMENT '답글사용',
+  is_delete     TINYINT       NOT NULL DEFAULT 1    COMMENT '덧글달린글삭제가능',
+  is_comment    TINYINT       NOT NULL DEFAULT 0    COMMENT '댓글사용',
+  is_category   TINYINT       NOT NULL DEFAULT 0    COMMENT '카테고리사용',
+  is_upload     TINYINT       NOT NULL DEFAULT 0    COMMENT '파일첨부사용',
+  is_image      TINYINT       NOT NULL DEFAULT 1    COMMENT '목록이미지노출',
+  is_captcha    TINYINT       NOT NULL DEFAULT 0    COMMENT '자동등록방지',
+  is_private    TINYINT       NOT NULL DEFAULT 0    COMMENT '작성자글만보기',
+  is_point      TINYINT           NULL DEFAULT 0    COMMENT '포인트부여',
   allow_type    VARCHAR(255)      NULL              COMMENT '허용확장자',
   deny_ext      VARCHAR(255)      NULL              COMMENT '거부확장자',
   header_html   VARCHAR(4000)     NULL              COMMENT '상단HTML',
@@ -1231,16 +1346,15 @@ CREATE TABLE TB_BOARD (
 
 CREATE TABLE TB_BOARD_CATEGORY (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
-  module      VARCHAR(50)  NOT NULL              COMMENT '모듈(board 등)',
-  module_id   BIGINT           NULL              COMMENT '모듈아이디(board_id)',
+  board_id    BIGINT       NOT NULL              COMMENT '게시판(TB_BOARD)',
   category_nm VARCHAR(100) NOT NULL              COMMENT '카테고리명',
   sort        INT              NULL              COMMENT '순서',
   status      INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
   created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_boardcat_module (module, module_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시판류 카테고리(범용)';
+  KEY idx_boardcat_board (board_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시판 카테고리(board_id 종속)';
 
 CREATE TABLE TB_POST (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
@@ -1253,14 +1367,14 @@ CREATE TABLE TB_POST (
   subject     VARCHAR(255)     NULL              COMMENT '제목',
   content     TEXT             NULL              COMMENT '내용',
   youtube_cd  VARCHAR(50)      NULL              COMMENT '유튜브코드',
-  notice_yn   TINYINT      NOT NULL DEFAULT 0    COMMENT '공지글',
-  secret_yn   TINYINT      NOT NULL DEFAULT 0    COMMENT '비밀글(1:1문의 등)',
+  is_notice   TINYINT      NOT NULL DEFAULT 0    COMMENT '공지글',
+  is_secret   TINYINT      NOT NULL DEFAULT 0    COMMENT '비밀글(1:1문의 등)',
   hit_cnt     INT          NOT NULL DEFAULT 0    COMMENT '조회수',
   comm_cnt    INT          NOT NULL DEFAULT 0    COMMENT '댓글수',
   recomm_cnt  INT          NOT NULL DEFAULT 0    COMMENT '추천수',
   report_cnt  INT          NOT NULL DEFAULT 0    COMMENT '신고수',
   file_cnt    INT          NOT NULL DEFAULT 0    COMMENT '첨부수',
-  display_yn  TINYINT      NOT NULL DEFAULT 1    COMMENT '노출여부',
+  is_display  TINYINT      NOT NULL DEFAULT 1    COMMENT '노출여부',
   sort        INT              NULL DEFAULT 1    COMMENT '순서',
   proc_status INT          NOT NULL DEFAULT 0    COMMENT '진행상태(1:1문의 답변상태 등)',
   status      INT          NOT NULL DEFAULT 1    COMMENT '1공개 0비공개 -1삭제',
@@ -1291,7 +1405,7 @@ CREATE TABLE TB_FILE (
   id           BIGINT       NOT NULL AUTO_INCREMENT,
   module       VARCHAR(50)  NOT NULL              COMMENT '모듈',
   module_id    BIGINT       NOT NULL DEFAULT 0    COMMENT '모듈아이디',
-  main_yn      TINYINT      NOT NULL DEFAULT 0    COMMENT '메인여부',
+  is_main      TINYINT      NOT NULL DEFAULT 0    COMMENT '메인여부',
   file_nm      VARCHAR(255)     NULL              COMMENT '표시 파일명',
   filename     VARCHAR(255) NOT NULL              COMMENT '원본파일명',
   realname     VARCHAR(255) NOT NULL              COMMENT '서버 실파일명(R2 키)',
@@ -1299,7 +1413,7 @@ CREATE TABLE TB_FILE (
   filetype     VARCHAR(100)     NULL              COMMENT '파일종류',
   file_uuid    VARCHAR(40)      NULL              COMMENT '파일UUID',
   download_cnt INT          NOT NULL DEFAULT 0    COMMENT '다운로드횟수',
-  download_yn  TINYINT      NOT NULL DEFAULT 1    COMMENT '다운로드가능',
+  is_download  TINYINT      NOT NULL DEFAULT 1    COMMENT '다운로드가능',
   status       INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
   created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -1307,21 +1421,33 @@ CREATE TABLE TB_FILE (
   KEY idx_file_module (module, module_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='첨부파일(범용 module 기반)';
 
+CREATE TABLE TB_COMMUNITY_CATEGORY (
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  product_id  BIGINT       NOT NULL              COMMENT '커뮤니티 상품(TB_PRODUCT type=community)',
+  category_nm VARCHAR(100) NOT NULL              COMMENT '카테고리명',
+  sort        INT              NULL              COMMENT '순서',
+  status      INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_communitycat_product (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='프리미엄 커뮤니티 카테고리(product_id 종속)';
+
 CREATE TABLE TB_COMMUNITY_POST (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   product_id  BIGINT       NOT NULL              COMMENT 'FK 커뮤니티 상품(TB_PRODUCT type=community)',
-  category_id BIGINT           NULL              COMMENT 'FK(TB_BOARD_CATEGORY module=community)',
+  category_id BIGINT           NULL              COMMENT 'FK(TB_COMMUNITY_CATEGORY)',
   user_id     BIGINT       NOT NULL              COMMENT 'FK 작성자(TB_USER)',
   subject     VARCHAR(255)     NULL              COMMENT '제목',
   content     TEXT             NULL              COMMENT '내용',
-  notice_yn   TINYINT      NOT NULL DEFAULT 0    COMMENT '공지',
-  secret_yn   TINYINT      NOT NULL DEFAULT 0    COMMENT '비밀글',
+  is_notice   TINYINT      NOT NULL DEFAULT 0    COMMENT '공지',
+  is_secret   TINYINT      NOT NULL DEFAULT 0    COMMENT '비밀글',
   hit_cnt     INT          NOT NULL DEFAULT 0    COMMENT '조회수',
   comm_cnt    INT          NOT NULL DEFAULT 0    COMMENT '댓글수',
   recomm_cnt  INT          NOT NULL DEFAULT 0    COMMENT '추천수',
   report_cnt  INT          NOT NULL DEFAULT 0    COMMENT '신고수',
   file_cnt    INT          NOT NULL DEFAULT 0    COMMENT '첨부수',
-  display_yn  TINYINT      NOT NULL DEFAULT 1    COMMENT '노출여부',
+  is_display  TINYINT      NOT NULL DEFAULT 1    COMMENT '노출여부',
   sort        INT              NULL DEFAULT 1    COMMENT '순서',
   status      INT          NOT NULL DEFAULT 1    COMMENT '1공개 0비공개 -1삭제',
   created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
