@@ -52,6 +52,16 @@
 - 테넌트 **88** / 총 **102**. dev DB 클린 리빌드 반영 완료(reset→migrate 88·seed). Figma 테넌트 보드 커뮤니티 도메인 **제자리 갱신**(URL 유지 `tds3QGtVLaj5InmKM56um5`).
 - (앞서) 회원 소셜 5종 비정규화 + `login_id`/`email` 분리도 dev DB 반영·ERD 인증 도메인 제자리 갱신 완료.
 
+## 8. 강좌·수강 도메인 재구조화 + 게시판 카테고리 정비 (동기화)
+
+사용자 제공 malgn 표준 테이블(`LM_COURSE_USER`/`LM_COURSE_PROGRESS`/`LM_COURSE_USER_LOG`/`LM_COURSE_TUTOR`)을 우리 컨벤션으로 변환·반영.
+- **강좌 계층**: `TB_PRODUCT.type` general→**course**. `TB_PRODUCT`(공통) ─1:1─ **`TB_COURSE`**(강좌) ─1:N─ `TB_SECTION`(course_id) ─1:N─ **`TB_LESSON`**(`TB_LECTURE` 개명). **`TB_COURSE_TUTOR`**(과정강사·정산비율) 신설.
+- **라이브=YouTube Live 전용** 재모델(`TB_PRODUCT_LIVE`), **화상=`TB_PRODUCT_VIDEO_CALL`** 분리.
+- **수강/학습 3계층**: `TB_ENROLLMENT`→**`TB_COURSE_USER`**(수강생관리·진도/성적/수료/정지/구독), **`TB_LESSON_PROGRESS`**(진도관리·이어보기), **`TB_COURSE_USER_LOG`**(학습기록·접속로그). 참조 `enrollment_id`→`course_user_id`.
+- **게시판 카테고리**: `TB_BOARD_CATEGORY`를 `module`→**`board_id`** 종속으로, 프리미엄 커뮤니티용 **`TB_COMMUNITY_CATEGORY`**(product_id) 신설.
+- **컨벤션**: 전 컬럼 **`_yn`→`is_`**, 날짜 varchar→DATE/DATETIME, 점수 DECIMAL, site_id 없음.
+- 테넌트 **93** / 총 **107**. **동기화 완료**: dev DB 클린 리빌드(93) + Figma ERD 상품·학습/커뮤니티 도메인 제자리 갱신(URL 유지) + 커밋.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
