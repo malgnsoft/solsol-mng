@@ -261,6 +261,7 @@ CREATE TABLE TB_PRODUCT_LIVE (
   enter_open_min      INT          NOT NULL DEFAULT 10   COMMENT '입장 활성(시작 N분 전) 10~60',
   live_status         VARCHAR(10)  NOT NULL DEFAULT 'upcoming' COMMENT 'upcoming/live/ended',
   instant_complete    TINYINT      NOT NULL DEFAULT 1    COMMENT '입장 즉시 자동수료',
+  certificate_template_id BIGINT       NULL              COMMENT '수료증 템플릿(TB_CERTIFICATE_TEMPLATE). NULL=수료증 미사용, 설정 시 자동발급',
   recorded_content_id BIGINT           NULL              COMMENT '종료 후 녹화본(TB_CONTENT)',
   status              INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
   created_at          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
