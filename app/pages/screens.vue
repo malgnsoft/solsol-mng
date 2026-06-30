@@ -259,8 +259,8 @@ function fmtTime(iso: string) { return (iso ?? '').slice(0, 16).replace('T', ' '
 .tab-count { font-size: 11px; color: var(--ink-400); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tab-badge { font-size: 10px; font-weight: 700; color: var(--ink-400); background: var(--ink-100); padding: 2px 7px; border-radius: 999px; }
 .tab-bars { display: flex; flex-direction: column; gap: 6px; }
-.tab-bar { display: grid; grid-template-columns: 48px 1fr 34px; align-items: center; gap: 8px; }
-.tb-l { font-size: 11px; color: var(--ink-500); }
+.tab-bar { display: grid; grid-template-columns: 66px 1fr 34px; align-items: center; gap: 8px; }
+.tb-l { font-size: 10.5px; color: var(--ink-500); white-space: nowrap; }
 .tb-track { height: 6px; background: var(--ink-50); border-radius: 3px; overflow: hidden; }
 .tb-track i { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width .2s; }
 .tb-v { font-size: 11px; color: var(--ink-500); text-align: right; font-variant-numeric: tabular-nums; }
