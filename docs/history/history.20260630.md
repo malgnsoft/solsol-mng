@@ -69,6 +69,13 @@
 - **`TB_DIGITAL_DOWNLOAD_LOG`** 신설 — 유료 디지털 상품의 다운로드 1건=1행(누가·무엇을·언제·어느 주문). `digital_file_id`·`product_id`·`course_user_id`·`user_id`·`order_id`·`ip_addr`·`user_agent`·`created_at`(다운로드시각). 한도(`download_limit`) 집계·구매검증·환불추적 근거. 테넌트 **94** / 총 **108**. dev DB 클린 리빌드 반영(94, 0오류).
 - **Figma 테넌트 ERD 전면 재구성** — 누적 갱신으로 노드 ID/배치가 뒤섞여, 보드 전체(227노드) 삭제 후 정본(94)에서 **5개 도메인을 처음부터 재생성**(URL 유지 `tds3QGtVLaj5InmKM56um5`). 검증: 홈 테이블 94 전수 존재(누락 0), 총 107노드·커넥터 129.
 
+## 10. 디지털 다운로드 이력·수강생 테이블 컬럼 정리(레거시 제거)
+
+- **`TB_DIGITAL_DOWNLOAD_LOG`**: `course_user_id`(수강) 제거 — 디지털 구매는 수강 개념과 무관. 구매권 근거를 **`order_id`+`order_item_id`**(주문/주문항목)로 정정. 인덱스 `idx_dldlog_order`.
+- **`TB_COURSE_USER`**: malgn 레거시 컬럼 26종 제거(검증 정본 학습자/수료/학습기간 화면 기준). 성적체계(progress_score·exam/homework/forum/etc·total_score) — 쏠쏠은 **완료 기준=진도율**(시험 P1 미구현)이라 불필요 → 삭제. 반명·담당강사·회원등급·학점·수료당시소속·미수료사유·관리자메모·마감(3)·정지(2)·구독사용유무·상태변경일 제거. **유지 18컬럼**: 구매연결(product/course/package/order/order_item/subscription)·grant_source·learn_status·start/end_date·renew_cnt·progress_ratio·is_complete·complete_no·complete_date·status. 
+- dev DB 클린 리빌드 반영(94, 0오류). Figma 도메인2 제자리 갱신(노드 ID 접두사 기준 정밀 교체, URL 유지). 테넌트 **94** 유지.
+- 참고: 수료여부 변경 모달의 '변경 사유'(필수, 05) 보존이 필요하면 `TB_COURSE_USER_STATUS_LOG`(상태변경 이력) 별도 신설 검토.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
