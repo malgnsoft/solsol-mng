@@ -299,6 +299,26 @@ CREATE TABLE TB_PRODUCT_DIGITAL_FILE (
   KEY idx_digital_product (product_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='디지털 상품 구성 파일';
 
+CREATE TABLE TB_DIGITAL_DOWNLOAD_LOG (
+  id              BIGINT       NOT NULL AUTO_INCREMENT,
+  digital_file_id BIGINT       NOT NULL              COMMENT '디지털 파일(TB_PRODUCT_DIGITAL_FILE)',
+  product_id      BIGINT       NOT NULL              COMMENT '상품(TB_PRODUCT) 비정규화',
+  course_user_id  BIGINT           NULL              COMMENT '수강/구매권(TB_COURSE_USER)',
+  user_id         BIGINT       NOT NULL              COMMENT '다운로드 회원(TB_USER)',
+  order_id        BIGINT           NULL              COMMENT '구매 주문(TB_ORDER) — 정산/환불 추적',
+  file_name       VARCHAR(255)     NULL              COMMENT '다운로드 파일명 스냅샷',
+  ip_addr         VARCHAR(64)      NULL              COMMENT '접속주소',
+  user_agent      VARCHAR(500)     NULL              COMMENT '접속환경',
+  status          INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '다운로드 시각',
+  updated_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_dldlog_file_user (digital_file_id, user_id),
+  KEY idx_dldlog_user (user_id, created_at),
+  KEY idx_dldlog_courseuser (course_user_id),
+  KEY idx_dldlog_product (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='디지털 상품 다운로드 이력(누가·언제·어느 주문)';
+
 CREATE TABLE TB_PACKAGE_ITEM (
   id                 BIGINT   NOT NULL AUTO_INCREMENT,
   package_product_id BIGINT   NOT NULL              COMMENT '패키지 상품',

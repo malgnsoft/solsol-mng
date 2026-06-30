@@ -62,6 +62,11 @@
 - **컨벤션**: 전 컬럼 **`_yn`→`is_`**, 날짜 varchar→DATE/DATETIME, 점수 DECIMAL, site_id 없음.
 - 테넌트 **93** / 총 **107**. **동기화 완료**: dev DB 클린 리빌드(93) + Figma ERD 상품·학습/커뮤니티 도메인 제자리 갱신(URL 유지) + 커밋.
 
+## 9. 디지털 상품 다운로드 이력 + Figma ERD 전면 재구성
+
+- **`TB_DIGITAL_DOWNLOAD_LOG`** 신설 — 유료 디지털 상품의 다운로드 1건=1행(누가·무엇을·언제·어느 주문). `digital_file_id`·`product_id`·`course_user_id`·`user_id`·`order_id`·`ip_addr`·`user_agent`·`created_at`(다운로드시각). 한도(`download_limit`) 집계·구매검증·환불추적 근거. 테넌트 **94** / 총 **108**. dev DB 클린 리빌드 반영(94, 0오류).
+- **Figma 테넌트 ERD 전면 재구성** — 누적 갱신으로 노드 ID/배치가 뒤섞여, 보드 전체(227노드) 삭제 후 정본(94)에서 **5개 도메인을 처음부터 재생성**(URL 유지 `tds3QGtVLaj5InmKM56um5`). 검증: 홈 테이블 94 전수 존재(누락 0), 총 107노드·커넥터 129.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
