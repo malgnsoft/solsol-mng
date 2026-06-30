@@ -76,6 +76,13 @@
 - dev DB 클린 리빌드 반영(94, 0오류). Figma 도메인2 제자리 갱신(노드 ID 접두사 기준 정밀 교체, URL 유지). 테넌트 **94** 유지.
 - 참고: 수료여부 변경 모달의 '변경 사유'(필수, 05) 보존이 필요하면 `TB_COURSE_USER_STATUS_LOG`(상태변경 이력) 별도 신설 검토.
 
+## 11. 수료조건을 TB_COURSE로 흡수 + TB_COMPLETION_RULE 삭제
+
+- 수료 조건을 별도 테이블이 아닌 **`TB_COURSE` 컬럼**으로 이동: `min_progress_rate`(수료 최소 진도율 10~100, 기본 80)·`watch_mode`(free/sequential 순차시청)·`certificate_template_id`(수료증 템플릿, NULL=미사용·설정 시 자동발급).
+- **`TB_COMPLETION_RULE` 삭제**(강좌 1:1이라 별도 테이블 불필요). 레거시 `min_exam_score`는 시험 미구현·성적 제거 일관성으로 미이전.
+- 테넌트 **93** / 총 **107**. dev DB 클린 리빌드(93, 0오류) + Figma 도메인2 제자리 갱신(URL 유지).
+- 참고: 라이브 수료증(②수료 탭)도 템플릿이 필요하면 `TB_PRODUCT_LIVE`에 `certificate_template_id` 추가 검토(현재 course만 보유).
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).

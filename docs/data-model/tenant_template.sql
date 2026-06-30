@@ -386,12 +386,15 @@ CREATE TABLE TB_COURSE (
   total_section_cnt  INT          NOT NULL DEFAULT 0    COMMENT '섹션수(캐시)',
   total_lesson_cnt   INT          NOT NULL DEFAULT 0    COMMENT '강의수(캐시)',
   total_duration_sec INT          NOT NULL DEFAULT 0    COMMENT '총 재생시간 초(캐시)',
+  min_progress_rate  INT          NOT NULL DEFAULT 80   COMMENT '수료 최소 진도율 10~100',
+  watch_mode         VARCHAR(12)  NOT NULL DEFAULT 'free' COMMENT '시청방식 free/sequential(순차시청)',
+  certificate_template_id BIGINT      NULL              COMMENT '수료증 템플릿(TB_CERTIFICATE_TEMPLATE). NULL=수료증 미사용, 설정 시 자동발급',
   status             INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
   created_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uk_course_product (product_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='강좌(type=course 확장·커리큘럼 루트)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='강좌(type=course 확장·커리큘럼 루트·수료조건)';
 
 CREATE TABLE TB_COURSE_TUTOR (
   id          BIGINT        NOT NULL AUTO_INCREMENT,
@@ -437,20 +440,6 @@ CREATE TABLE TB_LESSON (
   KEY idx_lesson_section (section_id),
   KEY idx_lesson_course (course_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='강의(차시)';
-
-CREATE TABLE TB_COMPLETION_RULE (
-  id                     BIGINT      NOT NULL AUTO_INCREMENT,
-  product_id             BIGINT      NOT NULL              COMMENT '상품(TB_PRODUCT) (type=course 강좌 기준)',
-  min_progress_rate      INT         NOT NULL DEFAULT 80  COMMENT '수료 최소 진도율 10~100',
-  min_exam_score         INT             NULL             COMMENT '시험 점수 기준(시험 기능 P1(미구현) — 별도 TB_EXAM* 신설 시 활성)',
-  certificate_template_id BIGINT         NULL             COMMENT '설정 시 자동발급',
-  watch_mode             VARCHAR(12) NOT NULL DEFAULT 'free' COMMENT 'free/sequential',
-  status                 INT         NOT NULL DEFAULT 1   COMMENT '1정상 0중지 -1삭제',
-  created_at             DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at             DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_completion_product (product_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='수료 기준';
 
 CREATE TABLE TB_CONTENT_FOLDER (
   id         BIGINT       NOT NULL AUTO_INCREMENT,
