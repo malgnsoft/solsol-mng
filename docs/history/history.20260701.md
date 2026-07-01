@@ -31,12 +31,19 @@
 - 스파이크 5항목 **종료일을 이번주(KST 2026-06-29~07-05) 안으로 압축** — 전부 `end ≤ 2026-07-05`(데이터모델 07-04, 나머지 07-05).
 - `wbsData.ts`·`seed.sql`·라이브 D1(step 5↔6 교체·sort 213–220↔221–225 재배치·스파이크 날짜 UPDATE) 동기화. 커밋 `a7bad92` → Pages 배포.
 
+## 6. 에이전트팀 글로벌 일원화 (배포)
+
+- 쏠쏠 **프로젝트 전용 에이전트팀 폐지 → 글로벌 에이전트팀(`~/.claude/agents/`)만 사용**. 로컬 정의는 원래 없었고(문서만 존재), 조직도에 글로벌에 없는 가상 역할(`chief-of-staff`·`service-planner`·`publisher`·`devops-engineer`·`instructional-designer`·`legal-reviewer`)이 섞여 있던 것을 실제 글로벌 정의(22개)와 1:1 정렬.
+- `docs/AGENT_TEAM.md` 재작성(글로벌 팀 사용·레포 적용만 기술·로컬 정의 금지), `CLAUDE.md`(에이전트팀 안내 2곳·참모 제거), `docs/DEV_VALIDATION_PROCESS.md`(조율 역할을 `plan/dev/qa/ops-lead` 글로벌 슬러그로) 정리. `docs/validation/*`(읽기전용 정본)의 작성자 메타데이터는 무수정.
+- 커밋 `f4167b7` → Pages 배포(`docs/`는 `/docs` 콘텐츠 소스라 반영).
+
 ## 산출물
 
-- 코드: `server/api/screens/[id].patch.ts`·`index.get.ts`·`server/utils/screenStatus.ts`(§3), `app/utils/wbsData.ts`·`app/pages/wbs.vue`·`app/pages/index.vue`·`server/db/seed.sql`(§4·§5).
+- 코드: `server/api/screens/[id].patch.ts`·`index.get.ts`·`server/utils/screenStatus.ts`(§3), `app/utils/wbsData.ts`·`app/pages/wbs.vue`·`app/pages/index.vue`·`server/db/seed.sql`(§4·§5), `docs/AGENT_TEAM.md`·`CLAUDE.md`·`docs/DEV_VALIDATION_PROCESS.md`(§6).
 - 라이브 D1(`solsol-project`): `screen_status` FR01 7행 복구, `wbs_item` 스텝 재편(4:13·5:5·6:8·7:19·8:18) + 스파이크 5행.
 - 커밋 `cf5ecd6`(screens fix)·`8cf245a`(wbs spike 신설)·`a7bad92`(spike 설계–구현 사이 이동·이번주 완료) → `malgnsoft/solsol-mng` → Pages `solsol-mng` 배포.
 - 최종 WBS 8단계: 4 목업 → **5 설계 → 6 스파이크(1차 개발·이번주 완료) → 7 구현** → 8 운영·계약.
+- 에이전트팀: **글로벌 팀만 사용**(프로젝트 전용 팀 폐지) — 커밋 `f4167b7`, Pages 배포.
 
 ## 다음 단계
 
