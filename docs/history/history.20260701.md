@@ -147,20 +147,20 @@
 
 ---
 
-## 12. API 문서 위치 이관 — 관리 허브 `/apis` 제거 → 백엔드(solsol-api) `/docs` 신설(Scalar UI + OpenAPI 3.1) + 루트 리다이렉트
+## 12. API 문서 위치 이관 — 관리 허브 `/apis` 제거 → 백엔드(solsol-api) `/doc` 신설(Scalar UI + OpenAPI 3.1) + 루트 리다이렉트
 
-- **배경/결정(오너 지시)**: API 상세 문서를 관리 허브(`solsol-mng`)의 `/apis` 페이지가 아니라 **백엔드(`solsol-api`) 자체의 `/docs`** 에서 제공하도록 이관. 루트(`/`) 접속 시 문서로 유도한다. 문서 UI는 **아키텍처 원본 `malgn-noti-api/doc`과 동일한 방식**(Scalar UI + OpenAPI 3.1)으로 맞춘다.
+- **배경/결정(오너 지시)**: API 상세 문서를 관리 허브(`solsol-mng`)의 `/apis` 페이지가 아니라 **백엔드(`solsol-api`) 자체의 `/doc`** 에서 제공하도록 이관. 루트(`/`) 접속 시 문서로 유도한다. 문서 UI·경로 모두 **아키텍처 원본 `malgn-noti-api/doc`과 동일한 방식**(Scalar UI + OpenAPI 3.1, 경로 `/doc` 단수)으로 맞춘다.
 - **solsol-mng — `/apis` 제거**: `app/pages/apis.vue`·`app/data/apiEndpoints.ts` 삭제 + `app/layouts/default.vue` 네비의 "API" 링크 제거. 커밋 `d237f59`(malgn main) → Pages 재배포(**https://b6868703.solsol-mng.pages.dev**). `/screens` 등 기존 기능 무손상.
-- **solsol-api — `/docs` 신설(Scalar + OpenAPI 3.1)**: 초기 자체 완결 HTML(중간 단계, 버전 `72c249d7`)로 배포했으나 오너 요청으로 **아키텍처 원본 `malgn-noti-api` 방식**(`@scalar/hono-api-reference@0.10.19`)으로 재구축.
+- **solsol-api — `/doc` 신설(Scalar + OpenAPI 3.1)**: 초기 자체 완결 HTML(중간 단계, 버전 `72c249d7`)로 배포했으나 오너 요청으로 **아키텍처 원본 `malgn-noti-api` 방식**(`@scalar/hono-api-reference@0.10.19`)으로 재구축.
   - `src/openapi.ts`(OpenAPI 3.1 스펙) — 카탈로그 `src/docs/endpoints.ts`의 `ENDPOINTS`를 빌더로 변환해 **151 paths / 223 operations / 26 태그(도메인)** 생성. `info.description` 마크다운(소개·인증[Bearer + X-Tenant]·**응답 형식**[`{ok,data,meta?}` / `{ok:false,error}`]·에러 코드·페이지네이션·멀티테넌트·멱등성)으로 참고 페이지의 `#description/응답-형식` 앵커에 대응. securitySchemes = `bearerAuth` + `tenantHeader`(X-Tenant).
-  - 라우트: `GET /docs`(Scalar UI) + `GET /docs/openapi.json`(raw 3.1 스펙) — `tenantResolver`·`requireAuth` **밖 공개 라우트**. 루트 `GET /` → **302 `/docs`** 유지. 기존 수제 HTML 라우트(`src/routes/docs.ts`) 삭제.
-  - Workers 재배포 **최종 버전 `d4136a0d`**(초기 수제 HTML `72c249d7` → Scalar로 재배포).
-- **스모크**: `/`→302→`/docs`(Scalar 셸 200) · `/docs/openapi.json` 200(3.1.0·151 paths/223 ops) · `/health` 200. URL **https://solsol-api.malgnsoft.workers.dev/docs**. (`solsol-api`는 로컬 git 레포 아님 → 커밋 대상 없음.)
+  - 라우트: `GET /doc`(Scalar UI) + `GET /doc/openapi.json`(raw 3.1 스펙) — `tenantResolver`·`requireAuth` **밖 공개 라우트**. 루트 `GET /` → **302 `/doc`** 유지. 기존 수제 HTML 라우트(`src/routes/docs.ts`) 삭제.
+  - Workers 재배포 흐름: 초기 수제 HTML `72c249d7` → Scalar 재구축 `d4136a0d` → **경로 `/docs`→`/doc`(단수) 변경 재배포 최종 버전 `bb42ee1b`**(`malgn-noti-api`와 경로 일치).
+- **스모크**: `/`→302→`/doc`(Scalar 셸 200) · `/doc/openapi.json` 200(3.1.0·151 paths/223 ops) · `/health` 200. URL **https://solsol-api.malgnsoft.workers.dev/doc**. (`solsol-api`는 로컬 git 레포 아님 → 커밋 대상 없음.)
 - **유지보수 메모**: 라우트 추가/변경 시 `solsol-api/src/docs/endpoints.ts`의 `ENDPOINTS` 배열만 갱신하면 OpenAPI 스펙·Scalar 문서에 자동 반영된다.
 
 ### §12 산출물
 - solsol-mng: `app/pages/apis.vue`·`app/data/apiEndpoints.ts` 삭제 + `app/layouts/default.vue`("API" 네비 제거). 커밋 `d237f59`(malgn main) → Pages 재배포 **https://b6868703.solsol-mng.pages.dev**.
-- solsol-api(로컬 git 아님): `src/openapi.ts`(OpenAPI 3.1 — 151 paths/223 ops/26 태그·securitySchemes bearerAuth+X-Tenant·`info.description` 규약 마크다운) + `GET /docs`(Scalar UI, 원본 `malgn-noti-api` 방식)·`GET /docs/openapi.json`(raw 3.1) 라우트 + 루트 `GET /` → 302 `/docs`. 기존 수제 HTML 라우트(`src/routes/docs.ts`) 삭제. Workers 재배포 **버전 `d4136a0d`** → **https://solsol-api.malgnsoft.workers.dev/docs**.
+- solsol-api(로컬 git 아님): `src/openapi.ts`(OpenAPI 3.1 — 151 paths/223 ops/26 태그·securitySchemes bearerAuth+X-Tenant·`info.description` 규약 마크다운) + `GET /doc`(Scalar UI, 원본 `malgn-noti-api` 방식)·`GET /doc/openapi.json`(raw 3.1) 라우트 + 루트 `GET /` → 302 `/doc`. 기존 수제 HTML 라우트(`src/routes/docs.ts`) 삭제. Workers 재배포 **최종 버전 `bb42ee1b`**(수제HTML `72c249d7` → Scalar `d4136a0d` → `/doc` 경로 `bb42ee1b`) → **https://solsol-api.malgnsoft.workers.dev/doc**.
 
 ### §12 다음 단계
 - 문서 카탈로그는 **코드 변경 시 `solsol-api/src/docs/endpoints.ts` 동기화**(라우트 추가/변경 → `ENDPOINTS` 배열 갱신 → OpenAPI/Scalar 자동 반영).
