@@ -307,3 +307,9 @@
 ### §19 다음 단계
 - **인증·쓰기 실연동**(login/signup/account/sites/subscriptions/payments) — 전제: 브랜드 API **DB 시드 + 계정 시드 실행 + 계약 프리즈**(백엔드 세션 소관), 보안 게이트(서버 인증/세션·IDOR·인증코드 서버검증·레이트리밋·PAN 마스킹·정보통신망법) 확인.
 - **백엔드 조율**: news/plans 등 실데이터 시드 시 프론트 자동 노출. 실 스키마 필드명 확정 시 `mapNews`/`mapPlan`만 조정.
+
+## 20. 브랜드 관리자단(solsol-brand-admin) 목업 모드 원클릭 로그인 버튼 추가 + 재배포
+
+- **변경**: `app/pages/auth/login.vue` — 목업 모드(`isMock`, `NUXT_API_BASE` 미설정) 조건에서만 '슈퍼관리자/지원팀 원클릭 로그인' 버튼 노출. typecheck GREEN·빌드 PASS.
+- **배포**: 커밋 `addddf8`(origin=malgnsoft/solsol-brand-admin main) → `pnpm build` → Pages `solsol-brand-admin` 재배포(alias `https://1127c9a5.solsol-brand-admin.pages.dev`). NUXT_API_BASE 미설정 유지(목업 모드), NUXT_SESSION_SECRET 유지.
+- **스모크**: `/auth/login` 200 + '원클릭'·'슈퍼관리자로 로그인' 문자열 노출 / `POST /api/admin/auth/login`(superadmin@solsol.local) 200 + 세션쿠키(`sbrand_admin_sess` HttpOnly·Secure·SameSite=Lax)·`{"ok":true}` 확인. 프로덕션 **https://solsol-brand-admin.pages.dev**.
