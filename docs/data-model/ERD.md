@@ -1,9 +1,9 @@
 # 쏠쏠 크리에이터 LMS — ERD (Mermaid)
 
-> 갱신일: 2026-07-01 | 정본: `master.sql`(13테이블) + `tenant_template.sql`(92테이블)에서 파생.
+> 갱신일: 2026-07-01 | 정본: `master.sql`(16테이블) + `tenant_template.sql`(92테이블)에서 파생.
 > 표준 Mermaid `erDiagram`(속성 = `자료형 컬럼명 PK/FK "코멘트"`). 전 컬럼 표기.
 >
-> **개정이력**: 2026-07-01 — `TB_OAUTH_CONFIG` 추가(테넌트 인증·회원 3-1, 멀티테넌트 OAuth 자격증명). 테넌트 91→92.
+> **개정이력**: 2026-07-01 — 브랜드 `TB_CONTACT`·`TB_CONTACT_REPLY`·`TB_NEWS` 추가(마스터 2. 브랜드 문의/소식). 마스터 13→16. · `TB_OAUTH_CONFIG` 추가(테넌트 인증·회원 3-1, 멀티테넌트 OAuth 자격증명). 테넌트 91→92.
 
 ---
 
@@ -11,7 +11,7 @@
 
 | 스키마 | 기본 DB명 | 테이블 수 | 역할 |
 |---|---|---|---|
-| 마스터 | `solsol_master`(dev: `solsol`) | 13 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝 |
+| 마스터 | `solsol_master`(dev: `solsol`) | 16 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝·브랜드 문의/소식 |
 | 테넌트 | `solsol_t{ID}`(dev: `solsol_lms`) | 92 | 크리에이터 사이트 운영 전체 — 회원·상품·콘텐츠·학습·주문/정산·마케팅·커뮤니티·사이트 |
 
 **컨벤션**: `TB_` 단수 · `id BIGINT AI PK` · `status INT`(1정상/0중지/-1삭제) · 통화 `DECIMAL(18,6)` **`*_price`** · 일시 **`TIMESTAMP`(내부 UTC)**·날짜 `DATE` · **약한 FK**(논리 FK, 제약 없음) · utf8mb4.
@@ -227,6 +227,40 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
+    TB_CONTACT {
+        bigint id PK
+        bigint user_id FK "작성 계정(TB_USER). 비로그인 문의 시 NULL 가능"
+        varchar type "product(상품)/payment(결제)/partnership(제휴)/service(서비스)/etc(기타)"
+        varchar subtype "세부 유형(유형별 하위 분류)"
+        varchar title "문의 제목"
+        text content "문의 내용"
+        text files_json "첨부 파일 메타(JSON 배열: name/r2_key/size 등)"
+        varchar contact_state "open(접수)/answered(답변완료)/closed(종료)"
+        timestamp answered_at "최초 답변 완료 시각"
+        int status "1정상 0중지 -1삭제"
+        timestamp created_at
+        timestamp updated_at
+    }
+    TB_CONTACT_REPLY {
+        bigint id PK
+        bigint contact_id FK "대상 문의(TB_CONTACT)"
+        varchar writer_type "user(문의자)/admin(운영자)"
+        bigint writer_user_id FK "작성 계정(TB_USER). 비로그인/시스템 시 NULL 가능"
+        text content "답변 내용"
+        int status "1정상 0중지 -1삭제"
+        timestamp created_at
+        timestamp updated_at
+    }
+    TB_NEWS {
+        bigint id PK
+        varchar category "notice(공지)/update(업데이트)/maintenance(점검)"
+        varchar title "소식 제목"
+        text content "소식 본문"
+        timestamp published_at "공개(게시) 시각. NULL=미공개(초안)"
+        int status "1정상 0중지 -1삭제"
+        timestamp created_at
+        timestamp updated_at
+    }
 
     TB_USER ||--o{ TB_SITE : "owner_user_id"
     TB_PLAN ||--o{ TB_SITE : "plan_id"
@@ -249,6 +283,9 @@ erDiagram
     TB_PAYMENT ||--o{ TB_CREDIT : "payment_id"
     TB_PAYMENT ||--o{ TB_TOSS_WEBHOOK_EVENT : "payment_id"
     TB_SITE ||--o{ TB_SITE_PROVISION_LOG : "site_id"
+    TB_USER ||--o{ TB_CONTACT : "user_id"
+    TB_CONTACT ||--o{ TB_CONTACT_REPLY : "contact_id"
+    TB_USER ||--o{ TB_CONTACT_REPLY : "writer_user_id"
 ```
 
 ---

@@ -205,3 +205,28 @@
 ### §14 다음 단계
 - **DJ 선행 컨펌(K-1~K-4)** 결정 시 AD-4(마스킹)·AD-5/COM-3(브랜드색)·COM-1(반응형) 순차 반영(K-1 마스킹·K-4 브랜드색 우선 권고).
 - 라운드2 **P0 공통 인프라**(마스킹 유틸·비가역 컨펌 모달·RBAC 골격·공통 상태 컴포넌트) 착수 시 다수 blocker 동시 해소 → 보완 라운드 재검증(종료조건 blocker 0).
+
+---
+
+## 15. 브랜드 백엔드(solsol-brand-api) 신규 구축 + master 스키마 확장 + 프로덕션 배포
+
+- **범위/스택**: 빈 레포 `solsol-brand-api`를 신규 구축. Hono + Drizzle + Cloudflare Workers(아키텍처 원본 `malgn-noti-api`, 기반 `solsol-api`). 브랜드 백엔드는 **master 스키마 단독**(tenant 불필요) — 동일 Aurora·Hyperdrive(`a14c69…`) 재사용. 인증은 master `TB_USER`(seller) **이메일 + PW**(PBKDF2), 소셜/tenantResolver 없음(크리에이터 LMS `solsol-api`와 구분되는 지점).
+- **엔드포인트**: **12 도메인 라우트 / 43 엔드포인트**(`/api/*`) — auth · account · agreement · plans(공개) · sites(프로비저닝 게이트) · billing · subscriptions · invoices · payments · contact · news(공개) · webhooks(`/webhooks/toss` 공개·서명검증).
+- **작업 방식**: 팀장 경유 — 도아컨님(스캐폴드·master 맵·상태머신 분석)·최기획님(목업→43EP 인벤토리) → 한데관님(SoT/미러) + 조백개님(스캐폴드) → 5트랙 병렬 도메인 라우트 → 통합 → 3중 게이트.
+- **master 스키마 확장(비파괴)**: 브랜드 문의/소식용 **`TB_CONTACT`·`TB_CONTACT_REPLY`·`TB_NEWS` 3테이블 추가**(`solsol-api` `000_master.sql` 13→16) + **`docs/data-model/ERD.md` 동기화**(db-change-sync-sot 규정 준수).
+- **문서(Scalar UI `/doc`)**: OpenAPI 3.1(`src/openapi.ts` + `src/docs/endpoints.ts` 카탈로그 — 43 operations · 12 태그 · 인증/응답형식/에러/게이트 규약) + 루트 `/` → **302 `/doc`**(`solsol-api`·`malgn-noti-api`와 동일 방식).
+- **3중 게이트**: qa GO(계약 43기능 커버·typecheck 그린) / privacy GO(마스킹·시크릿 미노출·동의 스냅샷) / security **초기 NO-GO**(blocker: `/health/db`·`/health/db/grants` 무인증 DB 토폴로지 노출) → 보완(OPS_SECRET 게이트·CORS 화이트리스트·billing 상태검증·`getMasterSchema` 분열버그 수정) → **재검토 전원 GO**.
+- **staging 게이트**: 결제·구독·카드등록·프로비저닝·웹훅은 골격 + TODO(실 토스 호출·자동전이·실 테넌트 스키마 생성 0).
+- **핵심 발견(스키마명)**: live master 스키마명 = **`solsol`**(설계상 `solsol_master`가 아니라 `solsol-api`와 동일) → `MASTER_SCHEMA_NAME=solsol`(`wrangler.toml [vars]`) 필수. contact/news 3테이블은 게이트된 `POST /ops/migrate`(CREATE IF NOT EXISTS)로 live `solsol`에 적용.
+- **배포(Cloudflare Workers)**: **https://solsol-brand-api.malgnsoft.workers.dev**. 시크릿 4종(`JWT_SECRET`·`REFRESH_PEPPER`·`SECRET_ENC_KEY`·`OPS_SECRET`) 난수 주입(값 무노출). 버전 흐름 `755ca23e`(생성)→`0e26f335`(시크릿)→`023c584f`(`MASTER_SCHEMA_NAME=solsol` 정합)→**`973fee86`**(마이그레이션 라우트·최종). git origin `malgnsoft/solsol-brand-api`(`591bcd5`).
+- **스모크**: `/`→302→`/doc` · `/doc` 200(Scalar) · `/doc/openapi.json` 200(43ops) · `/api/plans` 200 · `/api/news` 200(마이그레이션 후) · `/api/account` 401 · `/health/db` 게이트 403. **12도메인 라이브 완성.**
+
+### §15 산출물
+- `solsol-brand-api`(origin=`malgnsoft/solsol-brand-api`, `591bcd5`): Hono + Drizzle + Workers 신규 앱 — 12 도메인 라우트/43 엔드포인트(`/api/*` + `/webhooks/toss`), master 스키마 단독, `src/openapi.ts` + `src/docs/endpoints.ts`(43ops·12태그) + Scalar `/doc` + 루트 302, `MASTER_SCHEMA_NAME=solsol`(`wrangler.toml [vars]`), 시크릿 4종 난수 주입.
+- master SoT: `solsol-api` `000_master.sql` **13→16**(`TB_CONTACT`·`TB_CONTACT_REPLY`·`TB_NEWS` 추가) + `docs/data-model/ERD.md` 동기화. live `solsol`에 3테이블 적용(게이트된 `POST /ops/migrate`).
+- 배포: Cloudflare Workers **버전 `973fee86`**(생성 `755ca23e`→시크릿 `0e26f335`→스키마정합 `023c584f`→마이그레이션 라우트 `973fee86`) → **https://solsol-brand-api.malgnsoft.workers.dev**. 3중 게이트 전원 GO(security 초기 NO-GO→보완).
+
+### §15 다음 단계
+- **프론트 연결·결제 실연동 시**: `ALLOWED_ORIGINS`·토스키 미주입 상태 → 주입.
+- **결제 실연동 라운드 GO 조건**: refresh 세션 원장(`TB_SESSION`) · 웹훅 토스 서명검증 완성.
+- **후속**: 사이트 사용량 소스 · 프로비저닝 방식 · 약관버전 CMS · 레이트리밋(WAF).
