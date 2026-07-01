@@ -88,3 +88,32 @@
 - **실 API 결선**: dba(TB_ 스키마 마이그레이션) + api-developer(도메인별 라우터) 병행 → composable mock→실 API 단일지점 전환. R6 댓글 3계층·동의이력 정합.
 - 폴리시 백로그(하): 알림 미읽음 카운트·쿠폰 0장 hide·고객센터 연락처·휴대폰 마스킹 정책(강테크 컨펌).
 - 실연동 후 `NUXT_PUBLIC_API_BASE`·세션 시크릿 주입 → 프로덕션 승격.
+
+---
+
+## 10. 데이터 모델 정밀화 — 테넌트 마무리 + 마스터 스키마 전면 개편 (문서/DB, 배포 없음)
+
+사용자와 대화형으로 스키마를 다듬은 세션. 매 변경마다 **정본 4종(`master.sql`·`tenant_template.sql`·`README`·`ERD.md`) + dev DB(Hyperdrive→Aurora `solsol`/`solsol_lms`) 동기화 후 커밋**. Figma는 사용자 요청 시 일괄.
+
+### 테넌트(LMS) 마무리
+- **디지털 다운로드 이력** `TB_DIGITAL_DOWNLOAD_LOG` 신설 → 이후 `course_user_id` 제거·`order_id`/`order_item_id`로 정정(디지털은 수강 무관).
+- **`TB_COURSE_USER`** malgn 레거시 26컬럼 제거(성적체계·반/담당강사·등급·학점·마감·정지 등) → 진도율·수료·수강기간·구매연결 18컬럼.
+- **수료조건을 `TB_COURSE` 컬럼으로 흡수**(min_progress_rate·watch_mode·certificate_template_id) + `TB_COMPLETION_RULE` 삭제. 라이브 수료증용 `TB_PRODUCT_LIVE.certificate_template_id` 추가.
+- **금액 컬럼 `_price` 통일**(정가 list_price·할인 discount_price·거래액 pay_price 등, tenant 35·master 5건).
+- **설문 보기**: JSON→정규화 후 다시 **인라인**(`TB_SURVEY_QUESTION.option1~10`, `TB_SURVEY_OPTION` 삭제, 답변 `option_no`).
+- **영상=위캔디오(Wecandeo)** VOD(`TB_CONTENT.source_type=wecandeo`·`wecandeo_video_key`), **자막은 위캔디오 보관** → `TB_SUBTITLE`/`TB_SUBTITLE_LINE` 삭제.
+- **일시 = `TIMESTAMP`(내부 UTC)** 전환(DATETIME→TIMESTAMP tenant 239·master 49). 사유: dev Aurora tz=Asia/Seoul + **Hyperdrive가 세션 SET time_zone 미유지** → DATETIME은 KST 저장. (테넌트 최종 91)
+
+### 마스터 스키마 전면 개편 (14→13)
+- **`TB_TENANT`→`TB_SITE`**(+`tenant_id`→`site_id`, `TB_TENANT_PROVISION_LOG`→`TB_SITE_PROVISION_LOG`).
+- **`TB_SELLER`+`TB_PLATFORM_ADMIN`→`TB_USER`**(user_type=seller/admin) + **`login_id`·비밀번호 인라인**(`TB_USER_CREDENTIAL` 흡수).
+- **크레딧 재설계(에이전트팀 DBA 위임)** → 최종 **단일 `TB_CREDIT`**(통장식 원장): 증가lot(`remaining_cr`·`expires_at`·`is_expiring`)+차감, 각 행 `balance_after_cr`, 유효기간 FIFO, 소진 lot은 `source_credit_id`(분할 차감). `TB_CREDIT_ACCOUNT`/`TB_CREDIT_CHARGE`/`TB_CREDIT_ALLOCATION` 모두 제거(잔액=원장 파생). **크레딧 컬럼 `_cr` 접미**(통화 `_price`와 구분, 둘 다 DECIMAL(18,6)).
+- **감사 기록 신설**: `TB_USER_AGREEMENT`(약관 동의 이력)·`TB_LOGIN_LOG`(로그인/로그아웃/실패).
+- **사이트 권한 `TB_SITE_USER`(N:M)** — 크리에이터=owner 자동배정(다중 사이트)·담당자=manager 배정, 권한체크=배정 존재로 통일. `owner_user_id`=생성자 앵커 유지.
+
+### 정본·규정·산출물
+- **`ERD.md` 현행화**: 세션 중 tenant_template·DB만 갱신하고 ERD.md를 누락했던 것을 사용자가 지적 → 정본 기준 재생성(옛 구조 0). 이후 매 변경 동기화.
+- **글로벌 규정 등재**: `~/.claude/knowledge/conventions.md`에 "**DB 변경=정본 문서까지 동기화가 1작업**" 추가(+메모리 `db-change-sync-sot`).
+- **Figma**: 마스터 보드(`UR6M…`) 재생성(13테이블), 테넌트 보드(`tds3…`) 최신 확인. URL 유지.
+- dev DB 최종: **master 13 · tenant 91**, 0오류. `solsol-api`(`schema.master`·`ops` 시드/verify) 동기. ⚠️ `wrangler.toml` APP_ENV=production이라 dev ops는 `--var APP_ENV:local` 오버라이드로 적용.
+- 커밋 다수(malgn main): `2ca8e11`…`761452b` 및 후속(데이터모델·이력).
