@@ -76,6 +76,7 @@ export const screenStatus = sqliteTable('screen_status', {
   design: integer('design', { mode: 'boolean' }).notNull().default(true),
   publish: integer('publish', { mode: 'boolean' }).notNull().default(false),
   review: integer('review', { mode: 'boolean' }).notNull().default(false), // 디자인 검수(퍼블리싱↔개발 사이)
+  spike: integer('spike', { mode: 'boolean' }).notNull().default(false), // 스파이크(1차 개발/PoC · 디자인 검수↔개발 사이)
   dev: integer('dev', { mode: 'boolean' }).notNull().default(false),
   test: integer('test', { mode: 'boolean' }).notNull().default(false),
   mockupUrl: text('mockup_url').notNull().default(''), // 퍼블리싱 시 목업 링크

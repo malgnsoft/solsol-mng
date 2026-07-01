@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
 
   const b = await readBody(event) ?? {}
   const patch: StatusPatch = {}
-  for (const k of ['design', 'publish', 'review', 'dev', 'test'] as const) {
+  for (const k of ['design', 'publish', 'review', 'spike', 'dev', 'test'] as const) {
     if (typeof b[k] === 'boolean') patch[k] = b[k]
   }
   for (const k of ['mockupUrl', 'devUrl'] as const) {

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     const s = it.id ? map.get(it.id) : undefined
     if (!s) return { ...it, commentCount: cc }
     // URL 은 D1 값 우선, 비어 있으면 정적 목록으로 폴백(정적 목업 링크 보존)
-    return { ...it, design: s.design, publish: s.publish, review: s.review, dev: s.dev, test: s.test, mockupUrl: s.mockupUrl || it.mockupUrl, devUrl: s.devUrl || it.devUrl, commentCount: cc }
+    return { ...it, design: s.design, publish: s.publish, review: s.review, spike: s.spike, dev: s.dev, test: s.test, mockupUrl: s.mockupUrl || it.mockupUrl, devUrl: s.devUrl || it.devUrl, commentCount: cc }
   }
   const areas: ScreenArea[] = screenAreas.map(a => ({
     ...a,

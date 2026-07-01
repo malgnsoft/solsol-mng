@@ -7,6 +7,7 @@ const STAGES = [
   { key: 'design', label: '디자인' },
   { key: 'publish', label: '퍼블리싱' },
   { key: 'review', label: '디자인 검수' },
+  { key: 'spike', label: '스파이크' },
   { key: 'dev', label: '개발' },
   { key: 'test', label: '테스트' },
 ] as const
@@ -115,7 +116,7 @@ function fmtTime(iso: string) { return (iso ?? '').slice(0, 16).replace('T', ' '
   <div class="page">
     <header class="head">
       <h1>화면</h1>
-      <p class="sub">영역별 화면 목록과 <b>디자인 · 퍼블리싱(목업) · 디자인 검수 · 개발 · 테스트</b> 진척. 상태를 클릭해 토글(D1 저장),
+      <p class="sub">영역별 화면 목록과 <b>디자인 · 퍼블리싱(목업) · 디자인 검수 · 스파이크 · 개발 · 테스트</b> 진척. 상태를 클릭해 토글(D1 저장),
         링크 칸의 ✎ 로 목업/개발 URL을 입력합니다. <b>💬</b> 로 화면별 코멘트를 남길 수 있습니다. 모달은 해당 화면 아래에 함께 표시됩니다.
         화면 정본은 <NuxtLink to="/validation" class="lnk">검증 화면목록</NuxtLink>(읽기 전용).</p>
     </header>
@@ -281,7 +282,10 @@ function fmtTime(iso: string) { return (iso ?? '').slice(0, 16).replace('T', ' '
 .tbl tr:last-child td { border-bottom: 0; }
 .c-id { width: 168px; } .c-id code { font-family: var(--font-mono); font-size: 11px; color: var(--ink-600); }
 .c-nm { color: var(--ink-900); font-weight: 500; }
-.c-st { width: 78px; text-align: center !important; white-space: nowrap; }
+/* 상태(체크박스) 열 — 너비 좁히고 간격 축소, 제목은 2줄 허용 */
+.c-st { width: 46px; text-align: center !important; }
+.tbl th.c-st, .tbl td.c-st { padding-left: 4px; padding-right: 4px; }
+.tbl th.c-st { line-height: 1.2; word-break: keep-all; white-space: normal; vertical-align: middle; }
 .c-lk { width: 150px; }
 .row-modal td { background: var(--ink-50); border-bottom-color: var(--white); }
 .row-modal .c-nm { font-weight: 400; color: var(--ink-600); }
