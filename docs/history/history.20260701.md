@@ -291,3 +291,19 @@
 - 조회형 나머지 9도메인 `/api/proxy/admin/*` 순차 전환 + 목록 필터/정렬/페이지 서버 위임.
 - 쓰기형(CRUD mutation): CSRF 방어 갖춘 전용 BFF 핸들러 후 배선.
 - 백엔드 잔여(라운드1): 경로 `/api/auth/login` 정렬·F-2 계정열거·F-3 레이트리밋·F-5 공개경로·`/health/db` verdict·`SEED_ADMIN_PASSWORD` Pages secret화·로테이션.
+
+## 19. 브랜드 사용자단(solsol-brand) mock 세션 영속화 + 실 API 연동 1단계(공개 읽기+폴백) + 배포
+
+- **배경/결정(오너 지시)**: §13 브랜드 사용자단 배포 후 오너 지시로 ① 브라우저 심화검증 → a11y 1px-safe 보완(별도 반영) ② mock 세션 영속화 ③ **실 API 연동 페이즈 착수**. 실 연동은 오너 선택 "**연동 기반 + 읽기(폴백) 지금**"으로 범위 확정.
+- **mock 세션 영속화**: `useAuth`를 `useState`(인메모리) → **`useCookie('brand_mock_session')`(SSR-safe) 기반**으로 전환. 새로고침·직접 URL 진입 시 로그인 유지(보호 페이지 미튕김), 미인증 게이트는 그대로. 런타임 실측: 하드 새로고침 후 `/billing` 200 유지 / 쿠키 없는 세션 `/account`→`/login` 리다이렉트(게이트 정상). 계약·시각 무변경.
+- **실 API 연동 사전조사(실측)**: 브랜드 백엔드 **배포 확인** `https://solsol-brand-api.malgnsoft.workers.dev`(health/doc 200, §17 실배포). OpenAPI 3.1 계약 = **35 paths**, 사용자단 엔드포인트가 프론트 9 composable과 **1:1 매핑**(auth/account/agreements/plans/sites/billing/subscriptions/invoices/payments/contact/news). 엔벨로프 `{ok,data,meta}`/`{ok:false,error{code,message}}`, **X-Tenant 불필요**(master 단독). **현 DB 비어있음**(`/api/news`·`/api/plans`→빈), 계정 시드 미실행 → 인증·데이터 미충족.
+- **구현(프론트 4파일, 무쓰기)**: `nuxt.config` `runtimeConfig.public.apiBase`(기본 workers.dev·`NUXT_PUBLIC_API_BASE`) + `app/composables/useApi.ts`(신규 `$fetch` 래퍼: 엔벨로프·Bearer·8s·실패 throw) + `useNews`/`usePlans`를 **실API 우선 + 빈/실패 시 mock 폴백**으로 전환(계약·페이지 무수정; `computed` 동기호출 제약은 `useAsyncData`→`useState` 백그라운드 로드로 해결; 스키마 미확정 대비 camel/snake 방어 매핑). **인증·쓰기는 mock 유지**(범위 밖·401 폴백). DB 시드되면 프론트 수정 없이 실데이터 자동 노출.
+- **검증**: `pnpm build` PASS·eslint 0·1px 무영향. 라이브 API GET 실연동(현 빈 응답→조용히 mock 폴백)·런타임 `/news`·`/pricing` mock 정상·SSR 에러 0.
+- **배포**: 커밋 `291f007`(origin=malgnsoft/solsol-brand main) → Pages `solsol-brand` 재배포. 프로덕션 **https://solsol-brand.pages.dev** 스모크: `/`·`/pricing`·`/news`·`/login` 200·`/billing` 302(보호)·mock 폴백 콘텐츠 정상.
+
+### §19 산출물
+- solsol-brand(origin=malgnsoft): `app/composables/useAuth.ts`(쿠키 세션)·`useApi.ts`(신규)·`useNews.ts`·`usePlans.ts`·`nuxt.config.ts`. 커밋 `291f007` → Pages `solsol-brand` **https://solsol-brand.pages.dev**. (a11y 1px-safe 스윕 ~147속성은 §13 커밋 `ff377b4`에 포함.)
+
+### §19 다음 단계
+- **인증·쓰기 실연동**(login/signup/account/sites/subscriptions/payments) — 전제: 브랜드 API **DB 시드 + 계정 시드 실행 + 계약 프리즈**(백엔드 세션 소관), 보안 게이트(서버 인증/세션·IDOR·인증코드 서버검증·레이트리밋·PAN 마스킹·정보통신망법) 확인.
+- **백엔드 조율**: news/plans 등 실데이터 시드 시 프론트 자동 노출. 실 스키마 필드명 확정 시 `mapNews`/`mapPlan`만 조정.
