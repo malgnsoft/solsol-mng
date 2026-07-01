@@ -271,3 +271,23 @@
 - **② brand-admin 실전환**(시드 성공 후에만): `wrangler pages secret put NUXT_API_BASE`=brand-api Workers URL → 재빌드·재배포 → pages.dev 실 로그인 스모크.
 - **③ TOSS 실키**: 결제 활성화 시 `TOSS_SECRET_KEY`/`TOSS_WEBHOOK_SECRET` 주입.
 - **④ CF WAF**: 운영자 로그인 엔드포인트 레이트리밋(security 게이트).
+
+## 18. 크리에이터 관리자단(solsol-admin) 실 백엔드(solsol-api) 연동 + 프로덕션 배포
+
+- **한 줄**: 목데이터로 완성됐던 관리자단(AD01 107화면)을 **실 `solsol-api`에 연결** — BFF(Nitro server/)·httpOnly 세션·실 로그인·실 데이터(대시보드·사용자). 백엔드 블로커 3종 해소·재배포, 프론트 실연동·게이트·배포까지 GREEN. **총괄 검토 → BFF 골격 → 백엔드 블로커 해소 → 프론트 실연동**의 다단계.
+- **총괄 검토(2렌즈)**: solsol-api가 그새 전 도메인 구축·배포됨 확인(사용자단 15+관리자단 12 라우터·3중게이트) → 검토 결과 관리자 실연동 blocker 3(로그인 role버그·관리자 시드 부재·CORS 반사 F-1) 도출·기록(`docs/dev-validation/solsol-api-review-round1.md`).
+- **BFF 골격(Phase B1)**: solsol-admin에 Nitro `server/`(apiClient·auth/{login,logout,session}·proxy). security 초기 NO-GO(프록시 SSRF: 화이트리스트·`..`·메서드 부재)→보완(화이트리스트 `admin/*`·`new URL` 검증·GET/HEAD·Origin 검증)→직접 프로브로 해소 확인.
+- **백엔드 블로커 해소(solsol-api 수정·재배포)**: 로그인 role 파생(`userHasRole`/TB_ROLE)·CORS allowlist·`/ops/seed-admin`(INSERT·멱등)로 `solsol_lms`에 staff `admin@solsol.dev`(userId 2002·owner·11메뉴 권한 all) 시드·`GET /api/admin/me` 신설. 재배포 Version `50ca3ad1`→`3016f42d`. 라이브 검증: 로그인 200·role=owner·`/api/admin/me` 200(권한11)·무토큰 401·CORS 허용/차단. INSERT만·무삭제.
+- **프론트 실연동(Phase B2)**: 실 세션 부트스트랩(setSession·서버응답만 신뢰·setMockOwner 제거)·대시보드/사용자 3종 `/api/proxy/admin/*` 실 request(useMembersApi 어댑터)·나머지 도메인 목 폴백(회귀 0). qa blocker 0(중: 새로고침 세션 지속 해소).
+- **보안 critical 해소**: 시드가 실 계정이 되며 `devLoginCode`(=실 비번 `Solsol!2026`)가 public 번들 노출될 뻔 → **데모 원클릭을 서버측 실 로그인(`/api/auth/demo-login`)으로 전환**(서버 보관 자격증명·클라 미노출), public 실비번 제거. 클라 번들 실비번 **0건**(빌드·라이브 3중 확인, 서버 청크만).
+- **배포**(사용자 "공개 원클릭 데모 유지" 승인): solsol-admin `ce11a5d`(origin) → Pages 재배포 → **https://solsol-admin.pages.dev**. 라이브 스모크: demo-login 200(owner 세션)·session 200(권한11)·`/api/proxy/admin/admins` **200 실봉투**(시드 계정 2건·비번/해시 없음 = 프로덕션 Pages Function이 solsol-api 실도달)·무쿠키 401·클라 실비번 0. 데모 계정 `admin@solsol.dev`/`Solsol!2026`(dev·`NUXT_PREVIEW_DEMO=false`로 원클릭 404화 가능).
+
+### §18 산출물
+- solsol-admin: BFF `server/*`(apiClient·auth 4·proxy)·`useMembersApi`·실세션(auth store·login.vue·middleware)·대시보드/사용자 실 request. 커밋 `malgnsoft/solsol-admin` `ce11a5d` → **https://solsol-admin.pages.dev**(실연동).
+- solsol-api(무버전 레포, 다른 워크스트림): 로그인 role 파생·CORS allowlist·`/ops/seed-admin`·`GET /api/admin/me`. 재배포 `3016f42d`. 관리자 시드 1계정(Aurora `solsol_lms`).
+- 검증 기록: `docs/dev-validation/{solsol-api-review-round1,AD01-app-phaseB1-bff-integration,AD01-app-phaseB2-real-integration}.md`.
+
+### §18 다음 단계
+- 조회형 나머지 9도메인 `/api/proxy/admin/*` 순차 전환 + 목록 필터/정렬/페이지 서버 위임.
+- 쓰기형(CRUD mutation): CSRF 방어 갖춘 전용 BFF 핸들러 후 배선.
+- 백엔드 잔여(라운드1): 경로 `/api/auth/login` 정렬·F-2 계정열거·F-3 레이트리밋·F-5 공개경로·`/health/db` verdict·`SEED_ADMIN_PASSWORD` Pages secret화·로테이션.
