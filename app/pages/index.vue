@@ -154,7 +154,7 @@ const directions = [
 ]
 
 // 현황 요약은 WBS(간트)와 동일 소스 — wbsStageMeta(단계 진척) + /api/wbs(항목 수).
-const STEP_EMOJI: Record<number, string> = { 1: '🎯', 2: '📋', 3: '🎨', 4: '🧩', 5: '📐', 6: '🛠️', 7: '📦' }
+const STEP_EMOJI: Record<number, string> = { 1: '🎯', 2: '📋', 3: '🎨', 4: '🧩', 5: '⚡', 6: '📐', 7: '🛠️', 8: '📦' }
 const { data: wbsRes, pending: wbsPending, error: wbsError } = await useFetch<{ data: { step: number, progress: number }[] }>('/api/wbs', { key: 'wbs-overview' })
 const wbsItems = computed(() => wbsRes.value?.data ?? [])
 
@@ -190,7 +190,7 @@ const weightedAverage = computed(() => {
   let tw = 0, ws = 0
   for (const k in stepProgress.value) {
     const n = Number(k)
-    if (n === 7) continue // 전체 진척에서 Step 7(운영·계약) 제외
+    if (n === 8) continue // 전체 진척에서 Step 8(운영·계약) 제외
     const w = wbsStageMeta[n]?.weight ?? 1
     tw += w; ws += w * stepProgress.value[n]!
   }

@@ -106,7 +106,7 @@ const kpi = computed(() => {
   let tw = 0, ws = 0
   for (const k in stepProgressMap.value) {
     const n = Number(k)
-    if (n === 7) continue // 전체 진척에서 Step 7(운영·계약) 제외
+    if (n === 8) continue // 전체 진척에서 Step 8(운영·계약) 제외
     const w = wbsStageMeta[n]?.weight ?? 1
     tw += w; ws += w * stepProgressMap.value[n]!
   }
@@ -219,7 +219,7 @@ const memoPos = computed(() => {
 })
 
 /* ── 등록/수정/삭제 ── */
-const STEP_OPTIONS = [1, 2, 3, 4, 5, 6, 7]
+const STEP_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8]
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const saving = ref(false)
@@ -310,7 +310,7 @@ function scrollToToday() {
   el.scrollTo({ left: Math.max(0, target), behavior: 'smooth' })
 }
 
-const subtitle = 'WBS 간트 · 전체 일정 · 7단계 · 기준일'
+const subtitle = 'WBS 간트 · 전체 일정 · 8단계 · 기준일'
 </script>
 
 <template>
