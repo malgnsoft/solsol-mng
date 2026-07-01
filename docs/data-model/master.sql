@@ -146,7 +146,7 @@ CREATE TABLE TB_PAYMENT (
   site_id        BIGINT        NOT NULL,
   ref_type         VARCHAR(20)   NOT NULL DEFAULT 'saas' COMMENT 'saas(구독)/credit(크레딧충전)',
   invoice_id       BIGINT            NULL,
-  credit_ledger_id BIGINT            NULL              COMMENT '크레딧 충전 원장행(TB_CREDIT_LEDGER entry_type=charge)',
+  credit_id BIGINT            NULL              COMMENT '크레딧 충전 원장행(TB_CREDIT entry_type=charge)',
   toss_payment_key VARCHAR(255)      NULL,
   toss_order_id    VARCHAR(64)       NULL,
   approve_no       VARCHAR(64)       NULL,
@@ -163,56 +163,56 @@ CREATE TABLE TB_PAYMENT (
   PRIMARY KEY (id),
   UNIQUE KEY uk_payment_toss_key (toss_payment_key),
   KEY idx_payment_site (site_id),
-  KEY idx_payment_credit_ledger (credit_ledger_id)
+  KEY idx_payment_credit (credit_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='SaaS/크레딧 결제(토스)';
 
--- 크레딧 잔액 = TB_CREDIT_LEDGER에서 파생(별도 캐시 테이블 없음)
---   전체잔액   = 최신 행 balance_after (idx_ledger_site_created 로 O(1))
---   expiring/permanent = SUM(remaining) WHERE lot_state='open' GROUP BY is_expiring
+-- 크레딧 잔액 = TB_CREDIT에서 파생(별도 캐시 테이블 없음)
+--   전체잔액   = 최신 행 balance_after_cr (idx_credit_site_created 로 O(1))
+--   expiring/permanent = SUM(remaining_cr) WHERE lot_state='open' GROUP BY is_expiring
 --   next_expire = MIN(expires_at) WHERE lot_state='open' AND is_expiring=1
 --   (읽기 성능이 문제되면 그때 캐시 재도입 — 지금은 원장 단일 정본 유지)
 
 -- 크레딧 통장식 단일 원장(단일 테이블) — 증가(lot)·차감을 시간순 적재
---   증가행(charge/bonus/refund_restore): lot 역할. remaining(사용 후 남은 크레딧)/expires_at/is_expiring 보유
---   차감행(usage/expire/adjust): FIFO(임박 만료 우선)로 증가행 remaining 차감 + source_ledger_id 로 소진 lot 기록
+--   증가행(charge/bonus/refund_restore): lot 역할. remaining_cr(사용 후 남은 크레딧)/expires_at/is_expiring 보유
+--   차감행(usage/expire/adjust): FIFO(임박 만료 우선)로 증가행 remaining_cr 차감 + source_credit_id 로 소진 lot 기록
 --     (한 사용이 여러 lot에 걸치면 lot별로 차감행 분할 → 각 행이 자기 lot 참조 = 단일 테이블로 감사추적)
-CREATE TABLE TB_CREDIT_LEDGER (
+CREATE TABLE TB_CREDIT (
   id                 BIGINT        NOT NULL AUTO_INCREMENT,
   site_id            BIGINT        NOT NULL,
   entry_type         VARCHAR(16)   NOT NULL             COMMENT 'charge/bonus/refund_restore(증가) · usage/expire/adjust(차감)',
   direction          VARCHAR(6)    NOT NULL             COMMENT 'credit(증가)/debit(감소) — entry_type 파생',
   reason             VARCHAR(30)       NULL             COMMENT 'campaign_send/ai_tutor/ai_translate/ai_caption/promotion/manual',
-  amount             DECIMAL(18,6) NOT NULL             COMMENT '변동량(절대값, 양수). 방향은 direction',
-  balance_after      DECIMAL(18,6) NOT NULL             COMMENT '이 거래 직후 전체 잔액(통장 잔고)',
+  amount_cr             DECIMAL(18,6) NOT NULL             COMMENT '변동량(절대값, 양수). 방향은 direction',
+  balance_after_cr      DECIMAL(18,6) NOT NULL             COMMENT '이 거래 직후 전체 잔액(통장 잔고)',
   is_expiring        TINYINT       NOT NULL DEFAULT 1   COMMENT '증가행: 1=유효기간 있음/0=무기한',
   expires_at         TIMESTAMP         NULL             COMMENT 'lot 만료 시각(UTC). NULL=무기한. 증가행 전용',
-  remaining          DECIMAL(18,6)     NULL             COMMENT 'lot 잔여량(증가행 전용). 소진될수록 감소',
+  remaining_cr          DECIMAL(18,6)     NULL             COMMENT 'lot 잔여량(증가행 전용). 소진될수록 감소',
   lot_state          VARCHAR(12)       NULL             COMMENT 'lot 상태(증가행): open/exhausted/expired/canceled',
   payment_id         BIGINT            NULL             COMMENT '유상 충전행 ↔ TB_PAYMENT(논리 FK)',
   pay_price          DECIMAL(18,6)     NULL             COMMENT '결제 금액(VAT 별도) — charge 증가행',
   product_label      VARCHAR(50)       NULL             COMMENT '충전 상품 라벨',
   unit_count         DECIMAL(18,6)     NULL             COMMENT '사용량(발송건수/토큰) — usage행',
   unit_price         DECIMAL(18,6)     NULL             COMMENT '단가(config, M-3 Open) — usage행',
-  source_ledger_id   BIGINT            NULL             COMMENT '차감/만료행이 소진한 증가lot 원장행(charge/bonus). 여러 lot 걸치면 lot별 차감행 분할',
-  reverses_ledger_id BIGINT            NULL             COMMENT '환불/취소가 되돌리는 원본 원장 행',
+  source_credit_id   BIGINT            NULL             COMMENT '차감/만료행이 소진한 증가lot 원장행(charge/bonus). 여러 lot 걸치면 lot별 차감행 분할',
+  reverses_credit_id BIGINT            NULL             COMMENT '환불/취소가 되돌리는 원본 원장 행',
   ref_type           VARCHAR(20)       NULL             COMMENT 'campaign/ai_job (테넌트 스키마 리소스)',
   ref_id             BIGINT            NULL,
-  idempotency_key    VARCHAR(100)  NOT NULL             COMMENT '증가/차감 중복 방지(uk). lot 분할 차감은 source_ledger_id로 구분',
-  ledger_state       VARCHAR(12)   NOT NULL DEFAULT 'settled' COMMENT 'pending/settled/refunded/void',
+  idempotency_key    VARCHAR(100)  NOT NULL             COMMENT '증가/차감 중복 방지(uk). lot 분할 차감은 source_credit_id로 구분',
+  credit_state       VARCHAR(12)   NOT NULL DEFAULT 'settled' COMMENT 'pending/settled/refunded/void',
   memo               VARCHAR(255)      NULL,
   status             INT           NOT NULL DEFAULT 1   COMMENT '1정상 0중지 -1삭제',
   created_at         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_ledger_idem (site_id, idempotency_key, source_ledger_id),
-  KEY idx_ledger_site_created (site_id, id),
-  KEY idx_ledger_lot_fifo (site_id, is_expiring, expires_at, id),
-  KEY idx_ledger_open_lot (site_id, lot_state, expires_at),
-  KEY idx_ledger_payment (payment_id),
-  KEY idx_ledger_source (source_ledger_id),
-  KEY idx_ledger_ref (ref_type, ref_id),
-  KEY idx_ledger_reverses (reverses_ledger_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 통장식 단일 원장(증가lot/차감·source_ledger_id·remaining·멱등)';
+  UNIQUE KEY uk_credit_idem (site_id, idempotency_key, source_credit_id),
+  KEY idx_credit_site_created (site_id, id),
+  KEY idx_credit_lot_fifo (site_id, is_expiring, expires_at, id),
+  KEY idx_credit_open_lot (site_id, lot_state, expires_at),
+  KEY idx_credit_payment (payment_id),
+  KEY idx_credit_source (source_credit_id),
+  KEY idx_credit_ref (ref_type, ref_id),
+  KEY idx_credit_reverses (reverses_credit_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 통장식 단일 원장(증가lot/차감·source_credit_id·remaining_cr·멱등)';
 
 -- 토스 웹훅 수신 로그(멱등) — SaaS/크레딧 결제
 CREATE TABLE TB_TOSS_WEBHOOK_EVENT (

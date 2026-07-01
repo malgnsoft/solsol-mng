@@ -123,7 +123,7 @@ erDiagram
         bigint site_id FK
         varchar ref_type "saas(구독)/credit(크레딧충전)"
         bigint invoice_id FK
-        bigint credit_ledger_id FK "크레딧 충전 원장행(TB_CREDIT_LEDGER entry_type=charge)"
+        bigint credit_id FK "크레딧 충전 원장행(TB_CREDIT entry_type=charge)"
         varchar toss_payment_key
         varchar toss_order_id
         varchar approve_no
@@ -138,29 +138,29 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
-    TB_CREDIT_LEDGER {
+    TB_CREDIT {
         bigint id PK
         bigint site_id FK
         varchar entry_type "charge/bonus/refund_restore(증가) · usage/expire/adjust(차감)"
         varchar direction "credit(증가)/debit(감소) — entry_type 파생"
         varchar reason "campaign_send/ai_tutor/ai_translate/ai_caption/promotion/manual"
-        decimal amount "변동량(절대값, 양수). 방향은 direction"
-        decimal balance_after "이 거래 직후 전체 잔액(통장 잔고)"
+        decimal amount_cr "변동량(절대값, 양수). 방향은 direction"
+        decimal balance_after_cr "이 거래 직후 전체 잔액(통장 잔고)"
         tinyint is_expiring "증가행: 1=유효기간 있음/0=무기한"
         timestamp expires_at "lot 만료 시각(UTC). NULL=무기한. 증가행 전용"
-        decimal remaining "lot 잔여량(증가행 전용). 소진될수록 감소"
+        decimal remaining_cr "lot 잔여량(증가행 전용). 소진될수록 감소"
         varchar lot_state "lot 상태(증가행): open/exhausted/expired/canceled"
         bigint payment_id FK "유상 충전행 ↔ TB_PAYMENT(논리 FK)"
         decimal pay_price "결제 금액(VAT 별도) — charge 증가행"
         varchar product_label "충전 상품 라벨"
         decimal unit_count "사용량(발송건수/토큰) — usage행"
         decimal unit_price "단가(config, M-3 Open) — usage행"
-        bigint source_ledger_id FK "차감/만료행이 소진한 증가lot 원장행(charge/bonus). 여러 lot 걸치면 lot별 차감행 분할"
-        bigint reverses_ledger_id FK "환불/취소가 되돌리는 원본 원장 행"
+        bigint source_credit_id FK "차감/만료행이 소진한 증가lot 원장행(charge/bonus). 여러 lot 걸치면 lot별 차감행 분할"
+        bigint reverses_credit_id FK "환불/취소가 되돌리는 원본 원장 행"
         varchar ref_type "campaign/ai_job (테넌트 스키마 리소스)"
         bigint ref_id
-        varchar idempotency_key "증가/차감 중복 방지(uk). lot 분할 차감은 source_ledger_id로 구분"
-        varchar ledger_state "pending/settled/refunded/void"
+        varchar idempotency_key "증가/차감 중복 방지(uk). lot 분할 차감은 source_credit_id로 구분"
+        varchar credit_state "pending/settled/refunded/void"
         varchar memo
         int status "1정상 0중지 -1삭제"
         timestamp created_at
@@ -205,9 +205,9 @@ erDiagram
     TB_PAYMENT ||--o{ TB_INVOICE : "paid_payment_id"
     TB_SITE ||--o{ TB_PAYMENT : "site_id"
     TB_INVOICE ||--o{ TB_PAYMENT : "invoice_id"
-    TB_CREDIT_LEDGER ||--o{ TB_PAYMENT : "credit_ledger_id"
-    TB_SITE ||--o{ TB_CREDIT_LEDGER : "site_id"
-    TB_PAYMENT ||--o{ TB_CREDIT_LEDGER : "payment_id"
+    TB_CREDIT ||--o{ TB_PAYMENT : "credit_id"
+    TB_SITE ||--o{ TB_CREDIT : "site_id"
+    TB_PAYMENT ||--o{ TB_CREDIT : "payment_id"
     TB_PAYMENT ||--o{ TB_TOSS_WEBHOOK_EVENT : "payment_id"
     TB_SITE ||--o{ TB_SITE_PROVISION_LOG : "site_id"
 ```
@@ -713,7 +713,7 @@ erDiagram
         varchar kind "ai_tutor/ai_caption/ai_translate"
         varchar target_lang
         varchar job_status "pending/processing/done/failed"
-        bigint credit_ledger_id FK "크레딧 차감 원장 연결"
+        bigint credit_id FK "크레딧 차감 원장행(master.TB_CREDIT) 논리참조"
         int status "1정상 0중지 -1삭제"
         timestamp created_at
         timestamp updated_at
@@ -758,7 +758,7 @@ erDiagram
         bigint id PK
         varchar sub_state "active/grace/expired/canceled"
     }
-    TB_CREDIT_LEDGER {
+    TB_CREDIT {
         bigint id PK
     }
 
@@ -819,7 +819,7 @@ erDiagram
     TB_PRODUCT ||--o{ TB_REVIEW : "product_id"
     TB_COURSE_USER ||--o{ TB_REVIEW : "course_user_id"
     TB_CONTENT ||--o{ TB_AI_JOB : "content_id"
-    TB_CREDIT_LEDGER ||--o{ TB_AI_JOB : "credit_ledger_id"
+    TB_CREDIT ||--o{ TB_AI_JOB : "credit_id"
     TB_PRODUCT ||--o{ TB_COURSE_RESOURCE : "product_id"
 ```
 
@@ -1723,7 +1723,7 @@ erDiagram
 ## 4. 크로스 스키마 참조 (테넌트 → 마스터)
 
 schema-per-tenant라 물리 FK 없음. 테넌트가 마스터를 **논리 참조**:
-- `tenant.TB_AI_JOB.credit_ledger_id` → `master.TB_CREDIT_LEDGER` (AI 작업 크레딧 차감 원장)
+- `tenant.TB_AI_JOB.credit_id` → `master.TB_CREDIT` (AI 작업 크레딧 차감 원장)
 - `tenant.TB_CAMPAIGN.est_credit_cost` — 크레딧 소모 예상(원장은 마스터에서 종량 차감)
 
 ## 5. 폴리모픽 컬럼 (엣지 미표현)
@@ -1731,4 +1731,4 @@ schema-per-tenant라 물리 FK 없음. 테넌트가 마스터를 **논리 참조
 - `TB_NOTIFICATION.ref_id`(+ref_type): post/order/refund/content/campaign/settlement
 - `TB_SEO_OVERRIDE.target_id`(+target_type): page/product
 - `TB_FILE.module_id`(+module): post/comment/community_post
-- `TB_COMMENT.module_id`(+module) · `master.TB_CREDIT_LEDGER.ref_id`(+ref_type): campaign/ai_job
+- `TB_COMMENT.module_id`(+module) · `master.TB_CREDIT.ref_id`(+ref_type): campaign/ai_job

@@ -53,7 +53,7 @@ CREATE DATABASE solsol_t000123        DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 | 테이블명 | `TB_` 접두 + **영어 단수**(UPPER_SNAKE) |
 | PK | `id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY` (전 테이블) |
 | 상태 | `status INT NOT NULL DEFAULT 1` — **1=정상 / 0=중지 / -1=삭제** (전 테이블, 소프트삭제) |
-| 금액·크레딧·통화·수수료율 | `DECIMAL(18,6)` |
+| 금액·크레딧·통화·수수료율 | `DECIMAL(18,6)` (통화=`*_price`, **크레딧=`*_cr`**) |
 | 일시 | `TIMESTAMP`(내부 **UTC** 저장 — 세션/서버 tz 무관), 표시 시 로컬(KST 등) 변환. `created_at`/`updated_at`은 `CURRENT_TIMESTAMP`/`ON UPDATE` 기본시. 날짜 단위는 `DATE`. ※ DATETIME 대신 TIMESTAMP 채택 이유: dev Aurora 서버 tz=Asia/Seoul + **Hyperdrive가 세션 `SET time_zone` 미유지**라 DATETIME은 KST로 저장됨 → TIMESTAMP로 UTC 보장(OQ-TZ) |
 | 외래키 | **약한 FK** = 논리적 FK(네이밍 + 조인 인덱스)만, DB `FOREIGN KEY` 제약·CASCADE 미설정 |
 | FK 네이밍 | 참조테이블단수`_id`. `TB_USER`→`user_id`, `TB_SITE`→`site_id`. 동일 테이블 다중 참조 → 역할명`_user_id`(예: `instructor_user_id`) |
@@ -70,7 +70,7 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
    소셜 로그인은 `TB_USER`에 5종 SNS 컬럼 비정규화(`*_uid` 각 UNIQUE·`primary_provider`), ID/PW만 `TB_USER_CREDENTIAL` 분리. 권한(`TB_ROLE`/`TB_USER_ROLE`/`TB_ADMIN_PERMISSION` M-2).
 2. **셀러·플랫폼 운영자 통합 계정은 마스터** — `master.TB_USER`(`user_type`=seller/admin)로 통합, **ID/PW 인라인**(login_id·email·password_hash). (구 `TB_SELLER`+`TB_PLATFORM_ADMIN`+`TB_SELLER_CREDENTIAL` 병합)
 3. **구독 분리** — 셀러 SaaS 구독은 `master.TB_SUBSCRIPTION`(plan 기반), 학습자 멤버십/커뮤니티 구독은 `tenant.TB_SUBSCRIPTION`.
-4. **크레딧은 마스터(은행통장식 단일 원장)** — 플랫폼이 크리에이터에게 판매. **`TB_CREDIT_LEDGER`** 하나에 증가(charge/bonus/refund_restore=lot, `remaining`·`expires_at`·`is_expiring` 보유)와 차감(usage/expire/adjust)을 시간순 적재(각 행 `balance_after`). 유효기간 있는(만료)·없는(무기한) lot을 FIFO(임박 만료 우선)로 소진, 부분소진은 증가행 `remaining`을 FIFO로 차감하고 차감행 **`source_ledger_id`** 로 소진 lot 기록(여러 lot 걸치면 lot별 차감행 분할 — 단일 테이블 감사추적). **잔액은 원장에서 파생**(전체=최신 balance_after, expiring/permanent=열린 lot SUM(remaining), 별도 캐시 테이블 없음). 종량·멱등(M-3, uk `site_id`+`idempotency_key`). 테넌트 캠페인/AI는 `credit_ledger_id`로 사용 차감행을 논리 참조. (구 `TB_CREDIT_CHARGE` 흡수, `TB_PAYMENT.credit_charge_id`→`credit_ledger_id`)
+4. **크레딧은 마스터(은행통장식 단일 원장)** — 플랫폼이 크리에이터에게 판매. **`TB_CREDIT`** 하나에 증가(charge/bonus/refund_restore=lot, `remaining`·`expires_at`·`is_expiring` 보유)와 차감(usage/expire/adjust)을 시간순 적재(각 행 `balance_after`). 유효기간 있는(만료)·없는(무기한) lot을 FIFO(임박 만료 우선)로 소진, 부분소진은 증가행 `remaining`을 FIFO로 차감하고 차감행 **`source_ledger_id`** 로 소진 lot 기록(여러 lot 걸치면 lot별 차감행 분할 — 단일 테이블 감사추적). **잔액은 원장에서 파생**(전체=최신 balance_after, expiring/permanent=열린 lot SUM(remaining), 별도 캐시 테이블 없음). 종량·멱등(M-3, uk `site_id`+`idempotency_key`). 테넌트 캠페인/AI는 `credit_id`로 사용 차감행을 논리 참조. (구 `TB_CREDIT_CHARGE` 흡수, `TB_PAYMENT.credit_charge_id`→`credit_ledger_id`)
 5. **상품 7종 통합(CTI)** — `TB_PRODUCT`(`type`: `course`/`live`/`video_call`/`digital`/`package`/`membership`/`community`) + 유형별 확장. 알림 단일 라우팅(R-1), 쿠폰 정액 only(C-4), 결제 비가역(M-8).
    - **강좌(course)** = `TB_PRODUCT`(공통) + `TB_COURSE`(확장·커리큘럼 루트, 1:1 `uk_course_product`) → `TB_SECTION`(`course_id`) → `TB_LESSON`(차시). 진도는 `TB_LESSON_PROGRESS`(`course_user_id`+`lesson_id` 유니크).
    - **라이브(live)** = `TB_PRODUCT_LIVE`(**YouTube Live 전용**: `youtube_url`/`youtube_video_id`/`recorded_content_id`, 입장 즉시 자동수료). **화상(video_call)** = `TB_PRODUCT_VIDEO_CALL`(zoom/google_meet, `meeting_url`/`capacity`)로 분리.

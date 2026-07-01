@@ -186,6 +186,13 @@
 - 멱등 uk를 `(site_id, idempotency_key, source_ledger_id)`로 확장(분할 차감 허용). `idx_ledger_source` 추가. 마스터 10 유지.
 - dev DB 클린 리빌드(10/91, 0오류). ⚠️ `solsol-api` `wrangler.toml` APP_ENV=production으로 ops가 403 → dev 세션은 `--var APP_ENV:local` 오버라이드로 적용(운영 안전가드 정상 동작 확인).
 
+## 25. TB_CREDIT_LEDGER→TB_CREDIT 개명 + 크레딧 컬럼 _cr 접미
+
+- 테이블 **`TB_CREDIT_LEDGER`→`TB_CREDIT`**. 크레딧 값 컬럼 **`_cr` 접미**(자료형은 통화와 동일 `DECIMAL(18,6)`): `amount`→`amount_cr`·`balance_after`→`balance_after_cr`·`remaining`→`remaining_cr`.
+- 참조/자기참조/키명 정합: `credit_ledger_id`→`credit_id`(master `TB_PAYMENT` + tenant `TB_AI_JOB`), `source_ledger_id`→`source_credit_id`, `reverses_ledger_id`→`reverses_credit_id`, `ledger_state`→`credit_state`, `uk_ledger_idem`/`idx_ledger_*`→`uk_credit_idem`/`idx_credit_*`.
+- 컨벤션 추가: **통화=`*_price` / 크레딧=`*_cr`**(둘 다 DECIMAL(18,6)). 마스터 10 유지.
+- dev DB 클린 리빌드(10/91, 0오류, `--var APP_ENV:local`). README·ERD.md 갱신.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).

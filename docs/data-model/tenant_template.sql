@@ -629,7 +629,7 @@ CREATE TABLE TB_AI_JOB (
   kind             VARCHAR(12) NOT NULL              COMMENT 'ai_tutor/ai_caption/ai_translate',
   target_lang      VARCHAR(5)      NULL,
   job_status       VARCHAR(12) NOT NULL DEFAULT 'pending' COMMENT 'pending/processing/done/failed',
-  credit_ledger_id BIGINT          NULL              COMMENT '크레딧 차감 원장 연결',
+  credit_id        BIGINT          NULL              COMMENT '크레딧 차감 원장행(master.TB_CREDIT) 논리참조',
   status           INT         NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
   created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
