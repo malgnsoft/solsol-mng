@@ -35,38 +35,27 @@ CREATE TABLE TB_SITE (
   KEY idx_site_owner (owner_user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크리에이터 사이트(테넌트) 레지스트리';
 
--- 플랫폼 계정 — 셀러(크리에이터) + 운영자(쏠쏠 직원) 통합. user_type으로 구분
+-- 플랫폼 계정 — 셀러(크리에이터) + 운영자(쏠쏠 직원) 통합. user_type으로 구분. ID/PW 인라인.
 CREATE TABLE TB_USER (
-  id            BIGINT       NOT NULL AUTO_INCREMENT,
-  user_type     VARCHAR(12)  NOT NULL                COMMENT 'seller(크리에이터)/admin(플랫폼 운영자)',
-  login_id      VARCHAR(255) NOT NULL                COMMENT '플랫폼 로그인 아이디',
-  email         VARCHAR(255) NOT NULL                COMMENT '이메일(연락)',
-  name          VARCHAR(50)  NOT NULL,
-  phone         VARCHAR(20)      NULL,
-  role          VARCHAR(20)      NULL                COMMENT '운영자 역할(user_type=admin): superadmin/admin/support',
-  last_login_at TIMESTAMP         NULL,
-  status        INT          NOT NULL DEFAULT 1      COMMENT '1정상 0중지 -1삭제',
-  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_user_login_id (login_id),
-  UNIQUE KEY uk_user_email (email),
-  KEY idx_user_type (user_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정(셀러+운영자 통합)';
-
--- 플랫폼 계정 자격증명 (ID+PW)
-CREATE TABLE TB_USER_CREDENTIAL (
   id                  BIGINT       NOT NULL AUTO_INCREMENT,
-  user_id             BIGINT       NOT NULL,
-  password_hash       VARCHAR(255) NOT NULL              COMMENT '3종 8~16자(C-3) 해시',
+  user_type           VARCHAR(12)  NOT NULL              COMMENT 'seller(크리에이터)/admin(플랫폼 운영자)',
+  login_id            VARCHAR(255) NOT NULL              COMMENT '플랫폼 로그인 아이디',
+  email               VARCHAR(255) NOT NULL              COMMENT '이메일(연락)',
+  password_hash       VARCHAR(255) NOT NULL              COMMENT '비밀번호 해시(3종 8~16자 C-3, bcrypt/argon2id). 응답 미포함',
   password_updated_at TIMESTAMP         NULL,
-  two_factor_email    TINYINT      NOT NULL DEFAULT 0,
+  two_factor_email    TINYINT      NOT NULL DEFAULT 0    COMMENT '이메일 2단계 인증',
+  name                VARCHAR(50)  NOT NULL,
+  phone               VARCHAR(20)      NULL,
+  role                VARCHAR(20)      NULL              COMMENT '운영자 역할(user_type=admin): superadmin/admin/support',
+  last_login_at       TIMESTAMP         NULL,
   status              INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
   created_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_usercred_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정 자격증명';
+  UNIQUE KEY uk_user_login_id (login_id),
+  UNIQUE KEY uk_user_email (email),
+  KEY idx_user_type (user_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정(셀러+운영자 통합, ID/PW 인라인)';
 
 -- SaaS 요금제 — Free 즉시부여 + 유료(무료체험 미운영 M-1)
 CREATE TABLE TB_PLAN (

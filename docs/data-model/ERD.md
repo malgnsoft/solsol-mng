@@ -1,6 +1,6 @@
 # 쏠쏠 크리에이터 LMS — ERD (Mermaid)
 
-> 갱신일: 2026-07-01 | 정본: `master.sql`(13테이블) + `tenant_template.sql`(91테이블)에서 파생.
+> 갱신일: 2026-07-01 | 정본: `master.sql`(12테이블) + `tenant_template.sql`(91테이블)에서 파생.
 > 표준 Mermaid `erDiagram`(속성 = `자료형 컬럼명 PK/FK "코멘트"`). 전 컬럼 표기.
 
 ---
@@ -9,7 +9,7 @@
 
 | 스키마 | 기본 DB명 | 테이블 수 | 역할 |
 |---|---|---|---|
-| 마스터 | `solsol_master`(dev: `solsol`) | 13 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝 |
+| 마스터 | `solsol_master`(dev: `solsol`) | 12 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝 |
 | 테넌트 | `solsol_t{ID}`(dev: `solsol_lms`) | 91 | 크리에이터 사이트 운영 전체 — 회원·상품·콘텐츠·학습·주문/정산·마케팅·커뮤니티·사이트 |
 
 **컨벤션**: `TB_` 단수 · `id BIGINT AI PK` · `status INT`(1정상/0중지/-1삭제) · 통화 `DECIMAL(18,6)` **`*_price`** · 일시 **`TIMESTAMP`(내부 UTC)**·날짜 `DATE` · **약한 FK**(논리 FK, 제약 없음) · utf8mb4.
@@ -42,20 +42,13 @@ erDiagram
         varchar user_type "seller(크리에이터)/admin(플랫폼 운영자)"
         varchar login_id "플랫폼 로그인 아이디"
         varchar email "이메일(연락)"
+        varchar password_hash "비밀번호 해시(3종 8~16자 C-3, bcrypt/argon2id). 응답 미포함"
+        timestamp password_updated_at
+        tinyint two_factor_email "이메일 2단계 인증"
         varchar name
         varchar phone
         varchar role "운영자 역할(user_type=admin): superadmin/admin/support"
         timestamp last_login_at
-        int status "1정상 0중지 -1삭제"
-        timestamp created_at
-        timestamp updated_at
-    }
-    TB_USER_CREDENTIAL {
-        bigint id PK
-        bigint user_id FK
-        varchar password_hash "3종 8~16자(C-3) 해시"
-        timestamp password_updated_at
-        tinyint two_factor_email
         int status "1정상 0중지 -1삭제"
         timestamp created_at
         timestamp updated_at
@@ -214,7 +207,6 @@ erDiagram
 
     TB_USER ||--o{ TB_SITE : "owner_user_id"
     TB_PLAN ||--o{ TB_SITE : "plan_id"
-    TB_USER ||--o{ TB_USER_CREDENTIAL : "user_id"
     TB_SITE ||--o{ TB_SUBSCRIPTION : "site_id"
     TB_USER ||--o{ TB_SUBSCRIPTION : "user_id"
     TB_PLAN ||--o{ TB_SUBSCRIPTION : "plan_id"

@@ -10,7 +10,7 @@
 
 | 파일 | 스키마(기본) | 적용 단위 | 테이블 |
 | --- | --- | --- | --- |
-| [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **13** |
+| [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **12** |
 | [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **91** |
 
 > **개발(dev) 스키마 매핑 — 확정(2026-06-29)**: malgn-dev-db의 `solsol` 유저가 신규 DB 생성 권한이 없어,
@@ -68,7 +68,7 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 
 1. **통합 `TB_USER`(테넌트 내)** — 수강생/강사/서브강사/운영자를 `user_type`+RBAC로 구분.
    소셜 로그인은 `TB_USER`에 5종 SNS 컬럼 비정규화(`*_uid` 각 UNIQUE·`primary_provider`), ID/PW만 `TB_USER_CREDENTIAL` 분리. 권한(`TB_ROLE`/`TB_USER_ROLE`/`TB_ADMIN_PERMISSION` M-2).
-2. **셀러·플랫폼 운영자 통합 계정은 마스터** — `master.TB_USER`(`user_type`=seller/admin)로 통합, 자격증명은 `TB_USER_CREDENTIAL`. (구 `TB_SELLER`+`TB_PLATFORM_ADMIN` 병합)
+2. **셀러·플랫폼 운영자 통합 계정은 마스터** — `master.TB_USER`(`user_type`=seller/admin)로 통합, **ID/PW 인라인**(login_id·email·password_hash). (구 `TB_SELLER`+`TB_PLATFORM_ADMIN`+`TB_SELLER_CREDENTIAL` 병합)
 3. **구독 분리** — 셀러 SaaS 구독은 `master.TB_SUBSCRIPTION`(plan 기반), 학습자 멤버십/커뮤니티 구독은 `tenant.TB_SUBSCRIPTION`.
 4. **크레딧은 마스터** — 플랫폼이 크리에이터에게 판매(`TB_CREDIT_ACCOUNT/CHARGE/LEDGER`, 종량제·멱등 M-3).
    테넌트의 캠페인/AI 작업은 `credit_ledger_id`로 마스터 원장을 논리 참조.
@@ -109,5 +109,5 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 
 ## 검증 상태
 
-- 정적 구조: master(13)·tenant(91) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건. 강좌 도메인 재정의 후 `TB_LECTURE`/`lecture_id` 잔존 0, `TB_SECTION.product_id` 0, `TB_PRODUCT_LIVE` 내 `live_kind`/`platform`/`stream_url`/`capacity` 0건 확인. 수강 등록 재구성 후 `TB_ENROLLMENT`/`enrollment_id` 잔존 0건(전부 `TB_COURSE_USER`/`course_user_id`) 확인.
+- 정적 구조: master(12)·tenant(91) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건. 강좌 도메인 재정의 후 `TB_LECTURE`/`lecture_id` 잔존 0, `TB_SECTION.product_id` 0, `TB_PRODUCT_LIVE` 내 `live_kind`/`platform`/`stream_url`/`capacity` 0건 확인. 수강 등록 재구성 후 `TB_ENROLLMENT`/`enrollment_id` 잔존 0건(전부 `TB_COURSE_USER`/`course_user_id`) 확인.
 - ⚠️ **라이브 DB 문법 검증 미실행**(로컬 MySQL 미기동). Aurora/MySQL 8.0에서 `SOURCE` 1회 적용 검증 권장.

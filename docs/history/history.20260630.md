@@ -151,6 +151,13 @@
 - 마스터 **14→13** 테이블. `solsol-api` 시드(`ops.ts`) `TB_USER`(user_type=seller)로 갱신, verify 기대치 13.
 - dev DB 클린 리빌드(master 13·tenant 91, 0오류) — 시드 `TB_SITE.owner_user_id=1` 정상. 정본 4종(sql·README·ERD.md·DB) 동기. **Figma는 다음 일괄 갱신 시 반영.**
 
+## 20. 마스터 TB_USER — login_id + 비밀번호 인라인, TB_USER_CREDENTIAL 흡수
+
+- `TB_USER`에 **`login_id`**(로그인 아이디, uk_user_login_id)·**`password_hash`/`password_updated_at`/`two_factor_email`** 추가. email은 연락용으로 분리.
+- **`TB_USER_CREDENTIAL` 삭제**(마스터는 소셜 없이 ID/PW뿐이라 분리 이점 없음 → 인라인). 테넌트 `TB_USER_CREDENTIAL`은 소셜/분리 유지.
+- 마스터 **13→12**. `solsol-api` 시드(login_id·password_hash)·verify(12) 동기, dev DB 클린 리빌드(master 12·tenant 91, 0오류).
+- 정본 sql·README·ERD.md 갱신. Figma 마스터 보드는 다음 일괄 갱신 시.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
