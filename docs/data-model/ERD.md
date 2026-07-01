@@ -155,10 +155,11 @@ erDiagram
         varchar product_label "충전 상품 라벨"
         decimal unit_count "사용량(발송건수/토큰) — usage행"
         decimal unit_price "단가(config, M-3 Open) — usage행"
+        bigint source_ledger_id FK "차감/만료행이 소진한 증가lot 원장행(charge/bonus). 여러 lot 걸치면 lot별 차감행 분할"
         bigint reverses_ledger_id FK "환불/취소가 되돌리는 원본 원장 행"
         varchar ref_type "campaign/ai_job (테넌트 스키마 리소스)"
         bigint ref_id
-        varchar idempotency_key "증가/차감 중복 방지(uk)"
+        varchar idempotency_key "증가/차감 중복 방지(uk). lot 분할 차감은 source_ledger_id로 구분"
         varchar ledger_state "pending/settled/refunded/void"
         varchar memo
         int status "1정상 0중지 -1삭제"

@@ -180,6 +180,12 @@
 - 트레이드오프: "어느 사용이 어느 lot을 깠나"의 lot 단위 감사추적은 포기(잔액·만료 정확성은 remaining으로 보장). 필요 시 재도입 여지.
 - 마스터 **11→10**(크레딧=`TB_CREDIT_LEDGER` 1개). dev DB 클린 리빌드(10/91, 0오류). README·ERD.md 갱신, ops verify 10.
 
+## 24. 크레딧 lot 감사추적 — source_ledger_id (단일 테이블 유지)
+
+- 매핑 테이블 없이도 lot 추적 가능: 차감행에 **`source_ledger_id`**(소진한 증가lot 원장행 id) 추가. 한 사용이 여러 lot에 걸치면 **lot별 차감행 분할**(각 행이 자기 lot 참조). 단일 `TB_CREDIT_LEDGER`로 통장+FIFO+감사추적 동시 충족.
+- 멱등 uk를 `(site_id, idempotency_key, source_ledger_id)`로 확장(분할 차감 허용). `idx_ledger_source` 추가. 마스터 10 유지.
+- dev DB 클린 리빌드(10/91, 0오류). ⚠️ `solsol-api` `wrangler.toml` APP_ENV=production으로 ops가 403 → dev 세션은 `--var APP_ENV:local` 오버라이드로 적용(운영 안전가드 정상 동작 확인).
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).

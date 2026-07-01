@@ -174,7 +174,8 @@ CREATE TABLE TB_PAYMENT (
 
 -- 크레딧 통장식 단일 원장(단일 테이블) — 증가(lot)·차감을 시간순 적재
 --   증가행(charge/bonus/refund_restore): lot 역할. remaining(사용 후 남은 크레딧)/expires_at/is_expiring 보유
---   차감행(usage/expire/adjust): FIFO(임박 만료 우선)로 증가행 remaining 을 직접 차감(별도 매핑 테이블 없음)
+--   차감행(usage/expire/adjust): FIFO(임박 만료 우선)로 증가행 remaining 차감 + source_ledger_id 로 소진 lot 기록
+--     (한 사용이 여러 lot에 걸치면 lot별로 차감행 분할 → 각 행이 자기 lot 참조 = 단일 테이블로 감사추적)
 CREATE TABLE TB_CREDIT_LEDGER (
   id                 BIGINT        NOT NULL AUTO_INCREMENT,
   site_id            BIGINT        NOT NULL,
@@ -192,24 +193,26 @@ CREATE TABLE TB_CREDIT_LEDGER (
   product_label      VARCHAR(50)       NULL             COMMENT '충전 상품 라벨',
   unit_count         DECIMAL(18,6)     NULL             COMMENT '사용량(발송건수/토큰) — usage행',
   unit_price         DECIMAL(18,6)     NULL             COMMENT '단가(config, M-3 Open) — usage행',
+  source_ledger_id   BIGINT            NULL             COMMENT '차감/만료행이 소진한 증가lot 원장행(charge/bonus). 여러 lot 걸치면 lot별 차감행 분할',
   reverses_ledger_id BIGINT            NULL             COMMENT '환불/취소가 되돌리는 원본 원장 행',
   ref_type           VARCHAR(20)       NULL             COMMENT 'campaign/ai_job (테넌트 스키마 리소스)',
   ref_id             BIGINT            NULL,
-  idempotency_key    VARCHAR(100)  NOT NULL             COMMENT '증가/차감 중복 방지(uk)',
+  idempotency_key    VARCHAR(100)  NOT NULL             COMMENT '증가/차감 중복 방지(uk). lot 분할 차감은 source_ledger_id로 구분',
   ledger_state       VARCHAR(12)   NOT NULL DEFAULT 'settled' COMMENT 'pending/settled/refunded/void',
   memo               VARCHAR(255)      NULL,
   status             INT           NOT NULL DEFAULT 1   COMMENT '1정상 0중지 -1삭제',
   created_at         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_ledger_idem (site_id, idempotency_key),
+  UNIQUE KEY uk_ledger_idem (site_id, idempotency_key, source_ledger_id),
   KEY idx_ledger_site_created (site_id, id),
   KEY idx_ledger_lot_fifo (site_id, is_expiring, expires_at, id),
   KEY idx_ledger_open_lot (site_id, lot_state, expires_at),
   KEY idx_ledger_payment (payment_id),
+  KEY idx_ledger_source (source_ledger_id),
   KEY idx_ledger_ref (ref_type, ref_id),
   KEY idx_ledger_reverses (reverses_ledger_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 통장식 단일 원장(증가lot/차감·remaining·멱등)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 통장식 단일 원장(증가lot/차감·source_ledger_id·remaining·멱등)';
 
 -- 토스 웹훅 수신 로그(멱등) — SaaS/크레딧 결제
 CREATE TABLE TB_TOSS_WEBHOOK_EVENT (
