@@ -230,3 +230,25 @@
 - **프론트 연결·결제 실연동 시**: `ALLOWED_ORIGINS`·토스키 미주입 상태 → 주입.
 - **결제 실연동 라운드 GO 조건**: refresh 세션 원장(`TB_SESSION`) · 웹훅 토스 서명검증 완성.
 - **후속**: 사이트 사용량 소스 · 프로비저닝 방식 · 약관버전 CMS · 레이트리밋(WAF).
+
+## 16. 브랜드 관리자단(solsol-brand-admin) 신규 구축 Phase 0+1 + 운영자 API 30EP + 관리자단 CF Pages 배포(목업 모드)
+
+- **한 줄**: 빈 레포 `solsol-brand-admin`(플랫폼 운영자 콘솔)을 Phase 0+1 27화면으로 신규 구축하고, 백엔드 `solsol-brand-api`에 운영자(admin) API 계층 30EP를 신규 배선. **관리자단 프론트만 목업 모드로 CF Pages 배포**(https://solsol-brand-admin.pages.dev), **brand-api Workers 실배포·운영자 시드는 시크릿 확인 게이트로 코드 푸시까지만**.
+- **범위(총괄 방침)**: brand-admin 프론트 = 목업 모드 CF Pages 배포(실 API 미연동 — `NUXT_API_BASE` 미설정, BFF mock 폴백). brand-api Workers 실배포·`seed.admin.sql` 실행 = 프로덕션 Aurora·백엔드 시크릿(`JWT_SECRET`·`REFRESH_PEPPER`·`SECRET_ENC_KEY`(ENCRYPTION)·`TOSS_SECRET_KEY`) 확인 필요한 파괴적·비용 작업 → **게이트(코드 푸시 A-2까지만)**.
+- **brand-admin(신규 앱)**: Nuxt4(compat) · Nuxt UI · `nitro cloudflare-pages`. 27화면(사이트/회원/플랜/구독/결제(청구서·결제)/크레딧/CS/공지/통계/설정(운영자·약관·OAuth)) + admin/auth 레이아웃 · 전역 미들웨어(`01.auth.global`·`02.rbac.global`) · 공통 컴포넌트(테이블·필터·페이지네이션·상태배지·토스터) · 스토어(auth·ui) · `useApi` 컴포저블(brand-api 운영자 BFF 실연동 배선 + 목업 폴백). **BFF 세션**: 로그인 시 access/refresh 토큰을 HMAC 서명 세션 쿠키(`sbrand_admin_sess`)에 흡수 — 브라우저엔 user(permissions[])만 반환(토큰 비노출), role→permissions BFF 매핑, login 엔드포인트 인메모리 레이트리밋(운영은 CF WAF 병행 필요 주석).
+- **brand-api(운영자 계층 추가)**: 운영자 라우트 11도메인 30EP(`/admin/*`: auth·sites·users·plans·subscriptions·invoices·payments·credits·contact·news·stats) + `requireAdmin`·`requireRole` RBAC 미들웨어 + admin JWT(`typ:'admin'` 클레임으로 seller 토큰과 구분)·전용 refresh 쿠키(`solsol_brand_admin_refresh`) + openapi 운영자 태그. `wrangler.toml`에 운영자 시크릿 이름 주석(값 미기입 — `JWT_SECRET`·`REFRESH_PEPPER` seller와 공유). **`seed.admin.sql`**: 운영자 초기계정(superadmin@solsol.local / dev PW solsol2026 / PBKDF2 해시) — **문서·미실행**(prod PW 교체 경고 명시).
+- **3중 게이트(사전 라운드)**: brand-admin `docs/dev-validation/brand-admin-round1.md`·`round2.md` 기록(라운드 검증 GO). 배포 사전 점검: brand-admin **typecheck 그린(exit 0, 중복 import WARN만)** → `pnpm build` PASS(dist 산출·`_worker.js` BFF 라우트 베이크).
+- **배포(관리자단 프론트만 · 목업 모드)**: CF Pages `solsol-brand-admin` 프로젝트 생성(최초 create 8000000 transient → 재시도 성공) → **`NUXT_SESSION_SECRET` 32B 난수 비대화식 주입 성공**(production env·값 무노출) → **`NUXT_API_BASE` 미설정(목업 모드 유지)** → `wrangler pages deploy dist`(계정 info@malgnsoft.com·`CLOUDFLARE_ACCOUNT_ID` env 전달) → **https://solsol-brand-admin.pages.dev**(deploy alias `3dfd95f4.`). commit-message ASCII "brand-admin Phase0+1 mock preview".
+- **스모크(관리자단 배포)**: `/`→**302→/auth/login**(비인증 게이트) · `/auth/login`→**200** · `/admin`(비인증)→**302→/auth/login**(보호 라우트 가드) · **로그인 POST `/api/admin/auth/login`(mock superadmin)→200**(user+permissions[] 반환·서명 세션쿠키 set·토큰 비노출) · **세션 API `/api/admin/auth/session`(쿠키 동반)→200**(서버측 세션 검증=실 인가). SSR에서 `/admin`+쿠키가 302인 것은 클라이언트 게이트 특성(브라우저에서 store restore 후 렌더 — 인가는 서버 BFF 세션 API로 강제, blocker 아님).
+- **brand-api 게이트(실배포 금지)**: `wrangler deploy`(Workers)·`seed.admin.sql` **미실행**. 코드 푸시(A-2)까지만.
+
+### §16 산출물
+- `solsol-brand-admin`(origin=`malgnsoft/solsol-brand-admin`, 신규 브랜치 `main` `507c533`): Nuxt4 운영자 콘솔 신규 앱 27화면·BFF 세션·RBAC 미들웨어·공통 컴포넌트·`useApi` 실연동 배선(목업 폴백). CF Pages **배포 https://solsol-brand-admin.pages.dev**(deploy `3dfd95f4.`·목업 모드·`NUXT_SESSION_SECRET` 주입·`NUXT_API_BASE` 미설정).
+- `solsol-brand-api`(origin=`malgnsoft/solsol-brand-api`, `0443afd`): 운영자 API 계층 30EP(11도메인)·`requireAdmin`/`requireRole`·admin JWT·전용 refresh 쿠키·openapi 운영자 태그·`wrangler.toml` 시크릿 이름 주석(값 미기입)·`src/db/seed.admin.sql`(문서·미실행). **Workers 실배포·시드 미실행(게이트)**.
+- `solsol-mng`: `docs/dev-validation/brand-admin-round1.md`·`round2.md`(검증 라운드) + 본 이력.
+
+### §16 다음 단계 (brand-api 게이트 잔여 절차 — 사용자 확인 후 담당자가 자기 env로 직접 실행)
+- **① 백엔드 시크릿 주입**(값 무노출·담당자 자기 env): `wrangler secret put JWT_SECRET`·`REFRESH_PEPPER`(seller와 공유 가능)·`SECRET_ENC_KEY`(ENCRYPTION)·`TOSS_SECRET_KEY` — 이미 등록 시 공유. CORS `ALLOWED_ORIGINS`에 운영자단 도메인(`https://solsol-brand-admin.pages.dev`) 추가.
+- **② 운영자 시드 적용(코드 배포와 분리·선적용)**: `seed.admin.sql`을 담당자가 Aurora MySQL에 직접 `SOURCE`/`<` 실행 — **prod PW는 dev값(solsol2026) 교체·해시 재생성(`src/lib/password.ts`) 필수**. 스키마 = master `solsol`.
+- **③ brand-api Workers 실배포**: 시크릿·시드 검증 후 `wrangler deploy` → 스모크(`/admin/*` 401 무인증·admin 로그인 200).
+- **④ brand-admin 실연동 전환**: 위 ①~③ 완료·security(WAF 레이트리밋)·qa 게이트 통과 후 `wrangler pages secret put NUXT_API_BASE`(brand-api Workers URL) 주입 → 재배포로 목업→실 API 전환.
