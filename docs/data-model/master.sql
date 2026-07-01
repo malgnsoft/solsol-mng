@@ -90,6 +90,24 @@ CREATE TABLE TB_LOGIN_LOG (
   KEY idx_loginlog_event (event, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정 로그인/로그아웃 이력';
 
+-- 사이트 ↔ 회원 권한 배정 (N:M) — 소유자·담당자 통일
+--   owner  = 사이트 생성자(TB_SITE.owner_user_id)를 생성 시 자동 배정. 자기 생성 사이트 전체 권한
+--   manager= 특정 사이트에 배정된 담당자. 배정된 사이트만 권한
+--   권한체크 = 이 테이블에 (site_id, user_id) 배정이 존재하는가
+CREATE TABLE TB_SITE_USER (
+  id         BIGINT       NOT NULL AUTO_INCREMENT,
+  site_id    BIGINT       NOT NULL              COMMENT '대상 사이트(TB_SITE)',
+  user_id    BIGINT       NOT NULL              COMMENT '배정 회원(TB_USER)',
+  role       VARCHAR(12)  NOT NULL DEFAULT 'manager' COMMENT 'owner(생성자)/manager(담당자)',
+  status     INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_siteuser (site_id, user_id),
+  KEY idx_siteuser_user (user_id),
+  KEY idx_siteuser_site (site_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사이트-회원 권한 배정(소유자/담당자)';
+
 -- SaaS 요금제 — Free 즉시부여 + 유료(무료체험 미운영 M-1)
 CREATE TABLE TB_PLAN (
   id             BIGINT        NOT NULL AUTO_INCREMENT,

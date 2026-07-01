@@ -200,6 +200,13 @@
 - **`TB_LOGIN_LOG`**(로그인/로그아웃 이력, append-only): user_id·login_id(실패 추적)·event(login/logout/login_fail)·fail_reason·ip_addr·user_agent·created_at. 이벤트 로그 방식(A).
 - 마스터 **10→12**. dev DB 클린 리빌드(12/91, 0오류). README·ERD.md 갱신, ops verify 12.
 
+## 27. 사이트 권한 배정 — TB_SITE_USER(N:M) 신설
+
+- 확인 결과 기존엔 `TB_SITE.owner_user_id`(사이트당 1소유)뿐 → 크리에이터 다중소유는 되나 **담당자 배정(N:M) 부재**.
+- **`TB_SITE_USER`** 신설: `site_id`·`user_id`·`role`(owner/manager)·status, `uk(site_id,user_id)`. 소유자·담당자를 **동일 배정 구조로 통일**(권한체크=배정 존재). 크리에이터=생성 시 owner 자동배정, 담당자=manager 배정.
+- `TB_SITE.owner_user_id`는 **생성자 앵커(불변)** 로 유지. 마스터 **12→13**.
+- dev DB 클린 리빌드(13/91, 0오류). README(설계결정 2-1)·ERD.md 갱신, ops verify 13.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).

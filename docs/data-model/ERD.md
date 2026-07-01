@@ -1,6 +1,6 @@
 # 쏠쏠 크리에이터 LMS — ERD (Mermaid)
 
-> 갱신일: 2026-07-01 | 정본: `master.sql`(12테이블) + `tenant_template.sql`(91테이블)에서 파생.
+> 갱신일: 2026-07-01 | 정본: `master.sql`(13테이블) + `tenant_template.sql`(91테이블)에서 파생.
 > 표준 Mermaid `erDiagram`(속성 = `자료형 컬럼명 PK/FK "코멘트"`). 전 컬럼 표기.
 
 ---
@@ -9,7 +9,7 @@
 
 | 스키마 | 기본 DB명 | 테이블 수 | 역할 |
 |---|---|---|---|
-| 마스터 | `solsol_master`(dev: `solsol`) | 12 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝 |
+| 마스터 | `solsol_master`(dev: `solsol`) | 13 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝 |
 | 테넌트 | `solsol_t{ID}`(dev: `solsol_lms`) | 91 | 크리에이터 사이트 운영 전체 — 회원·상품·콘텐츠·학습·주문/정산·마케팅·커뮤니티·사이트 |
 
 **컨벤션**: `TB_` 단수 · `id BIGINT AI PK` · `status INT`(1정상/0중지/-1삭제) · 통화 `DECIMAL(18,6)` **`*_price`** · 일시 **`TIMESTAMP`(내부 UTC)**·날짜 `DATE` · **약한 FK**(논리 FK, 제약 없음) · utf8mb4.
@@ -75,6 +75,15 @@ erDiagram
         varchar user_agent "접속환경"
         int status "1정상 0중지 -1삭제"
         timestamp created_at "발생 시각"
+        timestamp updated_at
+    }
+    TB_SITE_USER {
+        bigint id PK
+        bigint site_id FK "대상 사이트(TB_SITE)"
+        bigint user_id FK "배정 회원(TB_USER)"
+        varchar role "owner(생성자)/manager(담당자)"
+        int status "1정상 0중지 -1삭제"
+        timestamp created_at
         timestamp updated_at
     }
     TB_PLAN {
@@ -221,6 +230,8 @@ erDiagram
     TB_PLAN ||--o{ TB_SITE : "plan_id"
     TB_USER ||--o{ TB_USER_AGREEMENT : "user_id"
     TB_USER ||--o{ TB_LOGIN_LOG : "user_id"
+    TB_SITE ||--o{ TB_SITE_USER : "site_id"
+    TB_USER ||--o{ TB_SITE_USER : "user_id"
     TB_SITE ||--o{ TB_SUBSCRIPTION : "site_id"
     TB_USER ||--o{ TB_SUBSCRIPTION : "user_id"
     TB_PLAN ||--o{ TB_SUBSCRIPTION : "plan_id"
