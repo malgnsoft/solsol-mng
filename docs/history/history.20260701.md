@@ -65,3 +65,26 @@
 - 회원 모델 변경 반영해 인증 API/프론트 재작성 → mock→실 provider 교체 → 인증 QA 라운드 → 배포.
 - 스파이크(Step 5) 항목 진행에 따라 진척률 갱신(현재 스텝5 평균 27%).
 - **solsol-admin(§8)**: 백엔드(solsol-api) 실연동 트랙 — 목→request 교체 + **Phase 1 서버 이관 보안**(roleGuard·httpOnly 세션·devLogin 제거·환불/정산 서버 재계산·응답 단계 마스킹). 에스컬레이션 3건 SoT 소유자 확정. 잔여(하): 페이지빌더 실 DnD·이미지 업로드/크롭·toss 카드등록·카카오 연결 C-14 다단계화.
+
+---
+
+## 9. 크리에이터 사용자단(FR01) 신규 앱 전 화면 구축(7라운드) + 프로덕션 배포
+
+- **`solsol` 레포 루트 `app/`에 사용자단 실제 앱 신규 구축**(mockup 기준선 무수정) — Nuxt 3(compat v4)·Nuxt UI v3·Cloudflare Pages·디자인토큰 primary `#7954C6`. **프론트 우선**, 데이터는 composable **mock 폴백 단일지점**(실 API 미연동).
+- **FR01 48페이지 전 화면 구현(7라운드)**: ①~③ 상품 브라우징 7유형(강의 일반/라이브/화상/패키지/디지털 + 프리미엄커뮤니티 + 멤버십) 목록·상세 ④ 게시판 3종(공지·자유[비밀글/등급권한]·FAQ) ⑤ 마이페이지 코어 11(구독관리·내상품·찜·쿠폰·결제내역·결제정보·내게시글·1:1문의 3종·프로필[탈퇴 이중컨펌 비가역]) ⑥ 학습 4(강의실[위캔디오 플레이어·순차잠금·진도율·AI튜터/자료실 조건부]·대시보드·라이브실[YouTube Live·채팅]·수료증 PDF) ⑦ 결제 3(주문·완료·실패)+알림센터+유예 인트로.
+- **운영 방식**: 라운드마다 **팀장 경유 4단계**(dev-lead 계획 → frontend-developer 구현 → qa +(재무/PII)privacy-officer 게이트[❌'상' 0] → 총괄 교차판정 → 체크포인트 커밋). 매 라운드 화면ID 단위 검증·결함 전건 보완. 정본(`docs/validation/`)·목업 무수정, `app/`만 변경, **05 확정 6건 준수**(쿠폰 정액·토스트 일원화·컨펌 AppModal·본인 마스킹·비가역 이중컨펌). 라운드7 카드 마스킹 형태 위반(뒤4자리 배치)을 **privacy-officer가 blocker로 잡고 총괄 교차판정으로 수정**. 전체 `pnpm typecheck` **0**.
+- **공통 자산**: 레이아웃 3(default·mypage·classroom) + 공통/course/board/subscription/mypage/learn 컴포넌트 ~50종 + composable 14종(useProducts·useBoard·useSubscription·useOrder·usePayment·useInquiry·useWishlist·useCoupon·useNotification·useLearning·useCertificate 등, 전부 mock 폴백 → 실 API 전환 시 이 지점만 교체).
+- **커밋·푸시**: `malgnsoft/solsol`(=origin) main — `0f0276c`(브라우징+게시판+typecheck 정리) → `fdab4ed`(마이페이지 코어 11) → `cf31dad`(학습+결제/알림/유예, **FR01 화면 완성점**). baseline 21건(구버전 토스트 color) 정리 + `vue-tsc` 도입 + mockup 컴파일 제외(nuxt.config).
+- **프로덕션 배포**(사용자 "배포" 지시 — mock 폴백 데모 인지): Cloudflare Pages 프로젝트 `solsol` 신규 생성(계정 `info@malgnsoft.com`) → `pnpm build`(nitro cloudflare-pages·`dist/`) → 배포 → **https://solsol.pages.dev**. 스모크: `/`200 · `/courses`200(mock 목록 SSR) · `/mypage/subscription`302→로그인(보호 라우트 가드) · `/notifications`200. ⚠️ `NUXT_PUBLIC_API_BASE` 미설정 = **mock 폴백**(실 데이터 없음) → **실 API 결선·시크릿 주입 전까지 비프로덕션 데모**.
+- **계약대기(실 API 전환 시)**: 위캔디오/YouTube/NICE/toss/약관JSON·후기·찜·쿠폰·문의·주문·알림 CRUD·R6 댓글 3계층 모델·약관 동의이력 필드.
+
+### §9 산출물
+- 코드: `solsol/app/`(페이지 48·레이아웃 3·컴포넌트 ~50·composable 14), `nuxt.config.ts`(mockup 제외·vue-tsc), `package.json`(vue-tsc).
+- 검증 기록: `docs/dev-validation/`(fr01-courses-round1/2·community-round3·boards-round4·mypage-5a/5b/5c-round1·learn-round6·payment-round7).
+- 배포: Cloudflare Pages `solsol` → **https://solsol.pages.dev**(mock 데모).
+- 커밋: `malgnsoft/solsol` `0f0276c`·`fdab4ed`·`cf31dad`.
+
+### §9 다음 단계
+- **실 API 결선**: dba(TB_ 스키마 마이그레이션) + api-developer(도메인별 라우터) 병행 → composable mock→실 API 단일지점 전환. R6 댓글 3계층·동의이력 정합.
+- 폴리시 백로그(하): 알림 미읽음 카운트·쿠폰 0장 hide·고객센터 연락처·휴대폰 마스킹 정책(강테크 컨펌).
+- 실연동 후 `NUXT_PUBLIC_API_BASE`·세션 시크릿 주입 → 프로덕션 승격.
