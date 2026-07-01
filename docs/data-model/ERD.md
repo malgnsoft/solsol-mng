@@ -1,7 +1,9 @@
 # 쏠쏠 크리에이터 LMS — ERD (Mermaid)
 
-> 갱신일: 2026-07-01 | 정본: `master.sql`(13테이블) + `tenant_template.sql`(91테이블)에서 파생.
+> 갱신일: 2026-07-01 | 정본: `master.sql`(13테이블) + `tenant_template.sql`(92테이블)에서 파생.
 > 표준 Mermaid `erDiagram`(속성 = `자료형 컬럼명 PK/FK "코멘트"`). 전 컬럼 표기.
+>
+> **개정이력**: 2026-07-01 — `TB_OAUTH_CONFIG` 추가(테넌트 인증·회원 3-1, 멀티테넌트 OAuth 자격증명). 테넌트 91→92.
 
 ---
 
@@ -10,7 +12,7 @@
 | 스키마 | 기본 DB명 | 테이블 수 | 역할 |
 |---|---|---|---|
 | 마스터 | `solsol_master`(dev: `solsol`) | 13 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝 |
-| 테넌트 | `solsol_t{ID}`(dev: `solsol_lms`) | 91 | 크리에이터 사이트 운영 전체 — 회원·상품·콘텐츠·학습·주문/정산·마케팅·커뮤니티·사이트 |
+| 테넌트 | `solsol_t{ID}`(dev: `solsol_lms`) | 92 | 크리에이터 사이트 운영 전체 — 회원·상품·콘텐츠·학습·주문/정산·마케팅·커뮤니티·사이트 |
 
 **컨벤션**: `TB_` 단수 · `id BIGINT AI PK` · `status INT`(1정상/0중지/-1삭제) · 통화 `DECIMAL(18,6)` **`*_price`** · 일시 **`TIMESTAMP`(내부 UTC)**·날짜 `DATE` · **약한 FK**(논리 FK, 제약 없음) · utf8mb4.
 
@@ -408,6 +410,18 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
+    TB_OAUTH_CONFIG {
+        bigint id PK
+        varchar provider "google/kakao/naver/apple/facebook. UNIQUE uk_oauth_provider(테넌트당 provider별 1행)"
+        varchar client_id "OAuth 앱 클라이언트 ID"
+        text client_secret "AES-GCM 암호문 저장(평문 금지)"
+        varchar redirect_uri "콜백 리다이렉트 URI"
+        text extra_json "provider별 추가값. apple={teamId,keyId,privateKey(암호문)}"
+        tinyint enabled "소셜 로그인 노출/사용(1)/미사용(0). default 0. idx_oauth_enabled"
+        int status "1정상 0중지 -1삭제. default 1"
+        timestamp created_at
+        timestamp updated_at
+    }
 
     TB_USER ||--o{ TB_USER_CREDENTIAL : "user_id"
     TB_USER ||--o{ TB_USER_ROLE : "user_id"
@@ -419,6 +433,8 @@ erDiagram
     TB_USER ||--o{ TB_SESSION : "user_id"
     TB_USER ||--o{ TB_DEVICE_TOKEN : "user_id"
 ```
+
+> **`TB_OAUTH_CONFIG`(멀티테넌트 OAuth 자격증명)**: 테넌트당 provider(google/kakao/naver/apple/facebook)별 1행(UNIQUE `uk_oauth_provider`)으로 소셜 로그인의 **앱 자격증명 소스**(client_id/secret·redirect_uri). `client_secret`·apple `privateKey`는 **AES-GCM 암호문**으로만 저장(평문 금지). `TB_USER.google_uid` 등 소셜 비정규화 컬럼과는 **역할이 다름** — TB_USER는 연동된 **개별 사용자 계정 식별**, TB_OAUTH_CONFIG는 그 소셜 인증을 수행할 **앱(테넌트) 자격증명**. user FK 없음(사용자별 행 아님).
 
 ### 3-2. 상품·콘텐츠·학습
 

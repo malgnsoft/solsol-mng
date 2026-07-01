@@ -117,3 +117,30 @@
 - **Figma**: 마스터 보드(`UR6M…`) 재생성(13테이블), 테넌트 보드(`tds3…`) 최신 확인. URL 유지.
 - dev DB 최종: **master 13 · tenant 91**, 0오류. `solsol-api`(`schema.master`·`ops` 시드/verify) 동기. ⚠️ `wrangler.toml` APP_ENV=production이라 dev ops는 `--var APP_ENV:local` 오버라이드로 적용.
 - 커밋 다수(malgn main): `2ca8e11`…`761452b` 및 후속(데이터모델·이력).
+
+---
+
+## 11. 크리에이터 백엔드(solsol-api) 전 도메인 엔드포인트 구축 + OAuth 테넌트화 + 프로덕션 배포
+
+- **범위**: `solsol-api`(Hono + Drizzle + Aurora MySQL, schema-per-tenant)에 사용자단(FR01) + 관리자단(AD01) **전 도메인 엔드포인트** 구축. 기존 인증(스프린트1 `/auth`·`/me`·`/tenant`) 위에 신규 **23개 라우터 마운트** — 사용자단 `/api/*`: products·learning·certificates·orders·billing·subscriptions·coupons·community·inquiry·faq·notifications·wishlist·reviews / 관리자단 `/api/admin/*`: settings·site·contents·products·commerce·settlement·credits·members(RBAC)·marketing·stats·support·dashboard.
+- **작업 방식**: 팀장 경유 4단계 — 정본 6소스 병렬 분석(조백개님·임관개님·도아컨님) → 팀개발(dev-lead) 도메인 배치 GO 계획 → **최대 9트랙 병렬 구현**(조백개님·배엘개님·임관개님) → 중앙 통합 → 3중 게이트.
+- **Batch 0 파운데이션**: Drizzle 미러 도메인 분할(`schema.tenant/` 7슬라이스 + index, 전 테넌트 테이블), `middleware/roleGuard.ts`(TB_ADMIN_PERMISSION menu + data_scope), `lib/pagination`·`lib/idempotency`, errors 확장.
+- **B1 정정(오너 지침)**: 소셜 연동은 **TB_USER 비정규화 컬럼**(`google_uid`…`primary_provider`)이 정본, **TB_USER_SOCIAL 미사용** — 초기 정규화 방향을 롤백하고 `auth`·`me` 라우트를 비정규화로 재작성.
+- **3중 게이트**: qa GO(계약 사용자단 40/40·관리자 15도메인 전량, typecheck 그린) / security·privacy 초기 **NO-GO(blocker 3)** — `/ops/*` 무인증·파괴적, `/ops/sessions` refreshTokenHash 노출, community 비밀글 무단열람 → **보완**(ops 운영게이트 `APP_ENV`+`OPS_SECRET`·reset prod 차단, refreshTokenHash 응답 제거, 비밀글 작성자/staff 통제, 업로드 타입·크기 검증, REFRESH_PEPPER 폴백 제거, 인증코드 시도상한) → **재검토 전원 GO**.
+- **비가역 staging 게이트**: 결제·환불·정산·구독·크레딧충전·캠페인발송은 **골격 + `// TODO(staging-gate)`로 실행 차단**(실 PG/토스 호출 0).
+- **OAuth 테넌트화(오너 아키텍처 정정)**: OAuth 자격증명은 테넌트마다 다르므로 전역 시크릿이 아닌 **테넌트 테이블 `TB_OAUTH_CONFIG`**(provider별 1행, `client_secret` AES-GCM 암호문)로 이전. `resolveProvider`(테넌트 조회)·`lib/crypto.ts`(AES-GCM) 신설. 테넌트 91→**92**. **정본 동기화**(db-change-sync-sot): 마이그레이션 SQL·Drizzle 미러·`docs/data-model/ERD.md` 갱신.
+- **배포(Cloudflare Workers)**: Worker `solsol-api` 신규 생성 → 전역 시크릿 3종(`JWT_SECRET`·`REFRESH_PEPPER`·`SECRET_ENC_KEY`) **난수 생성·주입(값 무노출)** → 최신 코드 재배포 **버전 `7e056d9d`** → 스모크 전량 통과: `/health` 200, **`/health/db` Aurora MySQL 8.0.42 실연결(`solsol`·`solsol_lms`) = 실 DB 실연동 검증**, `/api/products` 200(공개), `/api/orders` 401(보호+인증게이트), `/tenant` 200(실 테넌트 row). URL **https://solsol-api.malgnsoft.workers.dev**. (참고: `solsol-api`는 로컬 git 레포 아님 → 커밋 대상 없음.)
+- **관리 허브 부가**: `solsol-mng`에 **`/apis` API 상세 내역 페이지** 추가(157 엔드포인트·필터·상세 드로어, 네비 "API" 링크).
+
+### §11 산출물
+- 코드(`solsol-api`, 로컬 git 레포 아님): 신규 23개 라우터(사용자단 `/api/*` 13 + 관리자단 `/api/admin/*` 10 도메인), `schema.tenant/` 7슬라이스 + index, `middleware/roleGuard.ts`, `lib/pagination`·`lib/idempotency`·`lib/crypto.ts`(AES-GCM)·`resolveProvider`, `TB_OAUTH_CONFIG` 마이그레이션 SQL + Drizzle 미러.
+- 정본 동기화: `docs/data-model/ERD.md`(`TB_OAUTH_CONFIG` 반영, 테넌트 92).
+- 배포: Cloudflare Workers `solsol-api` **버전 `7e056d9d`** → **https://solsol-api.malgnsoft.workers.dev**(실 Aurora 실연동 검증). 시크릿 3종 난수 주입(값 무노출).
+- 관리 허브(`solsol-mng`): `/apis` API 상세 내역 페이지(157 엔드포인트) + 네비 "API" 링크.
+
+### §11 다음 단계 / 알려진 한계
+- **(a)** `/health/db` verdict 문구가 마스터 스키마명을 `solsol_master`로 기대하나 실제는 `solsol` → **문구 정정 권고**(연동 자체는 정상).
+- **(b)** 테넌트별 `TB_OAUTH_CONFIG` **행 시드 필요**(소셜 로그인 활성화 전제).
+- **(c)** 결제·크레딧 **실 토스 연동은 staging 게이트 해제 시 오너 확인**(현재 실행 차단).
+- **(d)** Figma 테넌트 ERD 보드(`tds3…`)에 `TB_OAUTH_CONFIG` **제자리 갱신**.
+- **(e)** 마스킹헬퍼(`maskAccount`·`maskBizNo`) lib 승격 · 동의이력 `TB_USER_AGREEMENT` 이관 후속.

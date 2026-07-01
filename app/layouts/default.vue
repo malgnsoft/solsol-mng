@@ -64,6 +64,7 @@ const nav = [
   { to: '/history', label: '작업 이력', icon: 'i-lucide-history' },
   { to: '/validation', label: '검증', icon: 'i-lucide-clipboard-check' },
   { to: '/screens', label: '화면', icon: 'i-lucide-layout-list' },
+  { to: '/apis', label: 'API', icon: 'i-lucide-webhook' },
   { to: '/members', label: '참여자', icon: 'i-lucide-users', adminOnly: true }
 ]
 
