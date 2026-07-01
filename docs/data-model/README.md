@@ -10,7 +10,7 @@
 
 | 파일 | 스키마(기본) | 적용 단위 | 테이블 |
 | --- | --- | --- | --- |
-| [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **10** |
+| [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **12** |
 | [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **91** |
 
 > **개발(dev) 스키마 매핑 — 확정(2026-06-29)**: malgn-dev-db의 `solsol` 유저가 신규 DB 생성 권한이 없어,
@@ -26,7 +26,7 @@
 > 수강 등록 재구성(2026-06-30): `TB_ENROLLMENT`→**`TB_COURSE_USER`(수강생관리)** 개명·확장. LM `LM_COURSE_USER` 참고로 진도(`progress_ratio`/`progress_score`)·성적(`exam`/`homework`/`forum`/`etc`/`total`)·수료(`complete_yn`/`complete_no`/`complete_date`)·정지(`pause_cnt`/`pause_day`)·마감·구독·`course_id`/`package_id`/`subscription_id`/`order_item_id`/`tutor_user_id` 추가, 날짜 varchar→DATE/DATETIME·점수 DECIMAL·Y/N→TINYINT 변환. 참조 3종(`TB_LESSON_PROGRESS`/`TB_CERTIFICATE`/`TB_REVIEW`)의 `enrollment_id`→`course_user_id`. LM의 `SITE_ID`/`TERM_ID`/`TERM_USER_ID`/`LC_EXAM_ID`/`SUBSCRIBE_USER_ID`/`ENROLL_NOTI_RECEIVED`는 범위 밖 제외. (개명만 — 테이블 수 91 불변)
 
 - **마스터** = 플랫폼 ↔ 크리에이터 관계: 사이트(테넌트) 레지스트리, 셀러·운영자 통합 계정(`TB_USER`), SaaS 요금제·구독·청구·결제,
-  **크레딧(플랫폼이 크리에이터에게 판매)**, 토스 웹훅, 플랫폼 운영자, 프로비저닝 이력.
+  **크레딧(플랫폼이 크리에이터에게 판매)**, 토스 웹훅, 프로비저닝 이력, **약관동의(`TB_USER_AGREEMENT`)·로그인이력(`TB_LOGIN_LOG`)**.
 - **테넌트** = 각 크리에이터 사이트 운영 전체: 수강생/스태프·상품·콘텐츠·학습·주문/결제·정산·
   마케팅·알림·커뮤니티·사이트설정. `site_id` 컬럼 없음(스키마 자체가 테넌트).
 
@@ -108,5 +108,5 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 
 ## 검증 상태
 
-- 정적 구조: master(10)·tenant(91) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건. 강좌 도메인 재정의 후 `TB_LECTURE`/`lecture_id` 잔존 0, `TB_SECTION.product_id` 0, `TB_PRODUCT_LIVE` 내 `live_kind`/`platform`/`stream_url`/`capacity` 0건 확인. 수강 등록 재구성 후 `TB_ENROLLMENT`/`enrollment_id` 잔존 0건(전부 `TB_COURSE_USER`/`course_user_id`) 확인.
+- 정적 구조: master(12)·tenant(91) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건. 강좌 도메인 재정의 후 `TB_LECTURE`/`lecture_id` 잔존 0, `TB_SECTION.product_id` 0, `TB_PRODUCT_LIVE` 내 `live_kind`/`platform`/`stream_url`/`capacity` 0건 확인. 수강 등록 재구성 후 `TB_ENROLLMENT`/`enrollment_id` 잔존 0건(전부 `TB_COURSE_USER`/`course_user_id`) 확인.
 - ⚠️ **라이브 DB 문법 검증 미실행**(로컬 MySQL 미기동). Aurora/MySQL 8.0에서 `SOURCE` 1회 적용 검증 권장.

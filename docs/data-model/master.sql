@@ -57,6 +57,39 @@ CREATE TABLE TB_USER (
   KEY idx_user_type (user_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정(셀러+운영자 통합, ID/PW 인라인)';
 
+-- 플랫폼 계정 이용약관 동의 기록 (동의 이력 — 버전·시점 보존)
+CREATE TABLE TB_USER_AGREEMENT (
+  id            BIGINT       NOT NULL AUTO_INCREMENT,
+  user_id       BIGINT       NOT NULL,
+  agreement_key VARCHAR(20)  NOT NULL              COMMENT 'terms/privacy/marketing 등',
+  required      TINYINT      NOT NULL DEFAULT 1    COMMENT '필수(1)/선택(0)',
+  agreed        TINYINT      NOT NULL DEFAULT 0    COMMENT '동의(1)/철회(0)',
+  terms_version VARCHAR(20)      NULL              COMMENT '동의 당시 약관 버전',
+  agreed_at     TIMESTAMP        NULL              COMMENT '동의/철회 시각',
+  status        INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_useragr_user (user_id, agreement_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정 약관 동의 기록';
+
+-- 플랫폼 계정 로그인/로그아웃 이력 (감사·부정로그인 추적, append-only)
+CREATE TABLE TB_LOGIN_LOG (
+  id          BIGINT       NOT NULL AUTO_INCREMENT,
+  user_id     BIGINT           NULL              COMMENT '로그인 시도 계정(TB_USER). 실패로 미식별 시 NULL 가능',
+  login_id    VARCHAR(255)     NULL              COMMENT '시도한 로그인 아이디(실패 추적용)',
+  event       VARCHAR(12)  NOT NULL              COMMENT 'login/logout/login_fail',
+  fail_reason VARCHAR(100)     NULL              COMMENT '실패 사유(login_fail)',
+  ip_addr     VARCHAR(64)      NULL              COMMENT '접속주소',
+  user_agent  VARCHAR(500)     NULL              COMMENT '접속환경',
+  status      INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '발생 시각',
+  updated_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_loginlog_user (user_id, created_at),
+  KEY idx_loginlog_event (event, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정 로그인/로그아웃 이력';
+
 -- SaaS 요금제 — Free 즉시부여 + 유료(무료체험 미운영 M-1)
 CREATE TABLE TB_PLAN (
   id             BIGINT        NOT NULL AUTO_INCREMENT,

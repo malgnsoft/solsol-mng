@@ -193,6 +193,13 @@
 - 컨벤션 추가: **통화=`*_price` / 크레딧=`*_cr`**(둘 다 DECIMAL(18,6)). 마스터 10 유지.
 - dev DB 클린 리빌드(10/91, 0오류, `--var APP_ENV:local`). README·ERD.md 갱신.
 
+## 26. 마스터 계정 감사 기록 — 약관동의 + 로그인/로그아웃 이력
+
+- 마스터 계정(셀러/운영자)엔 `last_login_at`(최신값)뿐이라 이력 부재 → 2테이블 신설.
+- **`TB_USER_AGREEMENT`**(약관 동의 기록): user_id·agreement_key(terms/privacy/marketing)·required·agreed·terms_version·agreed_at. 테넌트와 동일 패턴.
+- **`TB_LOGIN_LOG`**(로그인/로그아웃 이력, append-only): user_id·login_id(실패 추적)·event(login/logout/login_fail)·fail_reason·ip_addr·user_agent·created_at. 이벤트 로그 방식(A).
+- 마스터 **10→12**. dev DB 클린 리빌드(12/91, 0오류). README·ERD.md 갱신, ops verify 12.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
