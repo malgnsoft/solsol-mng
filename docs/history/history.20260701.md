@@ -164,3 +164,44 @@
 
 ### §12 다음 단계
 - 문서 카탈로그는 **코드 변경 시 `solsol-api/src/docs/endpoints.ts` 동기화**(라우트 추가/변경 → `ENDPOINTS` 배열 갱신 → OpenAPI/Scalar 자동 반영).
+
+## 13. 브랜드 사용자단(solsol-brand) 신규 앱 전 화면 구축(2라운드+a11y) + 프로덕션 배포
+
+- **배경/결정(오너 지시)**: 브랜드 사이트 **사용자단**을 핸드오프 v5 목업(`solsol-brand/mockup`, 동결 기준선) 대비 **1px 그대로** 재현하고 각 페이지에 **mock 데이터 기능**을 탑재해 레포 루트에 신규 구축. API 미생성 → 전 데이터 mock 폴백. 글로벌 에이전트팀(총괄 대행) 4단계 SoP로 진행.
+- **스택 결정(1px 우선)**: 목업과 동일 핀 — Nuxt 4.4.8 / **@nuxt/ui v4**(4.9.0) / Tailwind v4 / Pretendard. `nuxt.config` `ignore:['mockup/**']`·`tsConfig.exclude:['../mockup']`·`nitro cloudflare-pages`. 1px 생명선 `BrandCanvas`(1920 고정폭 + `body.style.zoom` fit) verbatim. GNB/Footer는 페이지 인라인 verbatim(추출 안 함).
+- **구축(4트랙 병렬)**: 파운데이션(리드) → 페이지 그룹 A/B/C/D 병렬. **37페이지**(목업 39 − 카탈로그성 index/page-list/design-guide 제외), `landing→index.vue`. mock composable 9종(useAuth/Sites/News/Inquiries/Plans/MyProduct/Billing/Account/LegalDocs) + data json. mock 인증코드 `400039`.
+- **검증 R1**: 화면ID 커버리지 37/37(누락0), 1px verbatim diff 훼손 0, `pnpm build` PASS. QA GO / privacy·security CONDITIONAL(**상 0**). 결함표 `docs/dev-validation/brand-site-round1.md`. 보완: route-protection(`/contact-history-detail`·`/pricing-purchase`)·오픈리다이렉트 화이트리스트·개정일버그·verbatim위반(결제실패버튼→`?fail=1`) 수정.
+- **검증 R2(런타임·브라우저 심화)**: dev 서버 전 37라우트 스모크(공개 27→200·보호 10→302 `/login?redirect=`), SSR 렌더·로그 에러 0. Playwright로 로그인 플로우(세션·리다이렉트 화이트리스트)·뉴스 필터·폼검증·반응형(가로 오버플로 0)·시각 렌더 확인. 콘솔·페이지 에러 0.
+- **a11y 1px-safe 스윕**: 4그룹 병렬로 비가시 속성만 추가(약 147개 `alt`/`aria-label`/label 연결/`select-name`). axe 재측정 결과 **image-alt·label·link-name·button-name·select-name 위반 0**, `color-contrast`만 잔존(=핸드오프 색상, 디자인/오너 판정 영역).
+- **배포**: 커밋 `ff377b4`(origin=malgnsoft/solsol-brand main 푸시). 신규 Pages 프로젝트 `solsol-brand` 생성 + `dist` 배포. 프로덕션 **https://solsol-brand.pages.dev**.
+- **스모크(프로덕션)**: `/`·`/pricing`·`/login`·`/terms`·`/signup` 200, `/billing` 302(보호), `/news`·`/news-detail` 200(초기 522는 콜드스타트 후 정상). 랜딩 콘텐츠(쏠쏠·크리에이터·무료로 시작) 정상.
+
+### §13 산출물
+- solsol-brand(origin=malgnsoft): 레포 루트 실앱 신규(app/pages 37 + composables 9 + data json + BrandCanvas/AppLogo + middleware + config). 커밋 `ff377b4` → Pages 신규 프로젝트 `solsol-brand` 배포 **https://solsol-brand.pages.dev**. `mockup/**` 무수정(동결).
+- solsol-mng: 결함표 `docs/dev-validation/brand-site-round1.md`(R1).
+
+### §13 다음 단계
+- **오너 판정 대기**: `color-contrast` 디자인 조정 · 모바일 리플로우 반응형 별도 설계 여부(현재 고정캔버스 zoom 축소) · 공유 약관상세 모달(C01) 신설 vs SoT 개정.
+- **실 API 연동 시 선결(보안·개인정보)**: 서버측 인증/세션·IDOR 차단·인증코드 서버검증·레이트리밋·v-html sanitize·카드 PAN 서버마스킹·정보통신망법 마케팅 고지. mock 세션 영속화(새로고침 유지)는 데모 개선 옵션.
+
+---
+
+## 14. 관리자단 **목업**(`solsol-admin/mockup`) 검증 라운드2 + 「수정 지시서」 AD01 즉시착수 3건 수정·배포
+
+- **배경/결정(오너)**: 종전 '동결 기준선'이던 `solsol-admin/mockup`을 오너가 **동결 해제 → 수정 대상**으로 전환(사용자단 `solsol/mockup`은 동결 유지). 수정 착수 **전** 읽기전용 검증 라운드2 수행 후, solsol PO 공식 「수정 지시서」(2026-07-01, DJ 지시)의 **AD01 해당·무게이트 항목만** 반영.
+- **검증 라운드2(무수정 분석)**: 관리자단 목업 99 Vue 전수를 SoT(`docs/validation/{00,02,04,05,06}` + 참조 PNG) 기준으로 **10 게이트 병렬**(도메인 qa 8 + security + privacy). 화면 파일 커버리지 ~100%(물리 누락 ≈0)이나 화면 내부 정책 충실도 낮은 **초기 축약본** → 10/10 NO-GO. 근본원인 **8계열**(마스킹 유틸 부재·RBAC 미반영·비가역 게이트 부재·인증 정책 위반·정책 정합 불일치·핵심요소 미구현·정통망법 컴플라이언스·공통 상태/반응형). 05 확정 6건 중 #2 무료체험·#6 쿠폰 정액only ⭕ / #1·#3·#5 ❌ / #4 🔺. 디자인 baseline 색 `#027CFA`(참조 PNG도 파랑)=비결함. 결함표 정본 = `docs/dev-validation/AD01-mockup-round2.md`.
+- **「수정 지시서」 AD01 분류**: 즉시착수(무게이트) = **AD-1·AD-2·AD-3**. 보류(DJ 선행 컨펌 게이트) = AD-4(마스킹·K-1)·AD-5/COM-3(브랜드색·K-4)·COM-1(반응형·K-2)·COM-2(화면ID SoT·K-3, 대상은 실앱 `screenList.ts`).
+- **수정(admin-developer, `solsol-admin/mockup` 3파일)**:
+  - **AD-1(상)** `auth/register.vue` — 회원가입 주 CTA 라벨 "로그인 하기" → **"회원가입"**(하단 로그인 링크·동작 로직 무변경).
+  - **AD-3(중)** `auth/register.vue`·`auth/reset-password.vue` — 비밀번호 placeholder → **"영문·숫자·특수문자 3종 조합 8~16자"**(05 C-3 통일). 검증 로직·확인 필드 무변경.
+  - **AD-2(중)** `admin/index.vue` — 대시보드 "chart.js/vue-chartjs 연동 필요" placeholder 제거 → **인라인 SVG 정적 막대차트**(신규 의존성 0, 색 `#027CFA`).
+  - grep 교차검증: 잔존 placeholder 0건, 검증 로직·타 영역 무변경.
+- **배포(deployer)**: 워킹트리에 섞인 **무관 루트앱 WIP**(`app/composables/useApi.ts`·`app/pages/auth/login.vue`·`nuxt.config.ts`·`server/`)는 **미접촉**, 내 3파일만 명시 스테이징. 커밋 **`5144310`**(`git show --stat`로 3파일만 확인) → `git push origin main`(`malgnsoft/solsol-admin`, `2fad462..5144310`). `npm run generate`(205 라우트 프리렌더 → `.output/public`) → `wrangler pages deploy` → Pages 프로젝트 **`solsol-admin-mockup`**. 배포 URL **https://4aa6a247.solsol-admin-mockup.pages.dev**(alias **https://solsol-admin-mockup.pages.dev**). 스모크: `/admin`·`/auth/register`·`/auth/reset-password` 308→200, AD-1/2/3 반영 라이브 확인.
+
+### §14 산출물
+- `solsol-admin/mockup`(별도 레포 `malgnsoft/solsol-admin`): `mockup/app/pages/{admin/index,auth/register,auth/reset-password}.vue` 3파일 — 커밋 `5144310`(origin main) → **Pages `solsol-admin-mockup` 배포**(https://solsol-admin-mockup.pages.dev).
+- `solsol-mng`: `docs/dev-validation/AD01-mockup-round2.md`(검증 라운드2 통합 결함표·8계열·우선순위) 신규.
+
+### §14 다음 단계
+- **DJ 선행 컨펌(K-1~K-4)** 결정 시 AD-4(마스킹)·AD-5/COM-3(브랜드색)·COM-1(반응형) 순차 반영(K-1 마스킹·K-4 브랜드색 우선 권고).
+- 라운드2 **P0 공통 인프라**(마스킹 유틸·비가역 컨펌 모달·RBAC 골격·공통 상태 컴포넌트) 착수 시 다수 blocker 동시 해소 → 보완 라운드 재검증(종료조건 blocker 0).
