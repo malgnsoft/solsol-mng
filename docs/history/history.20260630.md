@@ -173,6 +173,13 @@
 - `TB_CREDIT_ACCOUNT`는 `TB_CREDIT_LEDGER`에서 100% 파생되는 캐시(드리프트·정합배치 부담)라 **삭제**. 잔액=최신 `balance_after`, expiring/permanent=열린 lot `SUM(remaining)` by `is_expiring`, next_expire=`MIN(expires_at)`. 읽기 성능 이슈 시 캐시 재도입 여지만 주석으로 남김.
 - 마스터 **12→11**. dev DB 클린 리빌드(11/91, 0오류). README·ERD.md 갱신, ops verify 기대치 11.
 
+## 23. 크레딧 단일 테이블화 — TB_CREDIT_ALLOCATION 삭제
+
+- 사용자 요청: 크레딧 생성/차감 내역 + 증가행의 "사용 후 남은 크레딧(`remaining`)"만 있으면 **한 테이블로 충분**.
+- **`TB_CREDIT_ALLOCATION` 삭제** → 차감 시 FIFO(임박 만료 우선)로 증가행 `remaining`을 **직접 차감**(별도 매핑 없음). 통장·잔액·유효기간 소진 모두 `TB_CREDIT_LEDGER` 단일 테이블로 처리.
+- 트레이드오프: "어느 사용이 어느 lot을 깠나"의 lot 단위 감사추적은 포기(잔액·만료 정확성은 remaining으로 보장). 필요 시 재도입 여지.
+- 마스터 **11→10**(크레딧=`TB_CREDIT_LEDGER` 1개). dev DB 클린 리빌드(10/91, 0오류). README·ERD.md 갱신, ops verify 10.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).

@@ -10,7 +10,7 @@
 
 | 파일 | 스키마(기본) | 적용 단위 | 테이블 |
 | --- | --- | --- | --- |
-| [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **11** |
+| [master.sql](master.sql) | `solsol_master`(prod) | 1개(전역) | **10** |
 | [tenant_template.sql](tenant_template.sql) | `solsol_t{테넌트ID 6자리}`(prod) 예: `solsol_t000123` | 테넌트마다 1개 | **91** |
 
 > **개발(dev) 스키마 매핑 — 확정(2026-06-29)**: malgn-dev-db의 `solsol` 유저가 신규 DB 생성 권한이 없어,
@@ -70,7 +70,7 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
    소셜 로그인은 `TB_USER`에 5종 SNS 컬럼 비정규화(`*_uid` 각 UNIQUE·`primary_provider`), ID/PW만 `TB_USER_CREDENTIAL` 분리. 권한(`TB_ROLE`/`TB_USER_ROLE`/`TB_ADMIN_PERMISSION` M-2).
 2. **셀러·플랫폼 운영자 통합 계정은 마스터** — `master.TB_USER`(`user_type`=seller/admin)로 통합, **ID/PW 인라인**(login_id·email·password_hash). (구 `TB_SELLER`+`TB_PLATFORM_ADMIN`+`TB_SELLER_CREDENTIAL` 병합)
 3. **구독 분리** — 셀러 SaaS 구독은 `master.TB_SUBSCRIPTION`(plan 기반), 학습자 멤버십/커뮤니티 구독은 `tenant.TB_SUBSCRIPTION`.
-4. **크레딧은 마스터(은행통장식 단일 원장)** — 플랫폼이 크리에이터에게 판매. **`TB_CREDIT_LEDGER`** 하나에 증가(charge/bonus/refund_restore=lot, `remaining`·`expires_at`·`is_expiring` 보유)와 차감(usage/expire/adjust)을 시간순 적재(각 행 `balance_after`). 유효기간 있는(만료)·없는(무기한) lot을 FIFO(임박 만료 우선)로 소진, 부분소진은 **`TB_CREDIT_ALLOCATION`**(차감행↔lot) 매핑. **잔액은 원장에서 파생**(전체=최신 balance_after, expiring/permanent=열린 lot SUM(remaining), 별도 캐시 테이블 없음). 종량·멱등(M-3, uk `site_id`+`idempotency_key`). 테넌트 캠페인/AI는 `credit_ledger_id`로 사용 차감행을 논리 참조. (구 `TB_CREDIT_CHARGE` 흡수, `TB_PAYMENT.credit_charge_id`→`credit_ledger_id`)
+4. **크레딧은 마스터(은행통장식 단일 원장)** — 플랫폼이 크리에이터에게 판매. **`TB_CREDIT_LEDGER`** 하나에 증가(charge/bonus/refund_restore=lot, `remaining`·`expires_at`·`is_expiring` 보유)와 차감(usage/expire/adjust)을 시간순 적재(각 행 `balance_after`). 유효기간 있는(만료)·없는(무기한) lot을 FIFO(임박 만료 우선)로 소진, 부분소진은 증가행 `remaining`을 FIFO로 직접 차감(단일 테이블, 별도 매핑 없음). **잔액은 원장에서 파생**(전체=최신 balance_after, expiring/permanent=열린 lot SUM(remaining), 별도 캐시 테이블 없음). 종량·멱등(M-3, uk `site_id`+`idempotency_key`). 테넌트 캠페인/AI는 `credit_ledger_id`로 사용 차감행을 논리 참조. (구 `TB_CREDIT_CHARGE` 흡수, `TB_PAYMENT.credit_charge_id`→`credit_ledger_id`)
 5. **상품 7종 통합(CTI)** — `TB_PRODUCT`(`type`: `course`/`live`/`video_call`/`digital`/`package`/`membership`/`community`) + 유형별 확장. 알림 단일 라우팅(R-1), 쿠폰 정액 only(C-4), 결제 비가역(M-8).
    - **강좌(course)** = `TB_PRODUCT`(공통) + `TB_COURSE`(확장·커리큘럼 루트, 1:1 `uk_course_product`) → `TB_SECTION`(`course_id`) → `TB_LESSON`(차시). 진도는 `TB_LESSON_PROGRESS`(`course_user_id`+`lesson_id` 유니크).
    - **라이브(live)** = `TB_PRODUCT_LIVE`(**YouTube Live 전용**: `youtube_url`/`youtube_video_id`/`recorded_content_id`, 입장 즉시 자동수료). **화상(video_call)** = `TB_PRODUCT_VIDEO_CALL`(zoom/google_meet, `meeting_url`/`capacity`)로 분리.
@@ -108,5 +108,5 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 
 ## 검증 상태
 
-- 정적 구조: master(11)·tenant(91) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건. 강좌 도메인 재정의 후 `TB_LECTURE`/`lecture_id` 잔존 0, `TB_SECTION.product_id` 0, `TB_PRODUCT_LIVE` 내 `live_kind`/`platform`/`stream_url`/`capacity` 0건 확인. 수강 등록 재구성 후 `TB_ENROLLMENT`/`enrollment_id` 잔존 0건(전부 `TB_COURSE_USER`/`course_user_id`) 확인.
+- 정적 구조: master(10)·tenant(91) 각각 `CREATE TABLE = ENGINE = PRIMARY KEY (id)` 일치, 괄호 균형 OK(SQL 구문), 테넌트 `site_id` 0건. 강좌 도메인 재정의 후 `TB_LECTURE`/`lecture_id` 잔존 0, `TB_SECTION.product_id` 0, `TB_PRODUCT_LIVE` 내 `live_kind`/`platform`/`stream_url`/`capacity` 0건 확인. 수강 등록 재구성 후 `TB_ENROLLMENT`/`enrollment_id` 잔존 0건(전부 `TB_COURSE_USER`/`course_user_id`) 확인.
 - ⚠️ **라이브 DB 문법 검증 미실행**(로컬 MySQL 미기동). Aurora/MySQL 8.0에서 `SOURCE` 1회 적용 검증 권장.

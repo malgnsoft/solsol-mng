@@ -1,6 +1,6 @@
 # 쏠쏠 크리에이터 LMS — ERD (Mermaid)
 
-> 갱신일: 2026-07-01 | 정본: `master.sql`(11테이블) + `tenant_template.sql`(91테이블)에서 파생.
+> 갱신일: 2026-07-01 | 정본: `master.sql`(10테이블) + `tenant_template.sql`(91테이블)에서 파생.
 > 표준 Mermaid `erDiagram`(속성 = `자료형 컬럼명 PK/FK "코멘트"`). 전 컬럼 표기.
 
 ---
@@ -9,7 +9,7 @@
 
 | 스키마 | 기본 DB명 | 테이블 수 | 역할 |
 |---|---|---|---|
-| 마스터 | `solsol_master`(dev: `solsol`) | 11 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝 |
+| 마스터 | `solsol_master`(dev: `solsol`) | 10 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝 |
 | 테넌트 | `solsol_t{ID}`(dev: `solsol_lms`) | 91 | 크리에이터 사이트 운영 전체 — 회원·상품·콘텐츠·학습·주문/정산·마케팅·커뮤니티·사이트 |
 
 **컨벤션**: `TB_` 단수 · `id BIGINT AI PK` · `status INT`(1정상/0중지/-1삭제) · 통화 `DECIMAL(18,6)` **`*_price`** · 일시 **`TIMESTAMP`(내부 UTC)**·날짜 `DATE` · **약한 FK**(논리 FK, 제약 없음) · utf8mb4.
@@ -165,17 +165,6 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
-    TB_CREDIT_ALLOCATION {
-        bigint id PK
-        bigint site_id FK
-        bigint debit_ledger_id FK "소진/복원을 일으킨 원장 행(usage/expire/refund_restore/adjust)"
-        bigint lot_ledger_id FK "소진/복원 대상 증가lot 원장 행(charge/bonus)"
-        decimal amount "이 lot에서 소진/복원한 양(양수)"
-        varchar alloc_type "consume(소진)/restore(환불 복원)"
-        int status "1정상 0중지 -1삭제"
-        timestamp created_at
-        timestamp updated_at
-    }
     TB_TOSS_WEBHOOK_EVENT {
         bigint id PK
         varchar event_id "토스 이벤트 ID(멱등키)"
@@ -218,9 +207,6 @@ erDiagram
     TB_CREDIT_LEDGER ||--o{ TB_PAYMENT : "credit_ledger_id"
     TB_SITE ||--o{ TB_CREDIT_LEDGER : "site_id"
     TB_PAYMENT ||--o{ TB_CREDIT_LEDGER : "payment_id"
-    TB_SITE ||--o{ TB_CREDIT_ALLOCATION : "site_id"
-    TB_CREDIT_LEDGER ||--o{ TB_CREDIT_ALLOCATION : "debit_ledger_id"
-    TB_CREDIT_LEDGER ||--o{ TB_CREDIT_ALLOCATION : "lot_ledger_id"
     TB_PAYMENT ||--o{ TB_TOSS_WEBHOOK_EVENT : "payment_id"
     TB_SITE ||--o{ TB_SITE_PROVISION_LOG : "site_id"
 ```

@@ -172,9 +172,9 @@ CREATE TABLE TB_PAYMENT (
 --   next_expire = MIN(expires_at) WHERE lot_state='open' AND is_expiring=1
 --   (읽기 성능이 문제되면 그때 캐시 재도입 — 지금은 원장 단일 정본 유지)
 
--- 크레딧 통장식 단일 원장 — 증가(lot)·차감을 시간순 한 테이블에 적재(구 TB_CREDIT_CHARGE 흡수)
---   증가행(charge/bonus/refund_restore): lot 역할. remaining/expires_at/is_expiring 보유
---   차감행(usage/expire/adjust): lot 소진. 소진 lot 매핑은 TB_CREDIT_ALLOCATION
+-- 크레딧 통장식 단일 원장(단일 테이블) — 증가(lot)·차감을 시간순 적재
+--   증가행(charge/bonus/refund_restore): lot 역할. remaining(사용 후 남은 크레딧)/expires_at/is_expiring 보유
+--   차감행(usage/expire/adjust): FIFO(임박 만료 우선)로 증가행 remaining 을 직접 차감(별도 매핑 테이블 없음)
 CREATE TABLE TB_CREDIT_LEDGER (
   id                 BIGINT        NOT NULL AUTO_INCREMENT,
   site_id            BIGINT        NOT NULL,
@@ -209,24 +209,7 @@ CREATE TABLE TB_CREDIT_LEDGER (
   KEY idx_ledger_payment (payment_id),
   KEY idx_ledger_ref (ref_type, ref_id),
   KEY idx_ledger_reverses (reverses_ledger_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 통장식 단일 원장(증가lot/차감·멱등)';
-
--- 크레딧 차감·환불 ↔ 소진 lot 매핑 — FIFO 부분소진 추적(1 차감행 : N lot)
-CREATE TABLE TB_CREDIT_ALLOCATION (
-  id              BIGINT        NOT NULL AUTO_INCREMENT,
-  site_id         BIGINT        NOT NULL,
-  debit_ledger_id BIGINT        NOT NULL             COMMENT '소진/복원을 일으킨 원장 행(usage/expire/refund_restore/adjust)',
-  lot_ledger_id   BIGINT        NOT NULL             COMMENT '소진/복원 대상 증가lot 원장 행(charge/bonus)',
-  amount          DECIMAL(18,6) NOT NULL             COMMENT '이 lot에서 소진/복원한 양(양수)',
-  alloc_type      VARCHAR(10)   NOT NULL DEFAULT 'consume' COMMENT 'consume(소진)/restore(환불 복원)',
-  status          INT           NOT NULL DEFAULT 1   COMMENT '1정상 0중지 -1삭제',
-  created_at      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_alloc_debit (debit_ledger_id),
-  KEY idx_alloc_lot (lot_ledger_id),
-  KEY idx_alloc_site (site_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 차감·환불↔소진lot 매핑(FIFO 부분소진)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 통장식 단일 원장(증가lot/차감·remaining·멱등)';
 
 -- 토스 웹훅 수신 로그(멱등) — SaaS/크레딧 결제
 CREATE TABLE TB_TOSS_WEBHOOK_EVENT (
