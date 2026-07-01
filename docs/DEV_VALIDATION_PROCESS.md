@@ -53,8 +53,8 @@
 
 - **개발**: `frontend-developer`(FR01)·`admin-developer`(AD01)·`api-developer`(API)·`dba`(스키마) — 화면ID 기준 구현 + 셀프검증. 디자인 일관성은 `uiux-lead`/`ux-designer` 표준 준수.
 - **검증 게이트**: `qa`(동작·회귀·카피)·`security-reviewer`(권한·시크릿)·`privacy-officer`(마스킹·PII·약관).
-- **조율·판정**: `기획-lead`(화면ID/정책 정합)·`개발-lead`(기술 게이트)·`품질·보안-lead`(품질 게이트 컨펌)·`운영-lead`(배포·릴리스 게이트).
-- **총괄**(`chief`): 검증 라운드 운영·최종 판정·통합 보고. *(참모 `chief-of-staff` 미가용 → 취합은 총괄이 직접.)*
+- **조율·판정**: `plan-lead`(화면ID/정책 정합)·`dev-lead`(기술 게이트)·`qa-lead`(품질 게이트 컨펌)·`ops-lead`(배포·릴리스 게이트).
+- **총괄**(`chief`): 검증 라운드 운영·최종 판정·통합 보고(취합은 총괄이 직접).
 
 ---
 
