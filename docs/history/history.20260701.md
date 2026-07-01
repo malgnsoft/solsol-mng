@@ -252,3 +252,22 @@
 - **② 운영자 시드 적용(코드 배포와 분리·선적용)**: `seed.admin.sql`을 담당자가 Aurora MySQL에 직접 `SOURCE`/`<` 실행 — **prod PW는 dev값(solsol2026) 교체·해시 재생성(`src/lib/password.ts`) 필수**. 스키마 = master `solsol`.
 - **③ brand-api Workers 실배포**: 시크릿·시드 검증 후 `wrangler deploy` → 스모크(`/admin/*` 401 무인증·admin 로그인 200).
 - **④ brand-admin 실연동 전환**: 위 ①~③ 완료·security(WAF 레이트리밋)·qa 게이트 통과 후 `wrangler pages secret put NUXT_API_BASE`(brand-api Workers URL) 주입 → 재배포로 목업→실 API 전환.
+
+## 17. brand-api Workers 실배포 + 시크릿 주입 (사용자 승인 후 실행)
+
+- **한 줄**: 사용자 승인으로 `solsol-brand-api`(Hono/Workers)를 **프로덕션 실배포**하고 `ALLOWED_ORIGINS` 시크릿을 주입, 스모크(헬스 200·admin 게이트 401)까지 GREEN. **운영자 시드는 이 환경에서 Aurora 직접 쓰기 경로 없음 → 준비된 실해시 SQL 핸드오프(미적용)**. 시드 미완이므로 **brand-admin `NUXT_API_BASE` 전환은 페일세이프로 보류**(목업 배포 무손상).
+- **사전 점검**: `pnpm typecheck` GREEN(exit 0). 작업트리 clean(`0443afd`).
+- **시크릿(값 무노출)**: `JWT_SECRET`·`OPS_SECRET`·`REFRESH_PEPPER`·`SECRET_ENC_KEY`(AES-256 base64 32B) — **기존 등록분 재사용(로테이트 안 함)**. `ALLOWED_ORIGINS` **신규 주입 성공**(운영자단 `https://solsol-brand-admin.pages.dev` + 브랜드 프론트 포함). `MASTER_SCHEMA_NAME=solsol`(wrangler.toml var). `TOSS_SECRET_KEY`/`TOSS_WEBHOOK_SECRET` **미주입**(결제 staging-gate, 관리자 콘솔 동작 불요).
+- **배포**: `wrangler deploy` → **https://solsol-brand-api.malgnsoft.workers.dev** (Version `c8739ecf`). 바인딩: HYPERDRIVE(Aurora)·APP_ENV=production·MASTER_SCHEMA_NAME=solsol.
+- **스모크(GREEN)**: `GET /health`→200(env=production) · `GET /admin/sites`(무토큰)→**401 UNAUTHENTICATED**(requireAdmin 정상, 가드 누락 아님) · `GET /api/plans`(공개)→200 `[]` · `GET /api/news`→200 `[]`(**TB_NEWS 존재 = 이전 세션 migrate 적용됨, 재실행 불요**). 빈 배열=Aurora 실연결(에러 시 500).
+- **운영자 시드(미적용·핸드오프)**: `POST /admin/auth/login`(superadmin@solsol.local/solsol2026)→**401 INVALID_CREDENTIALS**(=admin 계정 미시드). brand-api엔 seed 엔드포인트 없음(`/ops/migrate`만) + 이 환경에서 Aurora 직접 MySQL 쓰기 경로 없음 → **시드 미실행**. `solsol2026`의 **실 PBKDF2 해시를 레포 알고리즘(`src/lib/password.ts`)으로 생성·self-verify** 후 최종 SQL을 **파일로만** 준비(해시 무노출). DBA가 자기 env로 Aurora master `solsol`.TB_USER에 `mysql ... < seed.admin.FINAL.sql` 적용 필요.
+- **brand-admin 실전환(보류)**: 시드 미완 → `NUXT_API_BASE` **미설정 유지**. 목업 배포 https://solsol-brand-admin.pages.dev 무손상.
+
+### §17 산출물
+- `solsol-brand-api` **Workers 실배포**: https://solsol-brand-api.malgnsoft.workers.dev (Version `c8739ecf`, `0443afd`). `ALLOWED_ORIGINS` 시크릿 주입. 스모크 GREEN.
+
+### §17 다음 단계 (잔여 TODO)
+- **① 운영자 시드 적용**(DBA·자기 env): 준비된 실해시 SQL을 Aurora master `solsol`.TB_USER에 적용 → 재검증 `POST /admin/auth/login`→200.
+- **② brand-admin 실전환**(시드 성공 후에만): `wrangler pages secret put NUXT_API_BASE`=brand-api Workers URL → 재빌드·재배포 → pages.dev 실 로그인 스모크.
+- **③ TOSS 실키**: 결제 활성화 시 `TOSS_SECRET_KEY`/`TOSS_WEBHOOK_SECRET` 주입.
+- **④ CF WAF**: 운영자 로그인 엔드포인트 레이트리밋(security 게이트).
