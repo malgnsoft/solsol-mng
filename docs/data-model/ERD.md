@@ -40,7 +40,8 @@ erDiagram
     TB_USER {
         bigint id PK
         varchar user_type "seller(크리에이터)/admin(플랫폼 운영자)"
-        varchar email "플랫폼 로그인 ID"
+        varchar login_id "플랫폼 로그인 아이디"
+        varchar email "이메일(연락)"
         varchar name
         varchar phone
         varchar role "운영자 역할(user_type=admin): superadmin/admin/support"

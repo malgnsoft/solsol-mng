@@ -39,7 +39,8 @@ CREATE TABLE TB_SITE (
 CREATE TABLE TB_USER (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
   user_type     VARCHAR(12)  NOT NULL                COMMENT 'seller(크리에이터)/admin(플랫폼 운영자)',
-  email         VARCHAR(255) NOT NULL                COMMENT '플랫폼 로그인 ID',
+  login_id      VARCHAR(255) NOT NULL                COMMENT '플랫폼 로그인 아이디',
+  email         VARCHAR(255) NOT NULL                COMMENT '이메일(연락)',
   name          VARCHAR(50)  NOT NULL,
   phone         VARCHAR(20)      NULL,
   role          VARCHAR(20)      NULL                COMMENT '운영자 역할(user_type=admin): superadmin/admin/support',
@@ -48,6 +49,7 @@ CREATE TABLE TB_USER (
   created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
+  UNIQUE KEY uk_user_login_id (login_id),
   UNIQUE KEY uk_user_email (email),
   KEY idx_user_type (user_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정(셀러+운영자 통합)';
