@@ -1,5 +1,5 @@
 // 간트 WBS 데이터 — 쏠쏠 크리에이터 LMS 전체 일정(보드 8단계 전부). 날짜는 YYYY-MM-DD.
-// Step 5=스파이크(1차 개발/PoC), Step 7=서비스 구현(개발 트랙). D1(wbs_item) 폴백 · seed.sql 동기화.
+// Step 6=스파이크(1차 개발/PoC·설계와 구현 사이), Step 7=서비스 구현(개발 트랙). D1(wbs_item) 폴백 · seed.sql 동기화.
 
 export interface GanttItem {
   step: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
@@ -19,8 +19,8 @@ export const wbsSteps: Record<number, string> = {
   2: "Step 2 · 화면설계",
   3: "Step 3 · 디자인",
   4: "Step 4 · 퍼블리싱(목업)",
-  5: "Step 5 · 스파이크(1차 개발)",
-  6: "Step 6 · 설계",
+  5: "Step 5 · 설계",
+  6: "Step 6 · 스파이크(1차 개발)",
   7: "Step 7 · 구현",
   8: "Step 8 · 운영·계약",
 }
@@ -32,8 +32,8 @@ export const wbsStageMeta: Record<number, { weight: number }> = {
   2: { weight: 10 },
   3: { weight: 6 },
   4: { weight: 8 },
-  5: { weight: 7 },
-  6: { weight: 9 },
+  5: { weight: 9 },
+  6: { weight: 7 },
   7: { weight: 40 },
   8: { weight: 12 },
 }
@@ -67,19 +67,19 @@ export const wbsGantt: GanttItem[] = [
   { step: 4, group: "브랜드 사이트 목업(BR01)", name: "BR 인증·내사이트·결제 목업", owner: "강프개", responsible: "김도형", start: "2026-06-25", end: "2026-06-25", progress: 100, href: "https://solsol-brand-mockup.pages.dev" },
   { step: 4, group: "브랜드 사이트 목업(BR01)", name: "BR 마이페이지·약관·시스템 목업", owner: "강프개", responsible: "김도형", start: "2026-06-25", end: "2026-06-25", progress: 100, note: "39화면 · 검증 게이트 통과 · major4 보완", href: "https://solsol-brand-mockup.pages.dev" },
   { step: 4, group: "브랜드 관리자단 목업(BO)", name: "BO 화면목록 확정 + 목업", owner: "강프개", responsible: "김도형", start: "2026-06-30", end: "2026-07-18", progress: 0, note: "화면목록 확정 후 목업" },
-  { step: 5, group: "핵심 스파이크(1차 개발)", name: "데이터 모델·멀티테넌트 스파이크 (schema-per-tenant·Hyperdrive)", owner: "한데관", responsible: "김도형", start: "2026-06-28", end: "2026-07-04", progress: 90, note: "1차 개발 검증 2라운드 통과" },
-  { step: 5, group: "핵심 스파이크(1차 개발)", name: "인증·회원 슬라이스 (소셜 로그인·JWT·세션)", owner: "조백개", responsible: "김도형", start: "2026-06-28", end: "2026-07-11", progress: 35, note: "mock E2E · 실 provider 교체 대기" },
-  { step: 5, group: "핵심 스파이크(1차 개발)", name: "핵심 도메인 API 골격 (강의·수강·주문)", owner: "조백개", responsible: "김도형", start: "2026-07-01", end: "2026-07-18", progress: 10 },
-  { step: 5, group: "핵심 스파이크(1차 개발)", name: "결제·정산 연동 PoC (토스·펌뱅킹)", owner: "조백개", responsible: "김도형", start: "2026-07-05", end: "2026-07-25", progress: 0 },
-  { step: 5, group: "핵심 스파이크(1차 개발)", name: "강의 플레이어·진도 PoC (위캔디오 VOD)", owner: "배현우", responsible: "김도형", start: "2026-07-05", end: "2026-07-25", progress: 0 },
-  { step: 6, group: "화면설계·정책·검증", name: "화면목록 마스터 (272화면 채번·3중검증)", owner: "김덕조", responsible: "김덕조", start: "2026-06-24", end: "2026-06-25", progress: 100, note: "00_화면목록 v1.2" },
-  { step: 6, group: "화면설계·정책·검증", name: "화면설계서 FR/AD/BR (01~03)", owner: "김덕조", responsible: "김덕조", start: "2026-06-26", end: "2026-07-18", progress: 90 },
-  { step: 6, group: "화면설계·정책·검증", name: "정책설계서·정책요약 (확정 6건)", owner: "김덕조", responsible: "김덕조", start: "2026-06-26", end: "2026-07-11", progress: 95 },
-  { step: 6, group: "화면설계·정책·검증", name: "검증 패키지·개발–검증 절차 (dev-validation 게이트)", owner: "김덕조", responsible: "김덕조", start: "2026-06-23", end: "2026-06-25", progress: 100, note: "docs/validation · DEV_VALIDATION_PROCESS" },
-  { step: 6, group: "개발 설계", name: "DB 설계 (테이블·ERD)", owner: "한데관", responsible: "김도형", start: "2026-06-26", end: "2026-07-04", progress: 95 },
-  { step: 6, group: "개발 설계", name: "기능명세서 (페이지명세서)", owner: "최기획", responsible: "김도형", start: "2026-06-26", end: "2026-07-04", progress: 0 },
-  { step: 6, group: "개발 설계", name: "API 명세서 (1·2차)", owner: "조백개", responsible: "김도형", start: "2026-06-26", end: "2026-08-01", progress: 25 },
-  { step: 6, group: "개발 설계", name: "외부 연계 설계 (NHN·NICE·PG·위캔디오·펌뱅킹)", owner: "조백개", responsible: "김도형", start: "2026-07-01", end: "2026-08-29", progress: 0, note: "7/1~ 2개월 실연동" },
+  { step: 5, group: "화면설계·정책·검증", name: "화면목록 마스터 (272화면 채번·3중검증)", owner: "김덕조", responsible: "김덕조", start: "2026-06-24", end: "2026-06-25", progress: 100, note: "00_화면목록 v1.2" },
+  { step: 5, group: "화면설계·정책·검증", name: "화면설계서 FR/AD/BR (01~03)", owner: "김덕조", responsible: "김덕조", start: "2026-06-26", end: "2026-07-18", progress: 90 },
+  { step: 5, group: "화면설계·정책·검증", name: "정책설계서·정책요약 (확정 6건)", owner: "김덕조", responsible: "김덕조", start: "2026-06-26", end: "2026-07-11", progress: 95 },
+  { step: 5, group: "화면설계·정책·검증", name: "검증 패키지·개발–검증 절차 (dev-validation 게이트)", owner: "김덕조", responsible: "김덕조", start: "2026-06-23", end: "2026-06-25", progress: 100, note: "docs/validation · DEV_VALIDATION_PROCESS" },
+  { step: 5, group: "개발 설계", name: "DB 설계 (테이블·ERD)", owner: "한데관", responsible: "김도형", start: "2026-06-26", end: "2026-07-04", progress: 95 },
+  { step: 5, group: "개발 설계", name: "기능명세서 (페이지명세서)", owner: "최기획", responsible: "김도형", start: "2026-06-26", end: "2026-07-04", progress: 0 },
+  { step: 5, group: "개발 설계", name: "API 명세서 (1·2차)", owner: "조백개", responsible: "김도형", start: "2026-06-26", end: "2026-08-01", progress: 25 },
+  { step: 5, group: "개발 설계", name: "외부 연계 설계 (NHN·NICE·PG·위캔디오·펌뱅킹)", owner: "조백개", responsible: "김도형", start: "2026-07-01", end: "2026-08-29", progress: 0, note: "7/1~ 2개월 실연동" },
+  { step: 6, group: "핵심 스파이크(1차 개발)", name: "데이터 모델·멀티테넌트 스파이크 (schema-per-tenant·Hyperdrive)", owner: "한데관", responsible: "김도형", start: "2026-06-28", end: "2026-07-04", progress: 90, note: "1차 개발 검증 2라운드 통과 · 이번주 완료" },
+  { step: 6, group: "핵심 스파이크(1차 개발)", name: "인증·회원 슬라이스 (소셜 로그인·JWT·세션)", owner: "조백개", responsible: "김도형", start: "2026-06-28", end: "2026-07-05", progress: 35, note: "mock E2E · 이번주 완료" },
+  { step: 6, group: "핵심 스파이크(1차 개발)", name: "핵심 도메인 API 골격 (강의·수강·주문)", owner: "조백개", responsible: "김도형", start: "2026-06-30", end: "2026-07-05", progress: 10, note: "이번주 완료" },
+  { step: 6, group: "핵심 스파이크(1차 개발)", name: "결제·정산 연동 PoC (토스·펌뱅킹)", owner: "조백개", responsible: "김도형", start: "2026-07-01", end: "2026-07-05", progress: 0, note: "이번주 완료" },
+  { step: 6, group: "핵심 스파이크(1차 개발)", name: "강의 플레이어·진도 PoC (위캔디오 VOD)", owner: "배현우", responsible: "김도형", start: "2026-07-01", end: "2026-07-05", progress: 0, note: "이번주 완료" },
   { step: 7, group: "공통·기반", name: "프레임워크·스키마·공통모듈", owner: "조백개", responsible: "김도형", start: "2026-06-26", end: "2026-08-01", progress: 35 },
   { step: 7, group: "공통·기반", name: "외부 API 연동 (소셜·메시징·결제·본인인증·위캔디오)", owner: "조백개", responsible: "김도형", start: "2026-06-26", end: "2026-08-29", progress: 5 },
   { step: 7, group: "공통·기반", name: "인프라·CI/CD", owner: "신배담", responsible: "김도형", start: "2026-06-26", end: "2026-08-15", progress: 0 },
