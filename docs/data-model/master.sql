@@ -21,7 +21,7 @@ CREATE TABLE TB_SITE (
   schema_name     VARCHAR(64)  NOT NULL                COMMENT '테넌트 DB(스키마)명. 예: solsol_t000123',
   domain          VARCHAR(255)     NULL                COMMENT '연결 도메인(커스텀/서브도메인)',
   name            VARCHAR(100) NOT NULL                COMMENT '사이트/브랜드명',
-  owner_seller_id BIGINT       NOT NULL                COMMENT '소유 크리에이터(TB_SELLER)',
+  owner_user_id BIGINT       NOT NULL                COMMENT '소유 셀러(TB_USER user_type=seller)',
   plan_id         BIGINT           NULL                COMMENT '현재 SaaS 요금제(TB_PLAN)',
   plan_state      VARCHAR(12)  NOT NULL DEFAULT 'active' COMMENT 'active/grace/expired/canceled',
   provisioned_at  TIMESTAMP         NULL                COMMENT '테넌트 스키마 생성 완료 시각',
@@ -32,27 +32,30 @@ CREATE TABLE TB_SITE (
   UNIQUE KEY uk_site_slug (slug),
   UNIQUE KEY uk_site_schema (schema_name),
   UNIQUE KEY uk_site_domain (domain),
-  KEY idx_site_owner (owner_seller_id)
+  KEY idx_site_owner (owner_user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크리에이터 사이트(테넌트) 레지스트리';
 
--- 크리에이터(셀러) — 플랫폼 레벨 소유자 계정
-CREATE TABLE TB_SELLER (
+-- 플랫폼 계정 — 셀러(크리에이터) + 운영자(쏠쏠 직원) 통합. user_type으로 구분
+CREATE TABLE TB_USER (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
+  user_type     VARCHAR(12)  NOT NULL                COMMENT 'seller(크리에이터)/admin(플랫폼 운영자)',
   email         VARCHAR(255) NOT NULL                COMMENT '플랫폼 로그인 ID',
   name          VARCHAR(50)  NOT NULL,
   phone         VARCHAR(20)      NULL,
+  role          VARCHAR(20)      NULL                COMMENT '운영자 역할(user_type=admin): superadmin/admin/support',
   last_login_at TIMESTAMP         NULL,
   status        INT          NOT NULL DEFAULT 1      COMMENT '1정상 0중지 -1삭제',
   created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_seller_email (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크리에이터(셀러) 플랫폼 계정';
+  UNIQUE KEY uk_user_email (email),
+  KEY idx_user_type (user_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정(셀러+운영자 통합)';
 
--- 셀러 자격증명 (ID+PW)
-CREATE TABLE TB_SELLER_CREDENTIAL (
+-- 플랫폼 계정 자격증명 (ID+PW)
+CREATE TABLE TB_USER_CREDENTIAL (
   id                  BIGINT       NOT NULL AUTO_INCREMENT,
-  seller_id           BIGINT       NOT NULL,
+  user_id             BIGINT       NOT NULL,
   password_hash       VARCHAR(255) NOT NULL              COMMENT '3종 8~16자(C-3) 해시',
   password_updated_at TIMESTAMP         NULL,
   two_factor_email    TINYINT      NOT NULL DEFAULT 0,
@@ -60,23 +63,8 @@ CREATE TABLE TB_SELLER_CREDENTIAL (
   created_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_sellercred_seller (seller_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='셀러 자격증명';
-
--- 플랫폼 운영자 (쏠쏠 직원/슈퍼관리자)
-CREATE TABLE TB_PLATFORM_ADMIN (
-  id            BIGINT       NOT NULL AUTO_INCREMENT,
-  email         VARCHAR(255) NOT NULL,
-  name          VARCHAR(50)  NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  role          VARCHAR(20)  NOT NULL DEFAULT 'admin' COMMENT 'superadmin/admin/support',
-  last_login_at TIMESTAMP         NULL,
-  status        INT          NOT NULL DEFAULT 1      COMMENT '1정상 0중지 -1삭제',
-  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_padmin_email (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 운영자';
+  UNIQUE KEY uk_usercred_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정 자격증명';
 
 -- SaaS 요금제 — Free 즉시부여 + 유료(무료체험 미운영 M-1)
 CREATE TABLE TB_PLAN (
@@ -99,7 +87,7 @@ CREATE TABLE TB_PLAN (
 CREATE TABLE TB_SUBSCRIPTION (
   id                   BIGINT        NOT NULL AUTO_INCREMENT,
   site_id            BIGINT        NOT NULL,
-  seller_id            BIGINT        NOT NULL,
+  user_id            BIGINT        NOT NULL,
   plan_id              BIGINT        NOT NULL,
   billing_cycle        INT           NOT NULL DEFAULT 1   COMMENT '1=monthly/2=yearly',
   unit_price           DECIMAL(18,6) NOT NULL,
@@ -117,13 +105,13 @@ CREATE TABLE TB_SUBSCRIPTION (
   updated_at           TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_sub_site (site_id),
-  KEY idx_sub_seller (seller_id)
+  KEY idx_sub_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='셀러 SaaS 구독';
 
 -- 셀러 빌링키(토스) — SaaS 정기결제 카드
 CREATE TABLE TB_BILLING_KEY (
   id               BIGINT       NOT NULL AUTO_INCREMENT,
-  seller_id        BIGINT       NOT NULL,
+  user_id        BIGINT       NOT NULL,
   toss_billing_key VARCHAR(255) NOT NULL              COMMENT '토스 빌링키(AES-256-GCM 암호화 저장·키는 KMS/wrangler secret·응답 미포함)',
   card_company     VARCHAR(50)      NULL,
   card_type        VARCHAR(20)      NULL,
@@ -134,7 +122,7 @@ CREATE TABLE TB_BILLING_KEY (
   created_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_billing_seller (seller_id)
+  KEY idx_billing_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='셀러 빌링키(SaaS)';
 
 -- SaaS 정기결제 청구서

@@ -143,6 +143,14 @@
 - dev DB 클린 리빌드(master 14·tenant 91, 0오류) — `TB_SITE` 시드 정상. README 참조 갱신.
 - Figma: 마스터 보드(`UR6M…`) 전면 재생성(TB_SITE·_price·timestamp 반영). **이후 Figma는 사용자 요청 시 일괄 갱신**(건별 갱신 중단).
 
+## 19. 마스터 계정 통합 — TB_SELLER + TB_PLATFORM_ADMIN → TB_USER
+
+- 마스터의 **셀러(`TB_SELLER`) + 플랫폼 운영자(`TB_PLATFORM_ADMIN`)를 `TB_USER`로 통합**, `user_type`(seller/admin)으로 구분. 운영자 역할은 `role`(superadmin/admin/support, admin일 때) 컬럼 유지.
+- 자격증명 패턴을 테넌트와 통일: `TB_SELLER_CREDENTIAL`→**`TB_USER_CREDENTIAL`**(운영자 인라인 password_hash도 흡수). `seller_id`→`user_id`.
+- 참조 정리: `TB_SITE.owner_seller_id`→**`owner_user_id`**, `TB_SUBSCRIPTION`/`TB_BILLING_KEY.seller_id`→`user_id`, 키명 `idx_*_user`.
+- 마스터 **14→13** 테이블. `solsol-api` 시드(`ops.ts`) `TB_USER`(user_type=seller)로 갱신, verify 기대치 13.
+- dev DB 클린 리빌드(master 13·tenant 91, 0오류) — 시드 `TB_SITE.owner_user_id=1` 정상. 정본 4종(sql·README·ERD.md·DB) 동기. **Figma는 다음 일괄 갱신 시 반영.**
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
