@@ -136,6 +136,13 @@
 - **WBS 현행화**(상기 §1~5 반영): DB설계·ERD 0→95%·API명세 0→25% / 프레임워크·스키마 0→35%·API개발 0→10%·외부API연동 0→5%·CF 인증·가입 0→35%. 진척 자동산출 → 스텝5 63%·스텝6 4%·**전체 39.5→43.3%**. 라이브 D1 + wbsData·seed 동기.
 - 마이그레이션 0005(screen_status.review + screen_comment) 원격 D1 적용. solsol-mng 다수 배포.
 
+## 18. 마스터 스키마 — TB_TENANT → TB_SITE 개명
+
+- 마스터 테넌트 레지스트리 **`TB_TENANT`→`TB_SITE`** 개명 + FK 컬럼 **`tenant_id`→`site_id`**(8개 테이블)·키명(`uk_site_*`/`idx_*_site`)·`TB_TENANT_PROVISION_LOG`→**`TB_SITE_PROVISION_LOG`** 일괄 정리.
+- `solsol-api` 코드 동기: `schema.master.ts`(ms.table 'TB_SITE') · `ops.ts`(seed/verify `solsol.TB_SITE`). JS 라우팅 변수 `tenant`은 멀티테넌시 개념이라 유지.
+- dev DB 클린 리빌드(master 14·tenant 91, 0오류) — `TB_SITE` 시드 정상. README 참조 갱신.
+- Figma: 마스터 보드(`UR6M…`) 전면 재생성(TB_SITE·_price·timestamp 반영). **이후 Figma는 사용자 요청 시 일괄 갱신**(건별 갱신 중단).
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).

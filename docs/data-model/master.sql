@@ -7,7 +7,7 @@
 --  컨벤션: TB_ 단수 / id BIGINT AUTO_INCREMENT PK / status INT(1정상 0중지 -1삭제)
 --          금액·크레딧 DECIMAL(18,6) / TIMESTAMP UTC + created_at·updated_at 기본시
 --          약한 FK(네이밍+인덱스, DB제약 미설정) / utf8mb4_unicode_ci
---  ※ tenant_id = TB_TENANT.id 참조(테넌트 스코프 행). 크로스스키마 참조는 논리 FK.
+--  ※ site_id = TB_SITE.id 참조(테넌트 스코프 행). 크로스스키마 참조는 논리 FK.
 -- =====================================================================
 
 SET NAMES utf8mb4;
@@ -15,7 +15,7 @@ SET time_zone = '+00:00';
 
 
 -- 크리에이터 사이트(테넌트) 레지스트리 — 스키마 라우팅의 정본
-CREATE TABLE TB_TENANT (
+CREATE TABLE TB_SITE (
   id              BIGINT       NOT NULL AUTO_INCREMENT,
   slug            VARCHAR(50)  NOT NULL                COMMENT '식별 슬러그(불변 권장)',
   schema_name     VARCHAR(64)  NOT NULL                COMMENT '테넌트 DB(스키마)명. 예: solsol_t000123',
@@ -29,10 +29,10 @@ CREATE TABLE TB_TENANT (
   created_at      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_tenant_slug (slug),
-  UNIQUE KEY uk_tenant_schema (schema_name),
-  UNIQUE KEY uk_tenant_domain (domain),
-  KEY idx_tenant_owner (owner_seller_id)
+  UNIQUE KEY uk_site_slug (slug),
+  UNIQUE KEY uk_site_schema (schema_name),
+  UNIQUE KEY uk_site_domain (domain),
+  KEY idx_site_owner (owner_seller_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크리에이터 사이트(테넌트) 레지스트리';
 
 -- 크리에이터(셀러) — 플랫폼 레벨 소유자 계정
@@ -98,7 +98,7 @@ CREATE TABLE TB_PLAN (
 -- 셀러 SaaS 구독 (플랫폼 ↔ 크리에이터)
 CREATE TABLE TB_SUBSCRIPTION (
   id                   BIGINT        NOT NULL AUTO_INCREMENT,
-  tenant_id            BIGINT        NOT NULL,
+  site_id            BIGINT        NOT NULL,
   seller_id            BIGINT        NOT NULL,
   plan_id              BIGINT        NOT NULL,
   billing_cycle        INT           NOT NULL DEFAULT 1   COMMENT '1=monthly/2=yearly',
@@ -116,7 +116,7 @@ CREATE TABLE TB_SUBSCRIPTION (
   created_at           TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at           TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_sub_tenant (tenant_id),
+  KEY idx_sub_site (site_id),
   KEY idx_sub_seller (seller_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='셀러 SaaS 구독';
 
@@ -141,7 +141,7 @@ CREATE TABLE TB_BILLING_KEY (
 CREATE TABLE TB_INVOICE (
   id                BIGINT        NOT NULL AUTO_INCREMENT,
   subscription_id   BIGINT        NOT NULL,
-  tenant_id         BIGINT        NOT NULL,
+  site_id         BIGINT        NOT NULL,
   period_start      TIMESTAMP      NOT NULL,
   period_end        TIMESTAMP      NOT NULL,
   pay_price            DECIMAL(18,6) NOT NULL,
@@ -158,13 +158,13 @@ CREATE TABLE TB_INVOICE (
   updated_at        TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_invoice_sub (subscription_id),
-  KEY idx_invoice_tenant (tenant_id)
+  KEY idx_invoice_site (site_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='SaaS 정기결제 청구서';
 
 -- SaaS/크레딧 결제(토스)
 CREATE TABLE TB_PAYMENT (
   id               BIGINT        NOT NULL AUTO_INCREMENT,
-  tenant_id        BIGINT        NOT NULL,
+  site_id        BIGINT        NOT NULL,
   ref_type         VARCHAR(20)   NOT NULL DEFAULT 'saas' COMMENT 'saas(구독)/credit(크레딧충전)',
   invoice_id       BIGINT            NULL,
   credit_charge_id BIGINT            NULL,
@@ -183,26 +183,26 @@ CREATE TABLE TB_PAYMENT (
   updated_at       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uk_payment_toss_key (toss_payment_key),
-  KEY idx_payment_tenant (tenant_id),
+  KEY idx_payment_site (site_id),
   KEY idx_payment_credit_charge (credit_charge_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='SaaS/크레딧 결제(토스)';
 
 -- 크레딧 잔액 (테넌트별) — 플랫폼이 크리에이터에게 판매
 CREATE TABLE TB_CREDIT_ACCOUNT (
   id         BIGINT        NOT NULL AUTO_INCREMENT,
-  tenant_id  BIGINT        NOT NULL,
+  site_id  BIGINT        NOT NULL,
   balance    DECIMAL(18,6) NOT NULL DEFAULT 0,
   status     INT           NOT NULL DEFAULT 1      COMMENT '1정상 0중지 -1삭제',
   created_at TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_credit_tenant (tenant_id)
+  UNIQUE KEY uk_credit_site (site_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 잔액(테넌트별)';
 
 -- 크레딧 충전 내역
 CREATE TABLE TB_CREDIT_CHARGE (
   id            BIGINT        NOT NULL AUTO_INCREMENT,
-  tenant_id     BIGINT        NOT NULL,
+  site_id     BIGINT        NOT NULL,
   payment_id    BIGINT            NULL              COMMENT '충전 결제(TB_PAYMENT)',
   charge_amount DECIMAL(18,6) NOT NULL,
   bonus_amount  DECIMAL(18,6) NOT NULL DEFAULT 0,
@@ -215,13 +215,13 @@ CREATE TABLE TB_CREDIT_CHARGE (
   created_at    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_creditcharge_tenant (tenant_id)
+  KEY idx_creditcharge_site (site_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 충전 내역';
 
 -- 크레딧 차감 원장(종량제·멱등 — M-3)
 CREATE TABLE TB_CREDIT_LEDGER (
   id              BIGINT        NOT NULL AUTO_INCREMENT,
-  tenant_id       BIGINT        NOT NULL,
+  site_id       BIGINT        NOT NULL,
   direction       VARCHAR(10)   NOT NULL             COMMENT 'debit/refund',
   reason          VARCHAR(30)   NOT NULL             COMMENT 'campaign_send/ai_tutor/ai_translate/ai_caption',
   unit_count      DECIMAL(18,6) NOT NULL,
@@ -236,8 +236,8 @@ CREATE TABLE TB_CREDIT_LEDGER (
   created_at      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_ledger_idem (tenant_id, idempotency_key),
-  KEY idx_ledger_tenant (tenant_id)
+  UNIQUE KEY uk_ledger_idem (site_id, idempotency_key),
+  KEY idx_ledger_site (site_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 차감 원장(종량제)';
 
 -- 토스 웹훅 수신 로그(멱등) — SaaS/크레딧 결제
@@ -260,9 +260,9 @@ CREATE TABLE TB_TOSS_WEBHOOK_EVENT (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='SaaS/크레딧 결제 웹훅 수신 로그(멱등)';
 
 -- 테넌트 프로비저닝 이력
-CREATE TABLE TB_TENANT_PROVISION_LOG (
+CREATE TABLE TB_SITE_PROVISION_LOG (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
-  tenant_id   BIGINT       NOT NULL,
+  site_id   BIGINT       NOT NULL,
   action      VARCHAR(20)  NOT NULL              COMMENT 'create/migrate/suspend/delete',
   schema_name VARCHAR(64)      NULL,
   detail      VARCHAR(255)     NULL,
@@ -271,7 +271,7 @@ CREATE TABLE TB_TENANT_PROVISION_LOG (
   created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  KEY idx_provlog_tenant (tenant_id)
+  KEY idx_provlog_site (site_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='테넌트 프로비저닝 이력';
 
 -- =====================================================================

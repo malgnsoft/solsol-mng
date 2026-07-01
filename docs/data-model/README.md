@@ -17,7 +17,7 @@
 > 이미 전권을 가진 기존 DB 2개를 사용한다. **마스터 = `solsol`**(Hyperdrive `malgn-dev-solsol-prv` 기본 DB와 일치),
 > **개발 중 단일 테넌트 = `solsol_lms`**. 이후 추가 테넌트는 **`solsol_lms_<site_id>`**(예: `solsol_lms_1`).
 > DDL은 스키마명을 하드코딩하지 않으므로(파일은 CREATE TABLE만), master.sql→`solsol`, tenant_template.sql→`solsol_lms`로 적용한다.
-> 라우팅 정본은 `solsol.TB_TENANT.schema_name`(테넌트1=`solsol_lms`). prod에서는 위 `solsol_master`/`solsol_t*`로 전환.
+> 라우팅 정본은 `solsol.TB_SITE.schema_name`(테넌트1=`solsol_lms`). prod에서는 위 `solsol_master`/`solsol_t*`로 전환.
 > ⚠️ 추가 테넌트의 `CREATE DATABASE`는 관리자 권한 필요(앱 `solsol` 유저 불가) — 자동 온보딩 경로는 prod OQ.
 > Round1 교정 반영(2026-06-30): B-1~B-6 blocker 해소 + 중결함 유니크/인덱스/INVOICE 컬럼 적용.
 > 소셜 통합(2026-06-30): `TB_USER_SOCIAL` 폐지 → `TB_USER`에 5종 SNS 컬럼(`google_uid`~`facebook_uid`, 각 UNIQUE) + `primary_provider` **비정규화**. 어떤 SNS로 로그인해도 1회원.
@@ -31,9 +31,9 @@
   마케팅·알림·커뮤니티·사이트설정. `site_id` 컬럼 없음(스키마 자체가 테넌트).
 
 ### 신규 테넌트 프로비저닝(개념)
-1. `master.TB_SELLER`/`TB_TENANT` 행 생성 → `schema_name` 확정(예: `solsol_t000123`)
+1. `master.TB_SELLER`/`TB_SITE` 행 생성 → `schema_name` 확정(예: `solsol_t000123`)
 2. `CREATE DATABASE solsol_t000123 ...` 후 `tenant_template.sql`을 그 스키마에 적용
-3. 시드(역할·기본 게시판·플레이어 설정·알림 라우팅) 입력 → `TB_TENANT.provisioned_at` 기록
+3. 시드(역할·기본 게시판·플레이어 설정·알림 라우팅) 입력 → `TB_SITE.provisioned_at` 기록
 
 ```sql
 CREATE DATABASE solsol_master         DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -56,10 +56,10 @@ CREATE DATABASE solsol_t000123        DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 | 금액·크레딧·통화·수수료율 | `DECIMAL(18,6)` |
 | 일시 | `TIMESTAMP`(내부 **UTC** 저장 — 세션/서버 tz 무관), 표시 시 로컬(KST 등) 변환. `created_at`/`updated_at`은 `CURRENT_TIMESTAMP`/`ON UPDATE` 기본시. 날짜 단위는 `DATE`. ※ DATETIME 대신 TIMESTAMP 채택 이유: dev Aurora 서버 tz=Asia/Seoul + **Hyperdrive가 세션 `SET time_zone` 미유지**라 DATETIME은 KST로 저장됨 → TIMESTAMP로 UTC 보장(OQ-TZ) |
 | 외래키 | **약한 FK** = 논리적 FK(네이밍 + 조인 인덱스)만, DB `FOREIGN KEY` 제약·CASCADE 미설정 |
-| FK 네이밍 | 참조테이블단수`_id`. `TB_USER`→`user_id`, `TB_TENANT`→`tenant_id`, `TB_SELLER`→`seller_id`. 동일 테이블 다중 참조 → 역할명`_user_id`(예: `instructor_user_id`) |
+| FK 네이밍 | 참조테이블단수`_id`. `TB_USER`→`user_id`, `TB_SITE`→`site_id`, `TB_SELLER`→`seller_id`. 동일 테이블 다중 참조 → 역할명`_user_id`(예: `instructor_user_id`) |
 | 엔진/문자셋 | InnoDB / `utf8mb4` / `utf8mb4_unicode_ci` |
 
-크로스 스키마 참조(테넌트→마스터: `tenant_id`, `credit_ledger_id` 등)는 전부 **논리 FK**.
+크로스 스키마 참조(테넌트→마스터: `credit_ledger_id` 등, 마스터 내부: `site_id`)는 전부 **논리 FK**.
 schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는다(약한 FK 일관).
 
 ---
@@ -75,7 +75,7 @@ schema-per-tenant라 DB 레벨 FK는 한 스키마 내부에서도 걸지 않는
 5. **상품 7종 통합(CTI)** — `TB_PRODUCT`(`type`: `course`/`live`/`video_call`/`digital`/`package`/`membership`/`community`) + 유형별 확장. 알림 단일 라우팅(R-1), 쿠폰 정액 only(C-4), 결제 비가역(M-8).
    - **강좌(course)** = `TB_PRODUCT`(공통) + `TB_COURSE`(확장·커리큘럼 루트, 1:1 `uk_course_product`) → `TB_SECTION`(`course_id`) → `TB_LESSON`(차시). 진도는 `TB_LESSON_PROGRESS`(`course_user_id`+`lesson_id` 유니크).
    - **라이브(live)** = `TB_PRODUCT_LIVE`(**YouTube Live 전용**: `youtube_url`/`youtube_video_id`/`recorded_content_id`, 입장 즉시 자동수료). **화상(video_call)** = `TB_PRODUCT_VIDEO_CALL`(zoom/google_meet, `meeting_url`/`capacity`)로 분리.
-6. `TB_SITE`(구 단일DB) → 테넌트 내 단일행 `TB_SITE_CONFIG`(표시 설정)로 전환. 테넌트 레지스트리는 `master.TB_TENANT`.
+6. `TB_SITE`(구 단일DB) → 테넌트 내 단일행 `TB_SITE_CONFIG`(표시 설정)로 전환. 테넌트 레지스트리는 `master.TB_SITE`.
 7. **게시판류=범용 엔진** — `TB_BOARD`(정의)/`TB_POST`(게시물)/`TB_COMMENT`(댓글)/`TB_FILE`(첨부)/`TB_BOARD_CATEGORY`(카테고리)를 `module`/`module_id` 기반으로 통합. 공지·FAQ·1:1문의(qna)·자유게시판을 `board_type`으로 분기. 기존 `TB_FAQ*`·`TB_INQUIRY*`·`TB_POST_LIKE`·`TB_ATTACHMENT`는 흡수. **프리미엄 커뮤니티는 별도**(`TB_COMMUNITY_POST`/`TB_COMMUNITY_COMMENT`, 첨부는 `TB_FILE module='community_post'` 재사용).
 8. **수강 등록 = `TB_COURSE_USER`(수강생관리)** — LM `LM_COURSE_USER` 참고. 단순 수강권을 넘어 진도·성적(시험/과제/토론/기타/전체)·수료·정지·마감·구독까지 한 테이블에 집약. `course_id`(강좌)·`package_id`(패키지 경유)·`subscription_id`(구독 부여)로 부여 경로 추적, `tutor_user_id`로 담당 강사 지정. 진도/성적/수료 참조는 `course_user_id`로 통일(`TB_LESSON_PROGRESS`/`TB_CERTIFICATE`/`TB_REVIEW`).
 
