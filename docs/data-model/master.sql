@@ -166,21 +166,11 @@ CREATE TABLE TB_PAYMENT (
   KEY idx_payment_credit_ledger (credit_ledger_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='SaaS/크레딧 결제(토스)';
 
--- 크레딧 잔액 캐시(테넌트별) — 원장/lot 집계의 스냅샷(원장이 정본)
-CREATE TABLE TB_CREDIT_ACCOUNT (
-  id                BIGINT        NOT NULL AUTO_INCREMENT,
-  site_id           BIGINT        NOT NULL,
-  balance           DECIMAL(18,6) NOT NULL DEFAULT 0  COMMENT '전체 잔액 = expiring + permanent',
-  expiring_balance  DECIMAL(18,6) NOT NULL DEFAULT 0  COMMENT '유효기간 있는(만료되는) 잔액 합',
-  permanent_balance DECIMAL(18,6) NOT NULL DEFAULT 0  COMMENT '무기한(만료 없는) 잔액 합',
-  next_expire_at    TIMESTAMP         NULL            COMMENT '가장 임박한 lot 만료 시각(알림 캐시)',
-  last_ledger_id    BIGINT            NULL            COMMENT '이 캐시가 반영한 마지막 원장 행(정합 검증)',
-  status            INT           NOT NULL DEFAULT 1  COMMENT '1정상 0중지 -1삭제',
-  created_at        TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at        TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_credit_site (site_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='크레딧 잔액 캐시(전체/유효기간유무별)';
+-- 크레딧 잔액 = TB_CREDIT_LEDGER에서 파생(별도 캐시 테이블 없음)
+--   전체잔액   = 최신 행 balance_after (idx_ledger_site_created 로 O(1))
+--   expiring/permanent = SUM(remaining) WHERE lot_state='open' GROUP BY is_expiring
+--   next_expire = MIN(expires_at) WHERE lot_state='open' AND is_expiring=1
+--   (읽기 성능이 문제되면 그때 캐시 재도입 — 지금은 원장 단일 정본 유지)
 
 -- 크레딧 통장식 단일 원장 — 증가(lot)·차감을 시간순 한 테이블에 적재(구 TB_CREDIT_CHARGE 흡수)
 --   증가행(charge/bonus/refund_restore): lot 역할. remaining/expires_at/is_expiring 보유

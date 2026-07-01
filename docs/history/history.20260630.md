@@ -168,6 +168,11 @@
 - 마스터 **12 유지**(−CHARGE +ALLOCATION). dev DB 클린 리빌드(master 12·tenant 91, 0오류). 정본 sql·README·ERD.md 갱신. Figma 다음 일괄.
 - 앱계층 주의(설계 근거): usage=1트랜잭션(차감행+lot UPDATE+allocation+account 캐시), lot 잠금(FOR UPDATE)로 경합 직렬화, 불변식 `lot.remaining=amount−Σconsume+Σrestore`·`balance_after` 연쇄·음수 금지. 기존 운영데이터 있으면 CHARGE→원장 백필 별도.
 
+## 22. TB_CREDIT_ACCOUNT 삭제 — 잔액은 원장 파생
+
+- `TB_CREDIT_ACCOUNT`는 `TB_CREDIT_LEDGER`에서 100% 파생되는 캐시(드리프트·정합배치 부담)라 **삭제**. 잔액=최신 `balance_after`, expiring/permanent=열린 lot `SUM(remaining)` by `is_expiring`, next_expire=`MIN(expires_at)`. 읽기 성능 이슈 시 캐시 재도입 여지만 주석으로 남김.
+- 마스터 **12→11**. dev DB 클린 리빌드(11/91, 0오류). README·ERD.md 갱신, ops verify 기대치 11.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).
