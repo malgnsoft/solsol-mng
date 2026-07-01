@@ -158,6 +158,16 @@
 - 마스터 **13→12**. `solsol-api` 시드(login_id·password_hash)·verify(12) 동기, dev DB 클린 리빌드(master 12·tenant 91, 0오류).
 - 정본 sql·README·ERD.md 갱신. Figma 마스터 보드는 다음 일괄 갱신 시.
 
+## 21. 크레딧 도메인 재설계 — 은행통장식 단일 원장 + 유효기간 lot (에이전트팀 DBA 설계)
+
+사용자 요구(①유효기간 있는/없는 크레딧 구분 ②증가·차감이 한 테이블에 통장식으로) → **DBA 에이전트에 설계 위임**, 총괄이 통합·적용.
+- **`TB_CREDIT_LEDGER`(통장식 단일 원장)**: 구 `TB_CREDIT_CHARGE`+`TB_CREDIT_LEDGER` 통합. 증가행(charge/bonus/refund_restore)=lot(`remaining`·`expires_at`·`is_expiring`·`lot_state`), 차감행(usage/expire/adjust). 각 행 `balance_after`(통장 잔고). `direction`(credit/debit)+양수 `amount`. 멱등 uk(`site_id`,`idempotency_key`).
+- **`TB_CREDIT_ALLOCATION`(신설)**: 차감행↔소진 lot 매핑(1차감:N lot). FIFO(임박 만료 우선, 무기한 후순위) 부분소진 정밀 추적. 통장은 사용 1건=1행 유지.
+- **`TB_CREDIT_ACCOUNT`(확장)**: 잔액 캐시에 `expiring_balance`/`permanent_balance`/`next_expire_at`/`last_ledger_id` 추가(원장이 정본, 캐시는 스냅샷).
+- **삭제**: `TB_CREDIT_CHARGE`(→원장 charge 증가행 흡수). `TB_PAYMENT.credit_charge_id`→**`credit_ledger_id`**.
+- 마스터 **12 유지**(−CHARGE +ALLOCATION). dev DB 클린 리빌드(master 12·tenant 91, 0오류). 정본 sql·README·ERD.md 갱신. Figma 다음 일괄.
+- 앱계층 주의(설계 근거): usage=1트랜잭션(차감행+lot UPDATE+allocation+account 캐시), lot 잠금(FOR UPDATE)로 경합 직렬화, 불변식 `lot.remaining=amount−Σconsume+Σrestore`·`balance_after` 연쇄·음수 금지. 기존 운영데이터 있으면 CHARGE→원장 백필 별도.
+
 ## 다음 단계 / 알려진 한계
 
 - **dev DB(`solsol_lms`) 재적용 보류** — 회원 모델 변경(소셜 통합·login_id)을 reset→migrate로 반영 필요(확인 후).

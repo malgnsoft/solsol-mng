@@ -123,7 +123,7 @@ erDiagram
         bigint site_id FK
         varchar ref_type "saas(구독)/credit(크레딧충전)"
         bigint invoice_id FK
-        bigint credit_charge_id FK
+        bigint credit_ledger_id FK "크레딧 충전 원장행(TB_CREDIT_LEDGER entry_type=charge)"
         varchar toss_payment_key
         varchar toss_order_id
         varchar approve_no
@@ -141,22 +141,11 @@ erDiagram
     TB_CREDIT_ACCOUNT {
         bigint id PK
         bigint site_id FK
-        decimal balance
-        int status "1정상 0중지 -1삭제"
-        timestamp created_at
-        timestamp updated_at
-    }
-    TB_CREDIT_CHARGE {
-        bigint id PK
-        bigint site_id FK
-        bigint payment_id FK "충전 결제(TB_PAYMENT)"
-        decimal charge_amount
-        decimal bonus_amount
-        decimal pay_price "결제 금액(VAT 별도)"
-        varchar product_label
-        timestamp expires_at "충전+1년 소멸"
-        varchar cancel_state "none/canceled(7일내)"
-        timestamp canceled_at
+        decimal balance "전체 잔액 = expiring + permanent"
+        decimal expiring_balance "유효기간 있는(만료되는) 잔액 합"
+        decimal permanent_balance "무기한(만료 없는) 잔액 합"
+        timestamp next_expire_at "가장 임박한 lot 만료 시각(알림 캐시)"
+        bigint last_ledger_id "이 캐시가 반영한 마지막 원장 행(정합 검증)"
         int status "1정상 0중지 -1삭제"
         timestamp created_at
         timestamp updated_at
@@ -164,16 +153,37 @@ erDiagram
     TB_CREDIT_LEDGER {
         bigint id PK
         bigint site_id FK
-        varchar direction "debit/refund"
-        varchar reason "campaign_send/ai_tutor/ai_translate/ai_caption"
-        decimal unit_count
-        decimal unit_price "단가 — config 참조(M-3 Open)"
-        decimal amount
-        decimal balance_after
-        varchar idempotency_key
-        varchar ledger_state "pending/settled/refunded"
+        varchar entry_type "charge/bonus/refund_restore(증가) · usage/expire/adjust(차감)"
+        varchar direction "credit(증가)/debit(감소) — entry_type 파생"
+        varchar reason "campaign_send/ai_tutor/ai_translate/ai_caption/promotion/manual"
+        decimal amount "변동량(절대값, 양수). 방향은 direction"
+        decimal balance_after "이 거래 직후 전체 잔액(통장 잔고)"
+        tinyint is_expiring "증가행: 1=유효기간 있음/0=무기한"
+        timestamp expires_at "lot 만료 시각(UTC). NULL=무기한. 증가행 전용"
+        decimal remaining "lot 잔여량(증가행 전용). 소진될수록 감소"
+        varchar lot_state "lot 상태(증가행): open/exhausted/expired/canceled"
+        bigint payment_id FK "유상 충전행 ↔ TB_PAYMENT(논리 FK)"
+        decimal pay_price "결제 금액(VAT 별도) — charge 증가행"
+        varchar product_label "충전 상품 라벨"
+        decimal unit_count "사용량(발송건수/토큰) — usage행"
+        decimal unit_price "단가(config, M-3 Open) — usage행"
+        bigint reverses_ledger_id FK "환불/취소가 되돌리는 원본 원장 행"
         varchar ref_type "campaign/ai_job (테넌트 스키마 리소스)"
         bigint ref_id
+        varchar idempotency_key "증가/차감 중복 방지(uk)"
+        varchar ledger_state "pending/settled/refunded/void"
+        varchar memo
+        int status "1정상 0중지 -1삭제"
+        timestamp created_at
+        timestamp updated_at
+    }
+    TB_CREDIT_ALLOCATION {
+        bigint id PK
+        bigint site_id FK
+        bigint debit_ledger_id FK "소진/복원을 일으킨 원장 행(usage/expire/refund_restore/adjust)"
+        bigint lot_ledger_id FK "소진/복원 대상 증가lot 원장 행(charge/bonus)"
+        decimal amount "이 lot에서 소진/복원한 양(양수)"
+        varchar alloc_type "consume(소진)/restore(환불 복원)"
         int status "1정상 0중지 -1삭제"
         timestamp created_at
         timestamp updated_at
@@ -217,11 +227,13 @@ erDiagram
     TB_PAYMENT ||--o{ TB_INVOICE : "paid_payment_id"
     TB_SITE ||--o{ TB_PAYMENT : "site_id"
     TB_INVOICE ||--o{ TB_PAYMENT : "invoice_id"
-    TB_CREDIT_CHARGE ||--o{ TB_PAYMENT : "credit_charge_id"
+    TB_CREDIT_LEDGER ||--o{ TB_PAYMENT : "credit_ledger_id"
     TB_SITE ||--o{ TB_CREDIT_ACCOUNT : "site_id"
-    TB_SITE ||--o{ TB_CREDIT_CHARGE : "site_id"
-    TB_PAYMENT ||--o{ TB_CREDIT_CHARGE : "payment_id"
     TB_SITE ||--o{ TB_CREDIT_LEDGER : "site_id"
+    TB_PAYMENT ||--o{ TB_CREDIT_LEDGER : "payment_id"
+    TB_SITE ||--o{ TB_CREDIT_ALLOCATION : "site_id"
+    TB_CREDIT_LEDGER ||--o{ TB_CREDIT_ALLOCATION : "debit_ledger_id"
+    TB_CREDIT_LEDGER ||--o{ TB_CREDIT_ALLOCATION : "lot_ledger_id"
     TB_PAYMENT ||--o{ TB_TOSS_WEBHOOK_EVENT : "payment_id"
     TB_SITE ||--o{ TB_SITE_PROVISION_LOG : "site_id"
 ```
