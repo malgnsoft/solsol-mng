@@ -343,3 +343,42 @@
 - **CF WAF Rate Limiting**: `/admin/auth/login`(brand-api·brand-admin BFF)에 엣지 레이트리밋 적용(인메모리는 Isolate 간 미공유).
 - **TOSS·Phase1 어댑터**: 결제(TOSS) 시크릿·Phase1 미매핑 도메인 어댑터는 별도(docs/DEPLOY.md TODO).
 - **OPS_SECRET**: 세션용 신규 발급값 유지 — 다음 /ops 사용 주체가 재설정 후 사용(기존값 미보관).
+
+## 23. 크리에이터 관리자단(solsol-admin) 조회형 전 도메인 실 API 전환 (2차 배치)
+
+- **한 줄**: §18 실연동 1차(대시보드·사용자)에 이어 **나머지 조회형 도메인 전체**(상품 7유형·콘텐츠·판매·마케팅·운영·사이트디자인·정산·설정·통계)를 BFF 프록시 `/api/proxy/admin/*` 실 request로 전환. 병렬 3그룹(P/S/O)·qa 게이트(blocker 0)·표시 정정 후 재배포.
+- **전환 패턴**: 도메인 어댑터 컴포저블 **9종**(`use{Products,Contents,Sales,Marketing,Ops,Site,Settlement,Settings,Stats}Api`) — 프록시 GET(httpOnly 세션)→응답 shape 매핑→실패/빈응답 시 **기존 목 폴백**(회귀 0).
+- **라이브 실증**(demo-login owner 세션): 실데이터 = 쿠폰 2·게시판 3·상품 7유형·콘텐츠·주문 1·정산 프로필·통계 KPI·site basic/footer·settings basic/player. 빈폴백(정상) = 환불·팝업·캠페인·설문·정산내역·수료증·공지·템플릿·툴·메뉴/페이지 등. **목유지(날조 0·정직 보고)** = 멤버십(등급 tier)·settings/notification(매트릭스 불일치)·site/meta(키 불일치)·통계 비-KPI·상세/쓰기.
+- **qa(blocker 0)** + 표시 정정: 쿠폰 code 파생 오인→`-`, 주문 유형 축약→미확정, 이중마스킹 정리(무해·안전방향). SSRF 가드(화이트리스트 `admin/*`·`..`방어·GET/HEAD) 무손상. 마스킹 유출 0(백엔드 마스킹 신뢰).
+- **배포**: solsol-admin 커밋 **`f89e790`**(`ce11a5d..f89e790`, origin=malgnsoft) → Pages 재배포 **https://a152a3ca.solsol-admin.pages.dev** → 프로덕션 **https://solsol-admin.pages.dev**. 라이브 스모크: demo-login 200 · `/api/proxy/admin/coupons` 200(2건, 응답에 code 필드 없음=파생코드 날조 실증) · `/boards` 200(3건) · 무쿠키 401 · 페이지 200. 백엔드 마스킹(`M*****r`·`q****@…`) 실봉투 확인.
+
+### §23 산출물
+- solsol-admin: 어댑터 9종 + 도메인 목록/조회 페이지 실 전환(대부분 목록). 커밋 `malgnsoft/solsol-admin` `f89e790` → 재배포 https://solsol-admin.pages.dev.
+- 검증 기록: `docs/dev-validation/AD01-app-phaseB2b-read-domains.md`.
+
+### §23 다음 단계
+- **상세(detail) 실 전환**(유형별 부속·주문/쿠폰 상세 조인) → **쓰기형 CRUD**(프록시 GET 전용 → CSRF 방어 전용 BFF 쓰기 핸들러 후 생성/수정/삭제/상태변경) → 목록 필터·정렬·페이지 서버 위임. site/meta 키 컨벤션·notification 매트릭스 API·멤버십 등급 조회 후속.
+
+## 24. 크리에이터 사용자단(solsol) ↔ 실 API(solsol-api) 전체 결선(A조회·인증/B쓰기/C결제 승인대기) + 안전 go-live 배포
+
+- **한 줄**: FR01 사용자단(§9, mock 폴백)을 실 API(solsol-api)에 **전 도메인 결선** — 연결가능성 검토 → dev 테넌트 도메인 시드 → Phase A/B/C 구현·실 API E2E(전 Phase GO·blocker 0) → **안전 결선 go-live**(사용자단 프론트·백엔드 재배포). 결제(PG)·업로드(R2)·쿠키 크로스도메인은 오너 확인 잔여.
+- **연결가능성 검토**(api-dev+frontend 양측 계약 대조): 경로(`/api/*`+`/auth`/`/me`/`/tenant`)·엔벨로프(`{ok,data,error}`+meta)·인증(Bearer·소셜콜백·refresh)·CORS 구조 정합 확인. 핵심 갭 = 테넌트 식별(schema-per-tenant)·`?site_id` mock 잔재·필드명·결제 staging-gate.
+- **Phase 0 선행(시드)**: dba `db/seed/dev_domain_seed.sql`(24테이블/68행, `solsol_lms` 멱등) — 카테고리5·상품 7유형+부속·강의/차시·게시판(공지/자유/FAQ/**qna**)·쿠폰·사이트config. api-dev `/ops/domain-seed`(dev 가드) + 응답 필드 병기(`thumbnailUrl/avatarUrl/role`). 실 Aurora dev 테넌트 적용(errors 0).
+- **Phase A(조회·인증)**: 프론트 `apiBase` env + **폴백정책 플래그**(apiBase 설정 시 mock 은폐 금지) + `site_id` 제거(12 composable) + 필드 매핑 어댑터 + **SSR-safe 테넌트(`X-Site-Host` 헤더·`useState` slug 공유·홈 SSR 방어·`NUXT_PUBLIC_TENANT_SLUG` 오버라이드)**. 백엔드 테넌트 해석 `X-Tenant>X-Site-Host(domain)>Host>dev폴백(localhost·*.workers.dev·빈값, prod 차단)` + mock 콜백 dev 허용. **E2E round2 GO**(홈 SSR 200·브라우징 실데이터·mock콜백→/me 루프).
+- **Phase B(쓰기)**: 후기·찜·쿠폰·문의·게시글/댓글·진도 6도메인 mock→실 apiFetch 전환+매핑. **E2E GO**(생성→재조회 영속). 업로드(R2)·미확정 조회는 계약공백 유지.
+- **Phase C(결제·구독)**: billing shape 통일(`{items}`)·orders/summary 매핑·**승인대기(pending) UX**(`{success:false,pending:true}` 분기·완료 단정 금지)·구독 pending. **E2E GO**(PG 미해제·실결제 0).
+- **품질 게이트**: 각 Phase qa 실 API E2E + Phase A security-reviewer(CORS·쿠키·인증·마스킹). 전체 `pnpm typecheck` 0·mock 회귀 0. blocker 해소(SSR 테넌트·mock 콜백·카드마스킹 형태·게시판/후기 매퍼 필드명 D-1/D-2·내주문 조인 D-3·qna 시드 D-4·가입 멱등 R2-1).
+- **안전 go-live 배포**(사용자 승인 — 결제·R2 제외):
+  - 백엔드 `solsol-api`: git 초기화·커밋 **`92ad1bd`**→malgn 푸시(빈 레포) + **워커 재배포 version `ec5c247f`** → https://solsol-api.malgnsoft.workers.dev. CORS allowlist에 `solsol.pages.dev`(+프리뷰) 추가 → **라이브 검증: solsol.pages.dev Origin 허용·attacker.test 거부**(구버전 임의오리진 취약점 해소). 시드 재적용(qna 포함 errors 0). 라이브 `/ops` 403(prod 차단 정상).
+  - 프론트 `solsol`: 결선분(app/·nuxt.config)만 커밋 **`f56a8b1`**(mockup 외부변경 제외)→origin(malgnsoft/solsol) 푸시 + `NUXT_PUBLIC_API_BASE`+`NUXT_PUBLIC_TENANT_SLUG=dev` 빌드·배포 + CF Pages env 설정 → **https://solsol.pages.dev**. 스모크: 홈 SSR 200(테넌트 dev 해석)·`/courses` 실 시드 상품 8건(클라 페치·CORS 허용)·보호 라우트 302/401 가드.
+- **잔여(오너 확인)**: ①**PG staging-gate 해제**(실결제·실환불 비가역 CMP-06 — 미해제=승인대기 유지) ②**R2 버킷**(첨부·이미지·아바타 업로드 스텁) ③**refresh 쿠키 크로스도메인**(`.pages.dev↔.workers.dev` 서드파티 쿠키 — 동일도메인 정렬/프록시 전략) ④localStorage access(XSS·중) ⑤R2-1 UNIQUE 제약 검토·D-3 스냅샷 컬럼 후속.
+
+### §24 산출물
+- 프론트 `solsol`: 14 composable 실 API 전환(폴백플래그·X-Site-Host·필드매핑·승인대기), `nuxt.config`(tenantSlug). 커밋 `malgnsoft/solsol` `f56a8b1` → 배포 https://solsol.pages.dev(실 API 연결).
+- 백엔드 `solsol-api`: 테넌트(X-Site-Host)·mock콜백·`/ops/domain-seed`·필드병기·CORS·orders조인·가입멱등. git 초기화 커밋 `92ad1bd`(malgn) → 워커 `ec5c247f`.
+- 시드: `dev_domain_seed.sql`(24테이블, qna 포함) 실 Aurora dev 테넌트 적용.
+- 검증 기록: `docs/dev-validation/wiring-phase{A-round1,A-round2,BC-round1}.md`.
+
+### §24 다음 단계
+- 오너 확인 후: PG staging-gate 단계 해제(toss 웹훅·staging 선검증) → 결제 승인대기→실결제. R2 버킷·업로드 배선. refresh 쿠키 동일도메인 전략(커스텀 도메인 정렬 or Pages 프록시).
+- 실 테넌트 프로비저닝(현재 `dev` 데모 테넌트) — 커스터머별 사이트·domain 매핑 시 host 기반 테넌트 해석 자동. 업로드/강의실·수료증 스키마 확정 후 잔여 조회 결선.
