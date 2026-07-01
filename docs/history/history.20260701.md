@@ -321,3 +321,25 @@
 - **검증**: `400039` 잔여 참조 0, `pnpm build` PASS, eslint 0 errors.
 - **배포**: 커밋 `ed77464`(origin=malgnsoft/solsol-brand) → Pages `solsol-brand` 재배포 **https://solsol-brand.pages.dev**. 스모크 `/`·`/signup`·`/login` 200·`/account-email` 302(보호).
 - **주의**: 테스트 전용 완화 — 실 API 연동/운영 전 반드시 서버측 인증코드 검증으로 원복.
+
+## 22. 브랜드 운영자단(solsol-brand-admin) 목업 → 실 API(brand-api) 전환 + 운영자 시드 + 배포
+
+- **오너 지시**: brand-api에 추가된 일회용 운영자 시드 엔드포인트를 배포하고, **배포 → 시드 → brand-admin 실 API 연결 → 검증**을 페일세이프(시드·로그인 검증 성공 전 `NUXT_API_BASE` 미설정)로 실행.
+- **brand-api 배포**: `src/routes/ops.ts`(`POST /ops/seed-admin` 멱등 시드)·`src/env.d.ts`(`SEED_ADMIN_PASSWORD?`) 커밋 `1c2967b`(origin=malgnsoft/solsol-brand-api main) → `wrangler deploy` **https://solsol-brand-api.malgnsoft.workers.dev**. 시크릿 `SEED_ADMIN_PASSWORD` 주입(값 무노출)·`OPS_SECRET` 세션용 재설정(기존값 미보관 → /ops 게이트용 신규 발급). typecheck GREEN.
+- **운영자 시드**: `POST /ops/seed-admin`(X-Ops-Secret 게이트) → `superadmin@solsol.local`·`support@solsol.local` **seeded:true**(신규). 재호출 시 **exists:true**(멱등 확인).
+- **페일세이프 게이트**: `POST /admin/auth/login`(superadmin) → **200 + admin JWT**(typ:admin·role:superadmin) 확인 후에만 다음 단계 진행.
+- **근본 결함 발견·수정(brand-admin)**: Cloudflare Pages/Workers는 env 바인딩을 `process.env`로 노출하지 않아, `useRuntimeConfig()`(event 미전달)로는 Pages secret이 runtimeConfig에 반영되지 않음 → `apiBase` 빈 값 → BFF가 mock 폴백(로그인 user.id=`mock-*`, `/api/admin/sites`→503). server 5파일(`[...path].ts`·`auth/login|logout|session`·`utils/session.ts`)을 **`useRuntimeConfig(event)`**(원본 malgn-noti-admin과 동일 패턴)로 수정. 부수 효과로 세션 서명이 DEV_FALLBACK_KEY가 아닌 실 `NUXT_SESSION_SECRET`으로 전환됨. typecheck GREEN.
+- **실 API 연결**: Pages secret `NUXT_API_BASE`·`NUXT_PUBLIC_API_BASE` = `https://solsol-brand-api.malgnsoft.workers.dev` 주입 → `pnpm build` → Pages 재배포.
+- **실연동 스모크(프로덕션 https://solsol-brand-admin.pages.dev)**: `/auth/login` 200 + **원클릭 목업 버튼 비노출**(isMock=false, SSR payload에 실 apiBase 반영) / `POST /api/admin/auth/login`(superadmin@solsol.local) → 200 + 세션쿠키·**user.id=`"2"`**(실 DB 시드 계정) / `GET /api/admin/sites`(세션) → **200**(이전 503 해소), 어댑터 정규화(snake_case) 정상 — dev 사이트 1건 실 Aurora 응답(500 아님).
+- **정리**: `SEED_ADMIN_PASSWORD`(brand-api) **삭제**(시드 완료 후 안전 — 계정 존재 시 멱등 스킵).
+
+### §22 산출물
+- solsol-brand-api(origin=malgnsoft): `src/routes/ops.ts`·`src/env.d.ts` 커밋 `1c2967b` → Worker 재배포 **https://solsol-brand-api.malgnsoft.workers.dev**.
+- solsol-brand-admin(origin=malgnsoft): `server/api/admin/[...path].ts`·`auth/login.post.ts`·`auth/logout.post.ts`·`auth/session.get.ts`·`utils/session.ts` — `useRuntimeConfig(event)` 전환. Pages 재배포 **https://solsol-brand-admin.pages.dev**.
+
+### §22 다음 단계(잔여)
+- **초기 비밀번호 변경**: 시드 계정(`superadmin`/`support`) 초기 비번(`SEED_ADMIN_PASSWORD`로 주입) 최초 로그인 후 즉시 변경 필수.
+- **brand-admin 코드 커밋·푸시**: `useRuntimeConfig(event)` 수정분(현 working tree 배포·미커밋) → origin=malgnsoft/solsol-brand-admin main 커밋 필요.
+- **CF WAF Rate Limiting**: `/admin/auth/login`(brand-api·brand-admin BFF)에 엣지 레이트리밋 적용(인메모리는 Isolate 간 미공유).
+- **TOSS·Phase1 어댑터**: 결제(TOSS) 시크릿·Phase1 미매핑 도메인 어댑터는 별도(docs/DEPLOY.md TODO).
+- **OPS_SECRET**: 세션용 신규 발급값 유지 — 다음 /ops 사용 주체가 재설정 후 사용(기존값 미보관).
