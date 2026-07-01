@@ -37,9 +37,14 @@
 - `docs/AGENT_TEAM.md` 재작성(글로벌 팀 사용·레포 적용만 기술·로컬 정의 금지), `CLAUDE.md`(에이전트팀 안내 2곳·참모 제거), `docs/DEV_VALIDATION_PROCESS.md`(조율 역할을 `plan/dev/qa/ops-lead` 글로벌 슬러그로) 정리. `docs/validation/*`(읽기전용 정본)의 작성자 메타데이터는 무수정.
 - 커밋 `f4167b7` → Pages 배포(`docs/`는 `/docs` 콘텐츠 소스라 반영).
 
+## 7. /screens 스파이크 단계 열 추가 + 체크박스 열 간격 축소 (배포)
+
+- `/screens` 상태 단계에 **「스파이크」(1차 개발/PoC)를 디자인 검수와 개발 사이**에 추가 — `screen_status.spike` 열 신설(schema + `0006_screen_spike.sql` ADD COLUMN, 라이브 D1 적용·기존 9행 spike=0), `StatusRow/Patch`·PATCH 불리언 키·GET 머지·`screenList` 인터페이스·인메모리 폴백 반영. 최종 6단계: 디자인·퍼블리싱·디자인 검수·**스파이크**·개발·테스트.
+- 상태(체크박스) 열 **너비 78→46px·좌우 패딩 축소**로 간격 압축, 헤더 제목 **2줄 허용**(`word-break: keep-all`). 커밋 `ab0e511` → Pages 배포.
+
 ## 산출물
 
-- 코드: `server/api/screens/[id].patch.ts`·`index.get.ts`·`server/utils/screenStatus.ts`(§3), `app/utils/wbsData.ts`·`app/pages/wbs.vue`·`app/pages/index.vue`·`server/db/seed.sql`(§4·§5), `docs/AGENT_TEAM.md`·`CLAUDE.md`·`docs/DEV_VALIDATION_PROCESS.md`(§6).
+- 코드: `server/api/screens/[id].patch.ts`·`index.get.ts`·`server/utils/screenStatus.ts`(§3·§7), `app/utils/wbsData.ts`·`app/pages/wbs.vue`·`app/pages/index.vue`·`server/db/seed.sql`(§4·§5), `docs/AGENT_TEAM.md`·`CLAUDE.md`·`docs/DEV_VALIDATION_PROCESS.md`(§6), `server/db/schema.ts`·`server/db/migrations/0006_screen_spike.sql`·`app/utils/screenList.ts`·`app/pages/screens.vue`(§7).
 - 라이브 D1(`solsol-project`): `screen_status` FR01 7행 복구, `wbs_item` 스텝 재편(4:13·5:5·6:8·7:19·8:18) + 스파이크 5행.
 - 커밋 `cf5ecd6`(screens fix)·`8cf245a`(wbs spike 신설)·`a7bad92`(spike 설계–구현 사이 이동·이번주 완료) → `malgnsoft/solsol-mng` → Pages `solsol-mng` 배포.
 - 최종 WBS 8단계: 4 목업 → **5 설계 → 6 스파이크(1차 개발·이번주 완료) → 7 구현** → 8 운영·계약.
