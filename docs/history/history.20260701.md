@@ -313,3 +313,11 @@
 - **변경**: `app/pages/auth/login.vue` — 목업 모드(`isMock`, `NUXT_API_BASE` 미설정) 조건에서만 '슈퍼관리자/지원팀 원클릭 로그인' 버튼 노출. typecheck GREEN·빌드 PASS.
 - **배포**: 커밋 `addddf8`(origin=malgnsoft/solsol-brand-admin main) → `pnpm build` → Pages `solsol-brand-admin` 재배포(alias `https://1127c9a5.solsol-brand-admin.pages.dev`). NUXT_API_BASE 미설정 유지(목업 모드), NUXT_SESSION_SECRET 유지.
 - **스모크**: `/auth/login` 200 + '원클릭'·'슈퍼관리자로 로그인' 문자열 노출 / `POST /api/admin/auth/login`(superadmin@solsol.local) 200 + 세션쿠키(`sbrand_admin_sess` HttpOnly·Secure·SameSite=Lax)·`{"ok":true}` 확인. 프로덕션 **https://solsol-brand-admin.pages.dev**.
+
+## 20. 브랜드 사용자단(solsol-brand) [TEST-ONLY] 인증번호 완화 + 배포
+
+- **오너 지시(테스트 편의)**: 테스트 기간 동안 회원가입·결제이메일 변경의 **인증번호를 아무 값이나 허용**(비어있지 않으면 통과).
+- **변경(2파일)**: `app/pages/signup.vue`(인증코드 확인) + `app/composables/useAccount.ts`(`verifyCode`·`changeBillingEmail`) — `400039` 고정 검증 → `trim().length > 0` 통과로 완화. 전부 `[TEST-ONLY]` 주석(실 API 연동 시 서버 검증 대체·완화 제거 필수, security gate). 빈 입력은 여전히 "입력해 주세요" 유지.
+- **검증**: `400039` 잔여 참조 0, `pnpm build` PASS, eslint 0 errors.
+- **배포**: 커밋 `ed77464`(origin=malgnsoft/solsol-brand) → Pages `solsol-brand` 재배포 **https://solsol-brand.pages.dev**. 스모크 `/`·`/signup`·`/login` 200·`/account-email` 302(보호).
+- **주의**: 테스트 전용 완화 — 실 API 연동/운영 전 반드시 서버측 인증코드 검증으로 원복.
