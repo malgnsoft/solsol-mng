@@ -382,3 +382,18 @@
 ### §24 다음 단계
 - 오너 확인 후: PG staging-gate 단계 해제(toss 웹훅·staging 선검증) → 결제 승인대기→실결제. R2 버킷·업로드 배선. refresh 쿠키 동일도메인 전략(커스텀 도메인 정렬 or Pages 프록시).
 - 실 테넌트 프로비저닝(현재 `dev` 데모 테넌트) — 커스터머별 사이트·domain 매핑 시 host 기반 테넌트 해석 자동. 업로드/강의실·수료증 스키마 확정 후 잔여 조회 결선.
+
+## 25. 브랜드 운영자단(solsol-brand-admin) Phase1 실 API 어댑터 실배포 + brand-api seed-admin 하드닝
+
+- **한 줄(§23 계열)**: §22(목업→실 API 전환)에 이어 **Phase1 조회 도메인**(credits·cs·news·stats)을 BFF 어댑터로 실 API 전환. app 표기 경로(`cs`·`notices`·`stats/dashboard`·`credits/:id`)를 brand-api 실 마운트(`contact`·`news`·`stats/overview`·`credits?siteId=`)로 **경로 정규화**(신규 엔드포인트 없이 기존 라우트 재사용) + 응답 camelCase→snake_case 매핑 + 요청 body 역매핑(notices `published_at`→`publishedAt`). 백엔드 갭 도메인은 **허구 데이터 생성 없이** 빈배열/0/null 로 정직 반환(500 없음).
+- **brand-admin 배포**: `server/utils/adapt.ts`·`server/api/admin/[...path].ts` 커밋 **`4886d3f`**(origin=malgnsoft/solsol-brand-admin main) → typecheck GREEN → `pnpm build` → Pages 재배포 alias **https://88ecfdf9.solsol-brand-admin.pages.dev** → 프로덕션 **https://solsol-brand-admin.pages.dev**. NUXT_API_BASE 등 기존 시크릿 유지(실 API 모드).
+- **brand-api 하드닝**: `src/routes/ops.ts` seed-admin 프로덕션 방어 커밋 **`266b6b1`**(origin=malgnsoft/solsol-brand-api main) → `wrangler deploy` Version **`2392abe3`** → https://solsol-brand-api.malgnsoft.workers.dev. prod(`APP_ENV=production`)에서 `SEED_ADMIN_PASSWORD` 미설정 시 **403(존재·사유 비노출)** — OPS_SECRET 통과자에게도 세부 미제공. 비프로덕션은 400+안내 유지. 부트스트랩 종료 후 라우트 제거/OPS_SECRET 로테이션 폐기 주석 추가.
+- **실연동 스모크(https://solsol-brand-admin.pages.dev, superadmin 세션)**: 로그인 200(실 DB user.id=`"2"`). Phase1 4경로 세션 200 — `/api/admin/credits` 200(빈배열·집계 API 미구현 우아처리)·`/api/admin/cs` 200(빈배열)·`/api/admin/notices` 200(빈배열)·`/api/admin/stats/dashboard` 200(실 스냅샷 active_sites=1·new_signups=1·delta=null·mrr_series/signup_series=[] 정직). **500·404 0건**. Phase0 회귀 `/api/admin/sites` 200(dev 사이트 1건). 미인증 가드: 5경로 전부 **401**(가드 정상). 시크릿 값 무노출.
+
+### §25 산출물
+- solsol-brand-admin(origin=malgnsoft): `server/utils/adapt.ts`·`server/api/admin/[...path].ts` 커밋 `4886d3f` → Pages 재배포 https://solsol-brand-admin.pages.dev(실 API 모드).
+- solsol-brand-api(origin=malgnsoft): `src/routes/ops.ts` 커밋 `266b6b1` → Worker Version `2392abe3` → https://solsol-brand-api.malgnsoft.workers.dev.
+
+### §25 다음 단계 (백엔드 갭 — 별도 티켓)
+- 신규 백엔드 엔드포인트 필요분: 크레딧 사이트별 잔액 목록 집계·수동 조정(멱등키), 문의 상태 전환(PATCH /cs/:id/state), 공지 단건 상세(본문 포함), 통계 시계열(mrr/signup)·전기간 delta·churn. 확보 시 어댑터 빈값→실값 승격.
+- seed-admin: 실 운영자 계정 유입 확인 즉시 라우트 제거 또는 OPS_SECRET 로테이션+마운트 해제로 완전 비활성.
