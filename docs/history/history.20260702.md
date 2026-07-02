@@ -27,6 +27,12 @@
 - **검증 정본 개정 메커니즘**: `docs/validation_modified/` 신설 — 원본(`docs/validation/`) 무수정 보존, 개정은 **동일 파일명 완성본** + `_개정이력.md` **전후 기록**, **개정본 우선 권위**. `CLAUDE.md`·`DEV_VALIDATION_PROCESS.md`·`DEV_SESSION_PROTOCOL.md` 반영.
 - (동봉) spine 세션의 `docs/data-model/*`(master.sql·ERD·README) 편집분 함께 커밋. 커밋 `b456066` → Pages 배포.
 
+## 6. 구현 표준(3계층·데이터 정책) + 개발 지시 프롬프트 + 세션 네이밍 정정
+- **구현 표준** `docs/IMPLEMENTATION_STANDARD.md` 신설(오너 확정) — **목업=가짜(하드코딩) 데이터로 디자인·기능 확인 / 실앱(사용자단·관리자단)=실 API+실 Aurora+샘플 데이터로 실 연동 확인**. 실앱 목 폴백엔 **`MOCK` 배지** 필수·게이트 종료조건 **배지 0건**(무음 폴백·미연동 은폐 금지). 유기적 연결=동일 화면ID·목업=디자인 SoT. §7 **개발 지시 프롬프트**(목업/실앱/샘플시드) 포함.
+- **세션 네이밍 정정**: 쏠쏠·쏠쏠 브랜드=**풀스택**(사용자단+관리자단+백엔드), `backend-db`=공유 데이터 정본 단독 소유. `DEV_SESSION_PLAN`·`PROTOCOL`·`transcripts` 전면 정합(spine/프론트/①②③ 폐기).
+- **`docs/transcripts/`** 일일 기록 체계(세션별 파일·시크릿 금지)·`validation_modified/` 개정 메커니즘은 §5 참조. `PROCESS`·`PROTOCOL`에 표준 링크 반영.
+- (동봉) 병렬 세션 산출물: `data-model/*`(master.sql·ERD·tenant_template) + dev-validation 신규(backend-db-r01·brand-admin-round3·brand-site-round2 등). 커밋 `cc62013` → Pages 배포.
+
 ## 다음 단계
-- 검증위원회 open blocker 8건 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01·PRV-r02-D01 등).
-- Phase B 3세션 병행 착수 — spine 데이터 정본 단일화·계약 프리즈 → 프론트 세션 소비.
+- 검증위원회 open blocker 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01 등) + 신규 `SEC-VC-01`(브랜드 이메일코드 오프라인탐색) backend-db 코드 원장 도입.
+- Phase B 3세션 병행 — backend-db 데이터 정본 단일화·샘플 시드·계약 발행 → 제품 세션 실앱 연동(MOCK 배지 0 목표).
