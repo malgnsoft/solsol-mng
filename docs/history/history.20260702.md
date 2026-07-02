@@ -143,6 +143,11 @@
 - **단일 총괄 확정**: 모든 세션(허브 포함)의 총괄 = 「맘대로 총괄」 한 명(PROTOCOL §1·PLAN §5 시작 프롬프트).
 - **세션 변경 공지 템플릿**(PLAN §7): 쏠쏠·쏠쏠브랜드 재읽기·backend-db 종료 공지 저장(재사용). 커밋 `70c05ca` → Pages 배포.
 
+## 14. 검증 게이트 = 허브 독립 실행 명문화 (허브 배포)
+- 오너 확정(B+C): **검증 게이트는 허브(맘대로 총괄)가 독립 렌즈(qa·security·privacy·dba·api)로 실행**하고 `_ledger` 판정(개발↔검증 분리·자기참조 방지·3제품 동일 기준). 개발한 세션은 자기 걸 검증하지 않는다.
+- **트리거(B)**: 제품 세션이 선결(배포 + 샘플 데이터 Aurora 적용 + `MOCK` 배지 0) 완료 → 허브에 "검증 준비 완료" 신호 → 허브 게이트. 현 쏠쏠은 선결 미완(solsol-api 홀드·시드 미적용)이라 정식 검증 대기.
+- 명문화(C): `DEV_SESSION_PROTOCOL §4-4`·`DEV_VALIDATION_PROCESS §8`·`IMPLEMENTATION_STANDARD §7-D`. 커밋 `263040a` → Pages 배포.
+
 ## 다음 단계
 - 검증위원회 open blocker 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01 등) + 신규 `SEC-VC-01`(브랜드 이메일코드 오프라인탐색) backend-db 코드 원장 도입.
 - **강사 RBAC 재작성**: 인증모델 확정(관리자단=`user_type='staff'`+TB_ROLE 파생) → 강사 판별 role 기반·배제 owner-only·roleGuard data_scope 검증·강사 code 강제 own → security 재서명.
