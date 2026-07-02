@@ -240,7 +240,7 @@ CREATE TABLE TB_CREDIT (
   is_expiring        TINYINT       NOT NULL DEFAULT 1   COMMENT '증가행: 1=유효기간 있음/0=무기한',
   expires_at         TIMESTAMP         NULL             COMMENT 'lot 만료 시각(UTC). NULL=무기한. 증가행 전용',
   remaining_cr          DECIMAL(18,6)     NULL             COMMENT 'lot 잔여량(증가행 전용). 소진될수록 감소',
-  lot_state          VARCHAR(12)       NULL             COMMENT 'lot 상태(증가행): open/exhausted/expired/canceled',
+  lot_state          VARCHAR(12)       NULL             COMMENT 'lot 상태(증가행): open/pending/exhausted/expired/canceled',
   payment_id         BIGINT            NULL             COMMENT '유상 충전행 ↔ TB_PAYMENT(논리 FK)',
   pay_price          DECIMAL(18,6)     NULL             COMMENT '결제 금액(VAT 별도) — charge 증가행',
   product_label      VARCHAR(50)       NULL             COMMENT '충전 상품 라벨',

@@ -184,7 +184,7 @@ erDiagram
         tinyint is_expiring "증가행: 1=유효기간 있음/0=무기한"
         timestamp expires_at "lot 만료 시각(UTC). NULL=무기한. 증가행 전용"
         decimal remaining_cr "lot 잔여량(증가행 전용). 소진될수록 감소"
-        varchar lot_state "lot 상태(증가행): open/exhausted/expired/canceled"
+        varchar lot_state "lot 상태(증가행): open/pending/exhausted/expired/canceled"
         bigint payment_id FK "유상 충전행 ↔ TB_PAYMENT(논리 FK)"
         decimal pay_price "결제 금액(VAT 별도) — charge 증가행"
         varchar product_label "충전 상품 라벨"

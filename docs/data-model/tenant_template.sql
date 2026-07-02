@@ -212,6 +212,22 @@ CREATE TABLE TB_DEVICE_TOKEN (
   UNIQUE KEY uk_device (user_id, device_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='푸시 디바이스 토큰';
 
+CREATE TABLE TB_OAUTH_CONFIG (
+  id            BIGINT       NOT NULL AUTO_INCREMENT,
+  provider      VARCHAR(20)  NOT NULL                COMMENT 'google/kakao/naver/apple/facebook',
+  client_id     VARCHAR(255)     NULL                COMMENT 'OAuth client id(앱 키). 평문 저장 가능',
+  client_secret TEXT             NULL                COMMENT 'AES-GCM 암호문(base64) 저장. 평문 금지',
+  redirect_uri  VARCHAR(255)     NULL                COMMENT '이 테넌트의 provider 콜백 URI(또는 base)',
+  extra_json    TEXT             NULL                COMMENT 'apple 전용 등: {teamId,keyId,privateKey(암호문)} JSON',
+  enabled       TINYINT      NOT NULL DEFAULT 0      COMMENT '해당 provider 활성 여부(1켜짐 0꺼짐)',
+  status        INT          NOT NULL DEFAULT 1      COMMENT '1정상 0중지 -1삭제',
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_oauth_provider (provider),
+  KEY idx_oauth_enabled (enabled)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='테넌트별 소셜 OAuth 자격증명(provider당 1행·멀티테넌트)';
+
 CREATE TABLE TB_CATEGORY (
   id         BIGINT      NOT NULL AUTO_INCREMENT,
   parent_id  BIGINT          NULL                COMMENT '상위 카테고리(self). 최대 2단계',
@@ -1590,8 +1606,10 @@ CREATE TABLE TB_BANNER (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='배너';
 
 -- =====================================================================
---  끝. 테넌트 88개 테이블.
+--  끝. 테넌트 92개 테이블.
 --  (Round1 교정 반영: TB_REVIEW 추가, 토큰/코드 해시, 정산프로필 소유자, 유니크/인덱스 보강)
 --  (Round2: 게시판류=범용 엔진(TB_BOARD/POST/COMMENT/FILE/BOARD_CATEGORY, module 기반)으로
 --   재구성, 우리 컨벤션 변환. FAQ/INQUIRY/POST_LIKE/ATTACHMENT 흡수. 프리미엄 커뮤니티는 별도(TB_COMMUNITY_*).)
+--  (Round3: TB_OAUTH_CONFIG 추가 — 소셜 OAuth 자격증명을 테넌트 스키마 테이블에 저장(provider당 1행,
+--   client_secret/privateKey는 AES-GCM 암호문). 전역 Worker 시크릿이 아닌 테넌트별 저장이 정본.)
 -- =====================================================================
