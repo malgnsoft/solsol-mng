@@ -22,5 +22,11 @@
 - 스파이크(Step 6, ~07-05) 이후 시작하도록 **구현(Step 7) 항목 중 07-06 이전 시작 13건을 07-06 시작으로 이동**(기간 보존 → 종료일 동일 delta 이동). 이미 07-06 이후(07-15·08-03) 시작분은 유지.
 - `wbsData.ts`·`seed.sql`·라이브 D1(`step=7 AND start<'2026-07-06'` → 07-06 + julianday delta) 동기화. 커밋 `<이 커밋>` → Pages 배포.
 
+## 5. 개발 세션 분할 계획 + 협업 규약 + 검증 정본 개정 메커니즘
+- **세션 분할(오너 확정 B→A 단계적)**: `docs/DEV_SESSION_PLAN.md`(Phase B 3세션=공통 백엔드·데이터 spine + 쏠쏠 프론트 + 브랜드 프론트, 담당·책임 blocker·시작 프롬프트; 안정화 후 Phase A 2세션 축소) + `docs/DEV_SESSION_PROTOCOL.md`(전 세션 전달용: 편집 소유 경계·`_ledger` 허브 단독 기록·API 계약 프리즈·레인 카드·공통 금지). 기존 8분할 폐지.
+- **검증 정본 개정 메커니즘**: `docs/validation_modified/` 신설 — 원본(`docs/validation/`) 무수정 보존, 개정은 **동일 파일명 완성본** + `_개정이력.md` **전후 기록**, **개정본 우선 권위**. `CLAUDE.md`·`DEV_VALIDATION_PROCESS.md`·`DEV_SESSION_PROTOCOL.md` 반영.
+- (동봉) spine 세션의 `docs/data-model/*`(master.sql·ERD·README) 편집분 함께 커밋. 커밋 `b456066` → Pages 배포.
+
 ## 다음 단계
 - 검증위원회 open blocker 8건 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01·PRV-r02-D01 등).
+- Phase B 3세션 병행 착수 — spine 데이터 정본 단일화·계약 프리즈 → 프론트 세션 소비.
