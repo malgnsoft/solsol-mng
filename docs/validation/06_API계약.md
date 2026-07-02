@@ -1,5 +1,13 @@
 # 06. API 계약서 (v0.2 — 라운드2 결정 반영)
 
+> ⚠️ **정본 격하 고지 (2026-07-01, 오너 승인)** — 본 문서 **§0 스택 전제·§1 "D1 테이블 관점" 엔티티·OQ-D1·KV 세션**은
+> **무효**다. 실백엔드는 **Aurora MySQL 8.0 schema-per-tenant + Hyperdrive**이며(테넌트 스키마엔 `site_id` 컬럼 없음),
+> 세션은 `TB_SESSION`(DB), 영상은 Wecandeo VOD(`wecandeo_video_key`)다.
+> **데이터(물리) 정본 = 구현 DDL(`master.sql`·`tenant_template.sql`) → `ERD.md`(파생 뷰).** 06은 이제
+> **엔드포인트 계약(경로·요청/응답 봉투·에러코드·정책ID 추적) 참고 문서**로만 쓴다 — 스키마·타입·제약·격리 판정에 06을 권위로 삼지 않는다.
+> 근거: [../DEV_VALIDATION_PROCESS.md](../DEV_VALIDATION_PROCESS.md) §0, [메모리: solsol-backend-aurora-not-d1].
+
+
 | 항목 | 내용 |
 |------|------|
 | 문서 ID | 06_API계약 |
