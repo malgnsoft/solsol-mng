@@ -18,6 +18,9 @@
 - 문서: `docs/DEV_VALIDATION_PROCESS.md`·`CLAUDE.md`·`docs/validation/06_API계약.md`·`docs/report/*`(취합 3 + `_archive/` 16)·`docs/dev-validation/*committee*`·`_ledger.md`.
 - 커밋 `39a5a1e` → `malgnsoft/solsol-mng` → Pages `solsol-mng` 배포.
 
+## 4. WBS 구현(Step 7) 일정 스파이크 이후로 재조정
+- 스파이크(Step 6, ~07-05) 이후 시작하도록 **구현(Step 7) 항목 중 07-06 이전 시작 13건을 07-06 시작으로 이동**(기간 보존 → 종료일 동일 delta 이동). 이미 07-06 이후(07-15·08-03) 시작분은 유지.
+- `wbsData.ts`·`seed.sql`·라이브 D1(`step=7 AND start<'2026-07-06'` → 07-06 + julianday delta) 동기화. 커밋 `<이 커밋>` → Pages 배포.
+
 ## 다음 단계
-- WBS 스파이크(이번주 ~07-05) 진행에 따라 **구현(Step 7) 일정을 스파이크 이후로 재조정**.
 - 검증위원회 open blocker 8건 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01·PRV-r02-D01 등).
