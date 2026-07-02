@@ -148,6 +148,13 @@
 - **트리거(B)**: 제품 세션이 선결(배포 + 샘플 데이터 Aurora 적용 + `MOCK` 배지 0) 완료 → 허브에 "검증 준비 완료" 신호 → 허브 게이트. 현 쏠쏠은 선결 미완(solsol-api 홀드·시드 미적용)이라 정식 검증 대기.
 - 명문화(C): `DEV_SESSION_PROTOCOL §4-4`·`DEV_VALIDATION_PROCESS §8`·`IMPLEMENTATION_STANDARD §7-D`. 커밋 `263040a` → Pages 배포.
 
+## 15. solsol-admin 데모 임시 로그인 env 활성 (배포담당 · 오너 지시 · 재배포)
+- 오너 지시: 크리에이터 관리자단(`solsol-admin`) 배포 데모에서 "데모 관리자 원클릭 입장" 재개. **코드 하드닝(demo-login default-deny)은 미변경 — CF Pages env-only 로만 활성**(소스 원복 없음).
+- **Pages 시크릿 4종 주입**(값 미기재·`solsol-admin` production): `NUXT_PREVIEW_DEMO`(=true) · `NUXT_APP_ENV`(=preview, 비프로덕션) · `NUXT_SEED_ADMIN_EMAIL`(비민감 데모 `admin@solsol.dev`) · `NUXT_SEED_ADMIN_PASSWORD`(데모 비번 — deployer env-only, 값 미노출). demo-login 이중가드(`previewDemo==='true'` AND `appEnv!=='production'`) 양 조건 충족.
+- **재배포**: `pnpm build`(GREEN, demo-login 청크 포함) → `wrangler pages deploy dist --project-name=solsol-admin --branch=main --commit-dirty=true` → 배포 `https://75c48217.solsol-admin.pages.dev` (prod `https://solsol-admin.pages.dev`).
+- **스모크**: `/auth/login` **200** · `POST /api/auth/demo-login` **200 `ok:true`**(세션 쿠키 `admin_at`·`admin_rt`·`solsol_refresh` 발급, `hasUser`) → 원클릭 입장→`/admin` 정상. 데모 자격증명이 live `solsol-api`(`admin@solsol.dev`) 계정과 일치 확인.
+- ⚠️ **프로덕션 전 `NUXT_PREVIEW_DEMO` 해제 필수**(또는 `NUXT_APP_ENV=production`) — **SEC-D02 데모 한정 재개**. 코드 default-deny 는 유지되므로 env 해제 시 demo-login 은 즉시 404 로 비활성.
+
 ## 다음 단계
 - 검증위원회 open blocker 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01 등) + 신규 `SEC-VC-01`(브랜드 이메일코드 오프라인탐색) backend-db 코드 원장 도입.
 - **강사 RBAC 재작성**: 인증모델 확정(관리자단=`user_type='staff'`+TB_ROLE 파생) → 강사 판별 role 기반·배제 owner-only·roleGuard data_scope 검증·강사 code 강제 own → security 재서명.
