@@ -138,6 +138,11 @@
 - **세션별 배포 범위 명시**(PROTOCOL §4-B): 허브=`solsol-mng`(Pages+D1) / 쏠쏠=solsol·admin·api+solsol_lms 마이그 / 쏠쏠 브랜드=brand 3레포+solsol 마이그. 각 세션 자기 소유만·solsol-mng 산출물은 허브 단일 커밋.
 - `DEV_SESSION_PLAN`·`PROTOCOL`·`transcripts`·`IMPLEMENTATION_STANDARD` 전면 정합(backend-db/spine/①②③ 폐기). 커밋 `c348da8` → Pages 배포.
 
+## 13. 트랜스크립트 원문 기록 + 단일 총괄(맘대로) + 변경 공지 템플릿 (허브 배포)
+- **트랜스크립트 원문화**: `transcripts/README.md` 규약을 요약→**원문(verbatim) 우선**으로 변경(사용자 프롬프트·위임 브리프·에이전트 회신 원문 그대로, 시크릿·PII 값만 마스킹). 허브 `20260702/hub.md` 원문 재작성(사용자 프롬프트 20건 전문·검증절차 논의 5인+검토 2인 위임 브리프 전문·회신 원문 details). 타 세션 트랜스크립트는 각 세션이 자기 창에서 원문 재기록(허브 접근 불가).
+- **단일 총괄 확정**: 모든 세션(허브 포함)의 총괄 = 「맘대로 총괄」 한 명(PROTOCOL §1·PLAN §5 시작 프롬프트).
+- **세션 변경 공지 템플릿**(PLAN §7): 쏠쏠·쏠쏠브랜드 재읽기·backend-db 종료 공지 저장(재사용). 커밋 `70c05ca` → Pages 배포.
+
 ## 다음 단계
 - 검증위원회 open blocker 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01 등) + 신규 `SEC-VC-01`(브랜드 이메일코드 오프라인탐색) backend-db 코드 원장 도입.
 - **강사 RBAC 재작성**: 인증모델 확정(관리자단=`user_type='staff'`+TB_ROLE 파생) → 강사 판별 role 기반·배제 owner-only·roleGuard data_scope 검증·강사 code 강제 own → security 재서명.
