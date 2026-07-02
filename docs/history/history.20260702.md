@@ -125,6 +125,12 @@
 - **배포 완료 조건(오너/DBA)** — (a) 프로덕션 `solsol`/`solsol_lms` DB 상태 확인(fresh=테이블 미존재 vs 기존): 기존이면 **DBA가 자기 mysql 자격으로 002/003/004 직접 적용**(파일 내 information_schema 멱등·롤백·프리체크 동봉), fresh면 000/001로 신규 컬럼 포함 생성 → (b) `OPS_SECRET`을 deployer env 주입(값 릴레이 금지) → `wrangler deploy` → `/ops/migrate` 재확인 → 4역할 스모크.
 - **후속 코드결함(별도 작업)** — `/ops/migrate`가 corrective(ALTER) 마이그를 적용하도록 러너/라우트 보강 필요(현재 CREATE-only). 또는 마이그를 mysql 직접 적용 표준으로 확정.
 
+## 12. 세션 구조 Phase A 확정 — 3세션 + 스키마 2분할 + 배포 범위 (허브 배포)
+- **3세션**(오너 확정): 허브 + **쏠쏠**(풀스택+`solsol_lms` tenant 92) + **쏠쏠 브랜드**(풀스택+`solsol` master 17). backend-db 세션 폐지→제품/허브 흡수(정본 단일화·계약 발행 완료 후).
+- **DB 소유=물리 스키마 단위**: `solsol`(master)=쏠쏠 브랜드(플랫폼+공유 인증) / `solsol_lms`(tenant)=쏠쏠 / 허브=ERD 통합·중재(스키마 authoring 없음). 공유 인증 테이블 DDL 변경만 허브 중재.
+- **세션별 배포 범위 명시**(PROTOCOL §4-B): 허브=`solsol-mng`(Pages+D1) / 쏠쏠=solsol·admin·api+solsol_lms 마이그 / 쏠쏠 브랜드=brand 3레포+solsol 마이그. 각 세션 자기 소유만·solsol-mng 산출물은 허브 단일 커밋.
+- `DEV_SESSION_PLAN`·`PROTOCOL`·`transcripts`·`IMPLEMENTATION_STANDARD` 전면 정합(backend-db/spine/①②③ 폐기). 커밋 `c348da8` → Pages 배포.
+
 ## 다음 단계
 - 검증위원회 open blocker 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01 등) + 신규 `SEC-VC-01`(브랜드 이메일코드 오프라인탐색) backend-db 코드 원장 도입.
 - **강사 RBAC 재작성**: 인증모델 확정(관리자단=`user_type='staff'`+TB_ROLE 파생) → 강사 판별 role 기반·배제 owner-only·roleGuard data_scope 검증·강사 code 강제 own → security 재서명.
