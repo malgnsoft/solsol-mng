@@ -57,9 +57,10 @@
 1. **API 계약 = 각 백엔드가 발행** — `solsol-api /doc`(쏠쏠)·`solsol-brand-api /doc`(쏠쏠 브랜드) Scalar가 계약(엔드포인트·봉투·에러코드) 정본. 상대 제품이 그 계약을 호출하면 **발행분만 소비**(불일치는 소유 세션에 변경요청). 계약 변경은 `_ledger`/허브에 알림.
 2. **공유 인증/사이트 테이블 변경** — `solsol`(master)의 공유 테이블(`TB_USER`·`TB_SITE`·`TB_SESSION`·`TB_SITE_USER`) DDL은 쏠쏠 브랜드 소유. solsol-api가 변경 필요 시 **허브 중재로 쏠쏠 브랜드에 요청**(frozen이라 드묾). ERD.md는 허브가 통합.
 3. **브랜드 실전환 의존** — ③의 brand-admin 실전환·크레딧 조정 노출은 ①의 **운영자 시드 + SEC-1(크레딧 멱등·원자성) 해소 이후**. 그 전까지 mock/목업 유지.
-4. **결정 사항 기록** — 오너·세션 간 합의는 **허브가 기록**(WBS·history·본 문서 갱신).
-5. **일일 트랜스크립트** — 각 세션은 **자기 프롬프트·에이전트 소통을 `docs/transcripts/<YYYYMMDD>/<세션>.md`(자기 파일)** 에 기록한다(규약 [`transcripts/README.md`](transcripts/README.md)). 파일명: `hub`·`solsol`·`solsol-brand`. **시크릿·PII는 값 대신 위치·유형만.** 허브는 `INDEX.md` 관리.
-6. **배포 범위(§4-B)** — 각 세션은 **자기 소유 레포·DB 스키마만** 배포한다(오너 "배포" 시).
+4. **검증 게이트 = 허브가 실행 (독립)** — 실앱·계약 검증 게이트는 **허브(맘대로 총괄)가 독립 렌즈(qa·security·privacy·dba·api)를 스폰**해 진행하고 `_ledger` 판정·등재한다(개발↔검증 분리·자기참조 방지·3제품 동일 기준). **제품 세션은 선결 준비물만 제공** → 배포 + 샘플 데이터 Aurora 적용 + `MOCK` 배지 0 → **허브에 "검증 준비 완료" 신호** → 허브가 게이트. (오너 확정 2026-07-02.) 절차 정본 [DEV_VALIDATION_PROCESS.md](DEV_VALIDATION_PROCESS.md), 실앱 검증 프롬프트 [IMPLEMENTATION_STANDARD.md](IMPLEMENTATION_STANDARD.md) §7-D.
+5. **결정 사항 기록** — 오너·세션 간 합의는 **허브가 기록**(WBS·history·본 문서 갱신).
+6. **일일 트랜스크립트** — 각 세션은 **자기 프롬프트·에이전트 소통을 `docs/transcripts/<YYYYMMDD>/<세션>.md`(자기 파일)** 에 **원문**으로 기록한다(규약 [`transcripts/README.md`](transcripts/README.md)). 파일명: `hub`·`solsol`·`solsol-brand`. **시크릿·PII 값만 마스킹.** 허브는 `INDEX.md` 관리.
+7. **배포 범위(§4-B)** — 각 세션은 **자기 소유 레포·DB 스키마만** 배포한다(오너 "배포" 시).
 
 ### 4-B. 배포 범위 (세션별 — 명확 정의)
 
