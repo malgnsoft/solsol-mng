@@ -10,10 +10,11 @@ docs/transcripts/
   <YYYYMMDD>/
     INDEX.md            ← 그날 세션 목록·요약 (허브 관리)
     hub.md              ← 허브 (프로젝트 관리, solsol-mng)
-    backend-db.md       ← 쏠쏠 사이트 백엔드 및 DB (공유 DB·스키마·데이터 정본)
-    solsol.md           ← 쏠쏠 (풀스택: 사용자단+관리자단+백엔드 solsol-api)
-    solsol-brand.md     ← 쏠쏠 브랜드 (풀스택: 사용자단+관리자단+백엔드 brand-api)
+    solsol.md           ← 쏠쏠 (풀스택 + solsol_lms 테넌트 스키마)
+    solsol-brand.md     ← 쏠쏠 브랜드 (풀스택 + solsol master 스키마)
 ```
+
+> 세션은 **3개(Phase A)**: `hub`·`solsol`·`solsol-brand`. (2026-07-02엔 한시적으로 `backend-db` 세션이 데이터 정본 단일화를 수행 → 이후 제품/허브로 흡수. 그날 `backend-db.md`는 역사 기록으로 보존.)
 
 - 세션들은 같은 파일시스템에서 동시에 돈다 → **한 파일을 여러 세션이 편집하면 덮어쓴다**. 그래서 **세션마다 자기 파일**에만 append 한다.
 - **각 세션이 자기 파일을 소유·기록**(그 세션이 자기 프롬프트·소통을 가장 정확히·안전하게 요약할 수 있다). 허브는 `INDEX.md`와 `hub.md`를 관리한다.

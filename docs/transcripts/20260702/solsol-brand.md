@@ -63,3 +63,36 @@
 
 ## 4. 참여 에이전트 (이름·역할)
 임두혁(dev-lead) · 강프개(frontend-developer) · 임관개(admin-developer) · 조백개(api-developer) · 배보검(security-reviewer) · 노개보(privacy-officer) · 오품관(qa) · ux-designer. 총괄=chief 대행.
+
+---
+
+## 5. 추가 실행 세션 (2026-07-02, 총괄 재개) — 프롬프트·대화 기록
+> 작업 내역(산출·게이트·blocker)은 `docs/history/history.20260702.md`에 기록. 본 절은 프롬프트와 에이전트 대화만.
+
+### 5-1. 사용자 프롬프트
+- ④ "검증위원회 통합보고서·미결취합 중 **쏠쏠 브랜드 해당 사항만 취합·검토**하고 실행계획·절차를 세워 **대기**하라(목업·사용자단·관리자단 모두)."
+- ⑤ "맘대로 총괄이 **최대한 많은 에이전트와 함께 계획대로 진행**하라."
+- ⑥ "transcript엔 작업내역이 아니라 **프롬프트·에이전트 대화**를 기록하고, 작업내역은 **history**에 기록하라."(본 정정 반영)
+
+### 5-2. 에이전트 대화 (총괄 ↔ 팀장 ↔ 팀원)
+**계획 단계**
+- 총괄: IMPLEMENTATION_STANDARD·03_brand-site·통합보고서·브랜드미결 숙지 → 목업/사용자단/관리자단 통합 실행계획·절차 수립·대기(오너 승인 전 실행 보류).
+
+**Wave 1 (총괄 오케스트레이션 · 7 병렬)**
+- 총괄→강프개(front): "U1 인증번호 서버검증 원복 + U2 인증·쓰기 실연동 배선(MOCK 배지, 실전환 금지)." → 강프개: A6 실배선·완화 하드코딩 제거·MOCK 배지 6화면·공용 래퍼 신설, typecheck 신규0 회신.
+- 총괄→임관개(admin): "brand-admin 프론트 중결함 + 실전환 배선(미활성)." → 임관개: 원장 pageSize·공지 count·CS 이메일 가드·MOCK 배지, vue-tsc EXIT0 회신.
+- 총괄→조백개(api): "brand-api 앱층 중결함 + 계약/uk 상태 점검(users·credits 무수정)." → 조백개: CS requireRole·TTL600·rawPayload 마스킹·news count SQL; uk는 스키마 정의만·실적용 backend-db 회신 필요 회신.
+- 총괄→배보검(security): "PRV-D01·SEC-1 재검 서명." → 배보검: PRV-D01 GO / SEC-1 조건부 GO(FOR UPDATE 직렬화, uk·Hyperdrive 실측 backend-db).
+- 총괄→노개보(privacy): "브랜드 PII 게이트." → 노개보: PRV-D01 GO / 탈퇴 파기정책 NO-GO(정책 대기) / IP 노출 지적.
+- 총괄→오품관(qa): "목업 9축 라운드(BR01·BA01)." → 오품관: BA01 GO / BR01 조건부 NO-GO(상0·중4).
+- 총괄→ux-designer: "오너 판정 3건 옵션·권고." → ux: color-contrast 토큰화 / 반응형 우선화면 / C01 이미 구현(FIXED).
+
+**Wave 2 (확정결함 시정 · 2 병렬)**
+- 총괄→강프개: "BR01 확정결함 시정(typecheck·화면ID·pricing-light·C-2)." → 강프개: typecheck EXIT0, 화면ID 태그, pricing-light 변형태그(기획 SoT 확정 필요), C-2 이미 600s.
+- 총괄→조백개: "maskPhone 폴백·adjust 멱등키 하드닝." → 조백개: maskPhone mask-by-default, adjust idempotencyKey 필수화(재전송 멱등 보존).
+
+**통합·판정**
+- dev-lead 통합 → 총괄 교차결정: 산출 머지가능·조건부 GO, verify-code/크레딧 실전환·실연동은 backend-db·오너 선결. 작업내역은 history 기록·오너 보고.
+
+### 5-3. 참여 에이전트
+강프개·임관개·조백개(구현) · 배보검·노개보·오품관(게이트) · ux-designer(판정) · dev-lead(통합) · 총괄(chief 대행).

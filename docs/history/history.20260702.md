@@ -59,7 +59,7 @@
 - **샘플 데이터 시드** — `dev_master_seed`(389행)·`dev_domain_seed`(820행), 도메인×엣지 5종(빈목록·긴텍스트·마스킹대상·페이지네이션 초과 101>100·29>20·상태다양성 incl is_secret), 크레딧 원장 SUM=**293,300** 검산·멱등·실 PII 0. 실 DB 미적용(DBA env 미접속) — 적용은 `/ops`·mysql 경유 절차 문서화.
 - **API 계약 발행** — solsol-api **223EP**·brand-api **77EP** `/doc`(Scalar) 프리즈 노트(②③ 인계·임의변경 금지). `totalPages` 보정.
 - **DB 미결 실행계획**(`plan-r01`, 5웨이브)·**오너 결정 12건 상신**(`decisions-r01`).
-- **강사 RBAC own-스코프** — `products` 활성화(own 강제·IDOR 차단, 완료) / 오너확정(정산·주문·수강생 3종·마스킹 유지·조회전용) 구현 시도 → **security NO-GO(blocker 2)**: 코드베이스 **인증모델 불일치** — 관리자단 로그인은 `user_type='staff'` 고정·강사/운영자는 **TB_ROLE 파생**인데 구현이 `typ==='instructor'` 전제 → own 트리거 사문화(IDOR)·배제 게이트 no-op(권한상승). **결함·보류**(역할기반 재작성 + 인증모델 확정 선행). privacy는 GO(마스킹 무조건 유지). 서브강사 3종 코드거부(AM-12)는 로직 정상.
+- **강사 RBAC own-스코프 (r02 시도→r03 해소)** — 오너확정(강사=정산·주문·수강생 3종 own·마스킹 유지·조회전용) 구현. r02 1차(typ 기반)는 security NO-GO였으나 **근거가 스테일 주석 오독**(`auth.ts:325`)이었음이 확정 — **실제 토큰 typ=user_type**(강사=instructor, `auth.ts:1022`). **architect 정본 인증모델 확정**(user_type 3값 + TB_ROLE 파생) → **역할기반 재작성**(`lib/role.ts resolveEffectiveRole`·roleGuard scope 코드강제·서브강사 request-time 배제·me 게이트·AC-2 교차강사 누출 교정) → **security GO·privacy GO**(r03). D-01/D-03/D-04 close. 잔존 하/후속: operator scope fail-open(RBAC-OBS-1)·서브강사 members-read menu_key 분리(RBAC-MENU-1)·프론트 role 도메인 확장(②조율).
 
 ### 산출물 (작업트리·미커밋·미배포)
 - `solsol-api`: `db/migrations/{002,003,004}`·`db/seed/{dev_master,dev_domain}_seed.sql`·`src/db/schema.master.ts`·`src/db/schema.tenant/*`·`src/index.ts`·`src/routes/admin/{credits,settlement,commerce,members}.ts`·`src/routes/auth.ts`·`src/docs/endpoints.ts`·`src/openapi.ts`.
@@ -114,6 +114,16 @@
 
 ### ⛔ solsol-api 홀드 (배포 금지)
 - backend-db 세션이 작업트리에 "적용 금지"로 표시한 **강사 RBAC NO-GO 코드** + **미적용 마이그레이션(002/003/004)** 존재 → 배포 시 취약코드·런타임 파손 위험. **커밋·푸시·배포 모두 미수행.** backend-db 세션의 NO-GO 해소·마이그 적용 후 별도 배포. 브랜드 레포·solsol-mng Pages도 이번 스코프 아님.
+
+## 11. 배포 (deployer) — backend-db: solsol-api·brand-api 커밋·푸시 완료 / Workers 배포 홀드
+
+> 오너 배포 승인(범위=**solsol-api·brand-api만**, solsol-mng 앱 제외). 시크릿=deployer env(평문 릴레이·출력 없음). 파괴 방지 가드레일로 Workers 배포·마이그는 중단. §8(강사 RBAC)은 r03에서 GO로 해소된 상태로 커밋됨(§10의 NO-GO 홀드 사유는 해소).
+
+- **커밋·푸시(완료)** — solsol-api `d0ed606` → `malgn/main`(`92ad1bd..d0ed606`, 24파일 +2496/-416) · solsol-brand-api `39828ce` → `origin/main`(`266b6b1..39828ce`, 12파일 +1036/-111). `Co-Authored-By` 트레일러 부착. brand-api 커밋엔 브랜드 프론트 세션 백엔드 작업(contact/news/webhooks/auth 마스킹)도 포함.
+- **빌드검증(통과)** — 양 레포 `tsc --noEmit` EXIT 0 · `wrangler deploy --dry-run` 번들 성공(api 3067KiB·brand 2425KiB). `wrangler whoami`=info@malgnsoft.com(deploy 권한 있음).
+- **⛔ Workers 배포·마이그 중단(가드레일)** — 배포 코드가 신규 컬럼(`is_secret`·`TB_SESSION`·`source_credit_key`) ORM 의존인데 마이그 002/003/004 안전 적용 경로 없음: ① `/ops/migrate` 러너(`src/lib/migrate.ts`)가 **CREATE TABLE 문만 실행** → ALTER corrective(002/003/004) 미적용, 000/001은 `CREATE IF NOT EXISTS`라 기존 테이블 컬럼추가 불가 ② deployer env에 `OPS_SECRET`·mysql 자격 없음 → 배포 후 `/ops/migrate` 호출·직접 적용 불가. → 마이그 없이 배포 시 해당 테이블 조회 500. **"반쯤 깨진 배포보다 미배포"** 규칙으로 중단.
+- **배포 완료 조건(오너/DBA)** — (a) 프로덕션 `solsol`/`solsol_lms` DB 상태 확인(fresh=테이블 미존재 vs 기존): 기존이면 **DBA가 자기 mysql 자격으로 002/003/004 직접 적용**(파일 내 information_schema 멱등·롤백·프리체크 동봉), fresh면 000/001로 신규 컬럼 포함 생성 → (b) `OPS_SECRET`을 deployer env 주입(값 릴레이 금지) → `wrangler deploy` → `/ops/migrate` 재확인 → 4역할 스모크.
+- **후속 코드결함(별도 작업)** — `/ops/migrate`가 corrective(ALTER) 마이그를 적용하도록 러너/라우트 보강 필요(현재 CREATE-only). 또는 마이그를 mysql 직접 적용 표준으로 확정.
 
 ## 다음 단계
 - 검증위원회 open blocker 시정(DAT-D02 즉시·DAT-D01 결정선행·SEC-r02-D01 등) + 신규 `SEC-VC-01`(브랜드 이메일코드 오프라인탐색) backend-db 코드 원장 도입.

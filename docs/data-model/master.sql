@@ -90,6 +90,29 @@ CREATE TABLE TB_LOGIN_LOG (
   KEY idx_loginlog_event (event, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정 로그인/로그아웃 이력';
 
+-- 플랫폼 계정 refresh 세션 원장(재사용 탐지, SEC-3) — 셀러/운영자 refresh 토큰 회전·revoke·리플레이 차단
+--   refresh_token_hash = SHA-256(rawToken + REFRESH_PEPPER) 해시만 저장(평문 미저장). 학습자 세션은 테넌트 TB_SESSION.
+--   session_id = 회전에도 유지되는 세션 계보 식별자(uk). reused_at = 폐기 토큰 재제시(재사용) 감지 시각(→ 전 세션 폐기).
+CREATE TABLE TB_SESSION (
+  id                 BIGINT       NOT NULL AUTO_INCREMENT,
+  user_id            BIGINT       NOT NULL              COMMENT '세션 소유 계정(TB_USER seller/admin)',
+  session_id         VARCHAR(64)  NOT NULL              COMMENT '세션 계보 식별자(회전에도 유지, uk)',
+  refresh_token_hash VARCHAR(255) NOT NULL              COMMENT 'refresh 토큰 해시(SHA-256+pepper, 평문 미저장)',
+  ip                 VARCHAR(64)      NULL              COMMENT '발급 IP',
+  user_agent         VARCHAR(500)     NULL              COMMENT '발급 User-Agent',
+  expires_at         TIMESTAMP     NOT NULL              COMMENT 'refresh 만료(UTC)',
+  revoked_at         TIMESTAMP         NULL              COMMENT '폐기(로그아웃/회전) 시각',
+  reused_at          TIMESTAMP         NULL              COMMENT '폐기 토큰 재사용 감지 시각(재사용 탐지)',
+  status             INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at         TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at         TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_session_sid (session_id),
+  KEY idx_session_user (user_id),
+  KEY idx_session_expires (expires_at),
+  KEY idx_session_refresh (refresh_token_hash)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='플랫폼 계정 refresh 세션 원장(재사용 탐지)';
+
 -- 사이트 ↔ 회원 권한 배정 (N:M) — 소유자·담당자 통일
 --   owner  = 사이트 생성자(TB_SITE.owner_user_id)를 생성 시 자동 배정. 자기 생성 사이트 전체 권한
 --   manager= 특정 사이트에 배정된 담당자. 배정된 사이트만 권한
@@ -357,5 +380,5 @@ CREATE TABLE TB_NEWS (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='브랜드 소식(공지/업데이트/점검, 공개 읽기)';
 
 -- =====================================================================
---  끝. 마스터 16개 테이블.
+--  끝. 마스터 17개 테이블. (2026-07-02: TB_SESSION 추가 — refresh 세션 원장·재사용 탐지 SEC-3)
 -- =====================================================================

@@ -186,16 +186,19 @@ CREATE TABLE TB_SESSION (
   id                 BIGINT       NOT NULL AUTO_INCREMENT,
   user_id            BIGINT       NOT NULL,
   refresh_token_hash VARCHAR(255) NOT NULL              COMMENT '리프레시 토큰 해시',
+  session_id         VARCHAR(64)      NULL              COMMENT '세션 계보 식별자(회전에도 유지, uk). 재사용 탐지 SEC-3. 기존행 NULL',
   user_agent         VARCHAR(255)     NULL,
   ip                 VARCHAR(64)      NULL,
   remember           TINYINT      NOT NULL DEFAULT 0,
   expires_at         TIMESTAMP     NOT NULL,
   revoked_at         TIMESTAMP         NULL,
+  reused_at          TIMESTAMP         NULL              COMMENT '폐기 토큰 재사용 감지 시각(재사용 탐지 SEC-3)',
   status             INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
   created_at         TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uk_session_refresh (refresh_token_hash), -- 해시 길이 191 prefix 적용 권장(VARCHAR(255) 인덱스 한계)
+  UNIQUE KEY uk_session_sid (session_id),             -- 세션 계보 식별자(NULL 다중 허용 — 기존행 무영향)
   KEY idx_session_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='세션/리프레시 토큰';
 
@@ -1317,6 +1320,7 @@ CREATE TABLE TB_BOARD (
   is_image      TINYINT       NOT NULL DEFAULT 1    COMMENT '목록이미지노출',
   is_captcha    TINYINT       NOT NULL DEFAULT 0    COMMENT '자동등록방지',
   is_private    TINYINT       NOT NULL DEFAULT 0    COMMENT '작성자글만보기',
+  is_secret     TINYINT       NOT NULL DEFAULT 0    COMMENT '비밀글 사용(작성 시 비밀글 지정 허용) — B13. 쓰기권한=auth_write',
   is_point      TINYINT           NULL DEFAULT 0    COMMENT '포인트부여',
   allow_type    VARCHAR(255)      NULL              COMMENT '허용확장자',
   deny_ext      VARCHAR(255)      NULL              COMMENT '거부확장자',
@@ -1382,6 +1386,7 @@ CREATE TABLE TB_COMMENT (
   writer        VARCHAR(50)     NULL              COMMENT '작성자',
   reply_user_id BIGINT          NULL DEFAULT 0    COMMENT '답글대상회원',
   content       MEDIUMTEXT      NULL              COMMENT '내용',
+  is_secret     TINYINT     NOT NULL DEFAULT 0    COMMENT '비밀댓글(1:1문의 등) — F-7. 작성자/관리자만 열람',
   status        INT         NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
   created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

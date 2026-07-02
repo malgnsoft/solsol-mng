@@ -79,6 +79,20 @@ erDiagram
         timestamp created_at "발생 시각"
         timestamp updated_at
     }
+    TB_SESSION {
+        bigint id PK
+        bigint user_id FK "세션 소유 계정(TB_USER seller/admin)"
+        varchar session_id "세션 계보 식별자(회전에도 유지, uk)"
+        varchar refresh_token_hash "refresh 토큰 해시(SHA-256+pepper, 평문 미저장)"
+        varchar ip "발급 IP"
+        varchar user_agent "발급 User-Agent"
+        timestamp expires_at "refresh 만료(UTC)"
+        timestamp revoked_at "폐기(로그아웃/회전) 시각"
+        timestamp reused_at "폐기 토큰 재사용 감지 시각(재사용 탐지 SEC-3)"
+        int status "1정상 0중지 -1삭제"
+        timestamp created_at
+        timestamp updated_at
+    }
     TB_SITE_USER {
         bigint id PK
         bigint site_id FK "대상 사이트(TB_SITE)"
@@ -267,6 +281,7 @@ erDiagram
     TB_PLAN ||--o{ TB_SITE : "plan_id"
     TB_USER ||--o{ TB_USER_AGREEMENT : "user_id"
     TB_USER ||--o{ TB_LOGIN_LOG : "user_id"
+    TB_USER ||--o{ TB_SESSION : "user_id"
     TB_SITE ||--o{ TB_SITE_USER : "site_id"
     TB_USER ||--o{ TB_SITE_USER : "user_id"
     TB_SITE ||--o{ TB_SUBSCRIPTION : "site_id"
@@ -429,11 +444,13 @@ erDiagram
         bigint id PK
         bigint user_id FK
         varchar refresh_token_hash "리프레시 토큰 해시"
+        varchar session_id "세션 계보 식별자(회전에도 유지, uk). 재사용 탐지 SEC-3. 기존행 NULL"
         varchar user_agent
         varchar ip
         tinyint remember
         timestamp expires_at
         timestamp revoked_at
+        timestamp reused_at "폐기 토큰 재사용 감지 시각(재사용 탐지 SEC-3)"
         int status "1정상 0중지 -1삭제"
         timestamp created_at
         timestamp updated_at
@@ -1528,6 +1545,7 @@ erDiagram
         tinyint is_image "목록이미지노출"
         tinyint is_captcha "자동등록방지"
         tinyint is_private "작성자글만보기"
+        tinyint is_secret "비밀글 사용(작성 시 비밀글 지정 허용) — B13. 쓰기권한=auth_write"
         tinyint is_point "포인트부여"
         varchar allow_type "허용확장자"
         varchar deny_ext "거부확장자"
@@ -1584,6 +1602,7 @@ erDiagram
         varchar writer "작성자"
         bigint reply_user_id FK "답글대상회원"
         mediumtext content "내용"
+        tinyint is_secret "비밀댓글(1:1문의 등) — F-7. 작성자/관리자만 열람"
         int status "1정상 0중지 -1삭제"
         timestamp created_at
         timestamp updated_at
