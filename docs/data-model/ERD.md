@@ -11,7 +11,7 @@
 
 | 스키마 | 기본 DB명 | 테이블 수 | 역할 |
 |---|---|---|---|
-| 마스터 | `solsol_master`(dev: `solsol`) | 16 | 플랫폼 공통 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧·프로비저닝·브랜드 문의/소식 |
+| 마스터 | `solsol_master`(dev: `solsol`) | 16 | 플랫폼 공유 마스터 — **사이트(테넌트) 레지스트리(`TB_SITE`)**·셀러·SaaS 요금제/구독/청구/결제·크레딧(단일 원장 `TB_CREDIT`)·프로비저닝·브랜드 문의/소식(테넌트 무관 플랫폼 레벨) |
 | 테넌트 | `solsol_t{ID}`(dev: `solsol_lms`) | 92 | 크리에이터 사이트 운영 전체 — 회원·상품·콘텐츠·학습·주문/정산·마케팅·커뮤니티·사이트 |
 
 **컨벤션**: `TB_` 단수 · `id BIGINT AI PK` · `status INT`(1정상/0중지/-1삭제) · 통화 `DECIMAL(18,6)` **`*_price`** · 일시 **`TIMESTAMP`(내부 UTC)**·날짜 `DATE` · **약한 FK**(논리 FK, 제약 없음) · utf8mb4.
@@ -191,10 +191,11 @@ erDiagram
         decimal unit_count "사용량(발송건수/토큰) — usage행"
         decimal unit_price "단가(config, M-3 Open) — usage행"
         bigint source_credit_id FK "차감/만료행이 소진한 증가lot 원장행(charge/bonus). 여러 lot 걸치면 lot별 차감행 분할"
+        bigint source_credit_key "GENERATED COALESCE(source_credit_id,0) STORED — uk_credit_idem 파생키(증가행 NULL→0 병합)"
         bigint reverses_credit_id FK "환불/취소가 되돌리는 원본 원장 행"
         varchar ref_type "campaign/ai_job (테넌트 스키마 리소스)"
         bigint ref_id
-        varchar idempotency_key "증가/차감 중복 방지(uk). lot 분할 차감은 source_credit_id로 구분"
+        varchar idempotency_key "멱등 uk_credit_idem(site_id, idempotency_key, source_credit_key) 구성. 증가행 중복충전 차단·차감행 lot별 구분"
         varchar credit_state "pending/settled/refunded/void"
         varchar memo
         int status "1정상 0중지 -1삭제"

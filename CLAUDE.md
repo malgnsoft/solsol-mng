@@ -54,7 +54,7 @@
 
 크리에이터/브랜드 제품의 **모든 개발은 [docs/validation/](docs/validation/) 검증 패키지를 정본(SoT)으로** 추적키(화면ID·엔드포인트) 단위로 검증한다. **상시 절차의 유일 정본 = [docs/DEV_VALIDATION_PROCESS.md](docs/DEV_VALIDATION_PROCESS.md)** — 아래는 요약이며 상세·판정 기준은 항상 그 문서를 따른다.
 
-- **검증 폴더는 읽기 전용** — `docs/validation/` 는 개발 중 **수정·생성·삭제 금지**. 변경은 오너/기획-lead 승인 후 별도 절차.
+- **검증 폴더는 읽기 전용** — `docs/validation/` 는 **수정·생성·삭제 금지**(원본 무수정 보존). 개정은 오너/기획-lead 승인 후 **`docs/validation_modified/<같은 파일명>` 에 개정 완성본 + `_개정이력.md` 전후 기록**(규칙 `docs/validation_modified/README.md`). 검증·개발은 **개정본 우선 → 없으면 원본**.
 - **권위 우선순위**: `05_정책설계서`(확정 6건) → 화면설계서 `00~03` → `04_정책요약` → 참조 PNG → 스타일가이드. **데이터(물리) 정본 = DDL·`ERD.md`**(06_API계약은 D1 가정 → **정본 격하**, 엔드포인트 참고만). `[추정]`은 권위 아님.
 - **두 트랙**: 화면 라운드(FR01·AD01·BR01, 9축) / 계약·데이터 라운드(solsol-api·brand-api, **데이터 5축**+dba). **관리 허브 `solsol-mng` 자체 변경은 라운드 비적용**(배포 스모크만).
 - **단계별 프로파일**(WBS): 목업=경량(qa·오너 승인 시 미통과 배포 허용) / 구현=9축 3렌즈 / **실연동=security·privacy 서명 필수·blocker 0 강제(우회 불가)**.

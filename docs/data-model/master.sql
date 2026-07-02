@@ -227,6 +227,8 @@ CREATE TABLE TB_PAYMENT (
 --   증가행(charge/bonus/refund_restore): lot 역할. remaining_cr(사용 후 남은 크레딧)/expires_at/is_expiring 보유
 --   차감행(usage/expire/adjust): FIFO(임박 만료 우선)로 증가행 remaining_cr 차감 + source_credit_id 로 소진 lot 기록
 --     (한 사용이 여러 lot에 걸치면 lot별로 차감행 분할 → 각 행이 자기 lot 참조 = 단일 테이블로 감사추적)
+--   멱등 uk(uk_credit_idem) = (site_id, idempotency_key, source_credit_key). source_credit_key = COALESCE(source_credit_id,0) STORED 파생:
+--     증가행은 source_credit_id=NULL→0 으로 병합돼 동일 idempotency_key 중복충전을 DB가 차단, 분할 차감행은 lot(source_credit_id)별로 공존.
 CREATE TABLE TB_CREDIT (
   id                 BIGINT        NOT NULL AUTO_INCREMENT,
   site_id            BIGINT        NOT NULL,
@@ -245,6 +247,7 @@ CREATE TABLE TB_CREDIT (
   unit_count         DECIMAL(18,6)     NULL             COMMENT '사용량(발송건수/토큰) — usage행',
   unit_price         DECIMAL(18,6)     NULL             COMMENT '단가(config, M-3 Open) — usage행',
   source_credit_id   BIGINT            NULL             COMMENT '차감/만료행이 소진한 증가lot 원장행(charge/bonus). 여러 lot 걸치면 lot별 차감행 분할',
+  source_credit_key  BIGINT        GENERATED ALWAYS AS (COALESCE(source_credit_id,0)) STORED COMMENT '멱등 uk 파생키: 증가행 NULL→0 병합(동일 idempotency_key 중복충전 차단)·차감행은 lot별 구분',
   reverses_credit_id BIGINT            NULL             COMMENT '환불/취소가 되돌리는 원본 원장 행',
   ref_type           VARCHAR(20)       NULL             COMMENT 'campaign/ai_job (테넌트 스키마 리소스)',
   ref_id             BIGINT            NULL,
@@ -255,7 +258,7 @@ CREATE TABLE TB_CREDIT (
   created_at         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uk_credit_idem (site_id, idempotency_key, source_credit_id),
+  UNIQUE KEY uk_credit_idem (site_id, idempotency_key, source_credit_key),
   KEY idx_credit_site_created (site_id, id),
   KEY idx_credit_lot_fifo (site_id, is_expiring, expires_at, id),
   KEY idx_credit_open_lot (site_id, lot_state, expires_at),
@@ -299,6 +302,60 @@ CREATE TABLE TB_SITE_PROVISION_LOG (
   KEY idx_provlog_site (site_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='테넌트 프로비저닝 이력';
 
+-- ---------------------------------------------------------------------
+--  2026-07-01 추가 — 쏠쏠 브랜드(플랫폼 공개 사이트) 문의·소식
+--    브랜드 목업의 문의(contact)·소식(news) 화면 저장소. 플랫폼 레벨(테넌트 무관)이라 마스터에 둠.
+--    TB_CONTACT(문의) 1:N TB_CONTACT_REPLY(답변 스레드) · TB_NEWS(공지/소식 — 공개 읽기).
+-- ---------------------------------------------------------------------
+
+-- 브랜드 문의 — 방문자/셀러의 상품·결제·제휴·서비스 문의(1:N 답변)
+CREATE TABLE TB_CONTACT (
+  id            BIGINT       NOT NULL AUTO_INCREMENT,
+  user_id       BIGINT           NULL              COMMENT '작성 계정(TB_USER). 비로그인 문의 시 NULL 가능',
+  type          VARCHAR(20)  NOT NULL              COMMENT '문의 유형: product(상품)/payment(결제)/partnership(제휴)/service(서비스)/etc(기타)',
+  subtype       VARCHAR(30)      NULL              COMMENT '세부 유형(유형별 하위 분류)',
+  title         VARCHAR(200) NOT NULL              COMMENT '문의 제목',
+  content       TEXT         NOT NULL              COMMENT '문의 내용',
+  files_json    TEXT             NULL              COMMENT '첨부 파일 메타(JSON 배열: name/r2_key/size 등)',
+  contact_state VARCHAR(12)  NOT NULL DEFAULT 'open' COMMENT 'open(접수)/answered(답변완료)/closed(종료)',
+  answered_at   TIMESTAMP        NULL              COMMENT '최초 답변 완료 시각',
+  status        INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_contact_user (user_id),
+  KEY idx_contact_state (contact_state, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='브랜드 문의(상품/결제/제휴/서비스/기타)';
+
+-- 브랜드 문의 답변 스레드 — 문의 1건에 대한 사용자/관리자 답변(시간순)
+CREATE TABLE TB_CONTACT_REPLY (
+  id             BIGINT       NOT NULL AUTO_INCREMENT,
+  contact_id     BIGINT       NOT NULL              COMMENT '대상 문의(TB_CONTACT)',
+  writer_type    VARCHAR(10)  NOT NULL              COMMENT 'user(문의자)/admin(운영자)',
+  writer_user_id BIGINT           NULL              COMMENT '작성 계정(TB_USER). 비로그인/시스템 시 NULL 가능',
+  content        TEXT         NOT NULL              COMMENT '답변 내용',
+  status         INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_contact_reply_contact (contact_id, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='브랜드 문의 답변 스레드';
+
+-- 브랜드 소식 — 공지/업데이트/점검(공개 읽기)
+CREATE TABLE TB_NEWS (
+  id           BIGINT       NOT NULL AUTO_INCREMENT,
+  category     VARCHAR(20)  NOT NULL              COMMENT 'notice(공지)/update(업데이트)/maintenance(점검)',
+  title        VARCHAR(200) NOT NULL              COMMENT '소식 제목',
+  content      TEXT         NOT NULL              COMMENT '소식 본문',
+  published_at TIMESTAMP        NULL              COMMENT '공개(게시) 시각. NULL=미공개(초안)',
+  status       INT          NOT NULL DEFAULT 1    COMMENT '1정상 0중지 -1삭제',
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_news_category (category, published_at),
+  KEY idx_news_published (published_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='브랜드 소식(공지/업데이트/점검, 공개 읽기)';
+
 -- =====================================================================
---  끝. 마스터 14개 테이블.
+--  끝. 마스터 16개 테이블.
 -- =====================================================================
