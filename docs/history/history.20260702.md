@@ -125,6 +125,13 @@
 - **배포 완료 조건(오너/DBA)** — (a) 프로덕션 `solsol`/`solsol_lms` DB 상태 확인(fresh=테이블 미존재 vs 기존): 기존이면 **DBA가 자기 mysql 자격으로 002/003/004 직접 적용**(파일 내 information_schema 멱등·롤백·프리체크 동봉), fresh면 000/001로 신규 컬럼 포함 생성 → (b) `OPS_SECRET`을 deployer env 주입(값 릴레이 금지) → `wrangler deploy` → `/ops/migrate` 재확인 → 4역할 스모크.
 - **후속 코드결함(별도 작업)** — `/ops/migrate`가 corrective(ALTER) 마이그를 적용하도록 러너/라우트 보강 필요(현재 CREATE-only). 또는 마이그를 mysql 직접 적용 표준으로 확정.
 
+### 11-1. 마이그 러너 corrective 지원 (위 후속결함 해소 · 커밋·푸시 / Workers 홀드 유지)
+- **러너 재작성**(양 레포 `src/lib/migrate.ts`) — CREATE-only 필터 제거 → **전 문장 순차 실행 + 멱등 에러캐치**(1050/1060/1061/1091/1826). `/ops/migrate`(`src/routes/ops.ts`) 확장: master=000→002→003(`solsol`)·tenant=001→004(`solsol_lms`).
+- **002/003/004 평문화** — Hyperdrive 미유지 세션변수(`SET @/PREPARE/EXECUTE`) 제거 → 평문 DDL(의미=fresh 정본과 1:1 불변, dba 대조 확인).
+- **dba 마이그안전 게이트 조건부GO → 시정 완료**: F2(003 앱유저 GRANT 제거 — 1044 중단 위험·정본 미포함·스키마레벨 grant 커버, out-of-band 주석) · F1(러너 화이트리스트 `1022` 제거 — unique index 실패 은폐/금전 uk 안전망 보전, 1062 throw 유지). F3(002 DROP+ADD 비원자)=정보성 허용.
+- 커밋·푸시: solsol-api `1cadeba`→`malgn/main` · brand-api `8a4cfe8`→`origin/main`. 양 레포 tsc EXIT0 · api `wrangler deploy --dry-run` 번들 성공. 결함표=`dev-validation` 반영 대상(마이그 러너 라운드).
+- **Workers 배포는 여전히 홀드** — 이제 코드상 `/ops/migrate`가 corrective까지 적용 가능하므로, **OPS_SECRET(배포담당 env 주입) + 프로덕션 DB 상태 확인**만 확보되면 `deploy → /ops/migrate → 4역할 스모크`로 완결 가능.
+
 ## 12. 세션 구조 Phase A 확정 — 3세션 + 스키마 2분할 + 배포 범위 (허브 배포)
 - **3세션**(오너 확정): 허브 + **쏠쏠**(풀스택+`solsol_lms` tenant 92) + **쏠쏠 브랜드**(풀스택+`solsol` master 17). backend-db 세션 폐지→제품/허브 흡수(정본 단일화·계약 발행 완료 후).
 - **DB 소유=물리 스키마 단위**: `solsol`(master)=쏠쏠 브랜드(플랫폼+공유 인증) / `solsol_lms`(tenant)=쏠쏠 / 허브=ERD 통합·중재(스키마 authoring 없음). 공유 인증 테이블 DDL 변경만 허브 중재.
